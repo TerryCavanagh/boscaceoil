@@ -1,16 +1,20 @@
 ﻿package {
 	import flash.display.*;
-	import flash.geom.*;
-  import flash.events.*;
-	import flash.utils.*;
-  import flash.net.*;
-	import org.si.sion.SiONDriver;
-	import org.si.sion.SiONData;
-	import org.si.sion.utils.SiONPresetVoice;
-	import org.si.sion.SiONVoice;
-  import org.si.sion.events.*;
+	import flash.events.*;
 	import flash.filesystem.*;
-  import flash.net.FileFilter;
+	import flash.geom.*;
+	import flash.net.*;
+	import flash.net.FileFilter;
+	import flash.utils.*;
+	
+	import flashx.textLayout.formats.Float;
+	
+	import org.si.sion.SiONData;
+	import org.si.sion.SiONDriver;
+	import org.si.sion.SiONVoice;
+	import org.si.sion.events.*;
+	import org.si.sion.sequencer.SiMMLTrack;
+	import org.si.sion.utils.SiONPresetVoice;
 		
 	public class controlclass extends Sprite{
 		public var SCALE_NORMAL:int = 0;
@@ -46,7 +50,7 @@
 		public var LIST_BOXCOUNT:int = 6;
 		
 		public function controlclass():void {
-			version = 1;
+			version = 2;
 			clicklist = false;
 			
 			test = false; teststring = "TEST = True";
@@ -110,6 +114,7 @@
 			scalename[CHORD_SUS2] = "Chord: sus2";
 			
 			looptime = 0;
+			SetSwing();
 			
 			_presets = new SiONPresetVoice();
 			voicelist = new voicelistclass();
@@ -159,7 +164,7 @@
 			
 			boxcount = 16; barcount = 4;
 			
-			_driver = new SiONDriver(2048); //2048, 4096
+			_driver = new SiONDriver(4096); //2048, 4096
 			_driver.setBeatCallbackInterval(1);
 			_driver.setTimerInterruption(1, _onTimerInterruption);
 			
@@ -171,10 +176,11 @@
 			_driver.play(null, false);
 		}
 		
-		public function _onTimerInterruption():void {
+		public function _onTimerInterruption():void {			
 			if(musicplaying){
 				if (looptime >= boxcount) {
 					looptime-= boxcount;
+					SetSwing();					
 					arrange.currentbar++;
 					if (arrange.currentbar >= arrange.loopend) {
 						arrange.currentbar = arrange.loopstart;
@@ -203,7 +209,7 @@
 											if (musicbox[i].recordfilter == 1) {
 												instrument[musicbox[i].instr].changefilterto(musicbox[i].cutoffgraph[looptime % boxcount], musicbox[i].resonancegraph[looptime % boxcount], musicbox[i].volumegraph[looptime % boxcount]);
 											}
-											_driver.noteOn(int(musicbox[i].notes[j].x), instrument[musicbox[i].instr].voice, int(musicbox[i].notes[j].y));
+											var track:SiMMLTrack = _driver.noteOn(int(musicbox[i].notes[j].x), instrument[musicbox[i].instr].voice, int(musicbox[i].notes[j].y));
 										}	
 									}
 								}
@@ -221,7 +227,7 @@
 													drumkit[instrument[musicbox[i].instr].type-1].updatefilter(musicbox[i].cutoffgraph[looptime % boxcount], musicbox[i].resonancegraph[looptime % boxcount]);
 												  drumkit[instrument[musicbox[i].instr].type-1].updatevolume(musicbox[i].volumegraph[looptime % boxcount]);
 												}
-												_driver.noteOn(drumkit[instrument[musicbox[i].instr].type-1].voicenote[int(musicbox[i].notes[j].x)], drumkit[instrument[musicbox[i].instr].type-1].voicelist[int(musicbox[i].notes[j].x)], int(musicbox[i].notes[j].y));
+												_driver.noteOn(drumkit[instrument[musicbox[i].instr].type-1].voicenote[int(musicbox[i].notes[j].x)],drumkit[instrument[musicbox[i].instr].type-1].voicelist[int(musicbox[i].notes[j].x)], int(musicbox[i].notes[j].y));
 											}
 										}	
 									}
@@ -232,9 +238,29 @@
 				}
 				
 				looptime = looptime + 1;
+				SetSwing();
 			}
 		}
 		
+		private function SetSwing():void{	
+			if (_driver==null)
+				return;
+
+			
+			//swing goes from -10 to 10
+			//fswing goes from 0.2 - 1.8
+			var fswing:Number = 0.2+(swing+10)*(1.8-0.2)/20.0;
+			
+			if (looptime%2==0)
+			{
+				_driver.setTimerInterruption(fswing, _onTimerInterruption);
+			}
+			else				
+			{
+				_driver.setTimerInterruption(2-fswing, _onTimerInterruption);
+			}
+		}
+			
 		public function adddrumkitnote(t:int, name:String, voice:String, note:int = 60):void {
 			if (t == 2 && note == 60) note = 16;
 			drumkit[t].voicelist.push(_presets[voice]);
@@ -675,6 +701,7 @@
 		public function makefilestring():void {
 			filestring = "";
 			filestring += String(version) + ",";
+			filestring += String(swing)+",";
 			filestring += String(bpm) + ",";
 			filestring += String(boxcount) + ",";
 			filestring += String(barcount) + ",";
@@ -741,6 +768,14 @@
 		public function convertfilestring():void {
 			fi = 0;
 			version = readfilestream();
+			if (version>1)
+			{			
+				swing = readfilestream();
+			}
+			else			
+			{
+				swing=0;
+			}
 			bpm = readfilestream();
 			boxcount = readfilestream();
 			barcount = readfilestream();
@@ -870,6 +905,7 @@
 			arrange.loopstart = 0; arrange.loopend = arrange.lastbar;
 			musicplaying = true;
 			looptime = 0;	arrange.currentbar = arrange.loopstart;
+			SetSwing();
 			
 			followmode = true;
 			nowexporting = true;
@@ -997,6 +1033,7 @@
 		public var nowexporting:Boolean = false;
 		public var followmode:Boolean = false;
 		public var bpm:int;
+		public var swing:int;
 		public var version:int;
 		
 		public var doubleclickcheck:int;

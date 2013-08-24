@@ -486,18 +486,24 @@
 			print(305 + 7, (linesize * 4)+5 - 1, "SAVE .ceol", 0, false, true);
 			
 			//fillrect(305 -2, (linesize * 4)+5 -2, 75, 10, 1);
-			fillrect(220, (linesize * 7)-1, 160, linesize, 1);
-			rprint(280, (linesize * 7) - 1, "PATTERN", 0, true);
-		  drawicon(290, (linesize * 7)-1, 0);
-			print(305, (linesize * 7) - 1, String(control.barcount), 0, false, true);
-			drawicon(330, (linesize * 7)-1, 0);
-			print(345, (linesize * 7) - 1, String(control.boxcount), 0, false, true);
+			fillrect(220, (linesize * 6)-1, 160, linesize, 1);
+			rprint(280, (linesize * 6) - 1, "PATTERN", 0, true);
+		 	drawicon(290, (linesize * 6)-1, 0);
+			print(305, (linesize * 6) - 1, String(control.barcount), 0, false, true);
+			drawicon(330, (linesize * 6)-1, 0);
+			print(345, (linesize * 6) - 1, String(control.boxcount), 0, false, true);
 			
-			fillrect(220, (linesize * 9)-1, 160, linesize, 1);
-			rprint(280, (linesize * 9) - 1, "BPM", 0, true);
-			drawicon(305, (linesize * 9)-1, 3);
-			print(320, (linesize * 9) - 1, String(control.bpm), 0, false, true);
-			drawicon(350, (linesize * 9)-1, 2);
+			fillrect(220, (linesize * 8)-1, 160, linesize, 1);
+			rprint(280, (linesize * 8) - 1, "BPM", 0, true);
+			drawicon(305, (linesize * 8)-1, 3);
+			print(320, (linesize * 8) - 1, String(control.bpm), 0, false, true);
+			drawicon(350, (linesize * 8)-1, 2);
+			
+			fillrect(220, (linesize * 10)-1, 160, linesize, 1);
+			rprint(280, (linesize * 10) - 1, "SWING", 0, true);
+			drawicon(305, (linesize * 10)-1, 3);
+			print(320, (linesize * 10) - 1, String(control.swing), 0, false, true);
+			drawicon(350, (linesize * 10)-1, 2);
 		}
 		
 		public function drawpatternmanager(control:controlclass):void {

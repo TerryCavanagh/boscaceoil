@@ -162,7 +162,7 @@
 				}
 			}else if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 10) {				
 				if (control.currenttab == 0) {
-					if(control.my<(gfx.linesize * 7)){
+					if(control.my<(gfx.linesize * 6)){
 						//Files
 						if (control.mx > 300) {
 							if (control.my >= gfx.linesize * 2 && control.my <= gfx.linesize * 3) {
@@ -180,21 +180,29 @@
 							}
 						}
 					}else {
-						if (help.inboxw(control.mx, control.my, 300, (gfx.linesize * 9) - 1, 10, 10)) {
+						if (help.inboxw(control.mx, control.my, 300, (gfx.linesize * 10) - 1, 10, 10)) {
+							control.swing --;
+							if (control.swing < -10) control.swing = -10;
+						}
+						if (help.inboxw(control.mx, control.my, 350, (gfx.linesize * 10) - 1, 10, 10)) {
+							control.swing ++;
+							if (control.swing > 10) control.swing = 10;
+						}
+						if (help.inboxw(control.mx, control.my, 300, (gfx.linesize * 8) - 1, 10, 10)) {
 							control.bpm -= 5;
 							if (control.bpm < 10) control.bpm = 10;
 							control._driver.bpm = control.bpm;
 						}
-						if (help.inboxw(control.mx, control.my, 350, (gfx.linesize * 9) - 1, 10, 10)) {
+						if (help.inboxw(control.mx, control.my, 350, (gfx.linesize * 8) - 1, 10, 10)) {
 							control.bpm += 5;
 							if (control.bpm > 220) control.bpm = 220;
 							control._driver.bpm = control.bpm;
 						}
-						if (help.inboxw(control.mx, control.my, 290, (gfx.linesize * 7), 35, 10)) {
+						if (help.inboxw(control.mx, control.my, 290, (gfx.linesize * 6), 35, 10)) {
 							control.filllist(control.LIST_BARCOUNT);
 							control.list.init(gfx, 295, (gfx.linesize * 8) - 3);
 						}
-						if (help.inboxw(control.mx, control.my, 330, (gfx.linesize * 7), 35, 10)) {
+						if (help.inboxw(control.mx, control.my, 330, (gfx.linesize * 6), 35, 10)) {
 							control.filllist(control.LIST_BOXCOUNT);
 							control.list.init(gfx, 335, (gfx.linesize * 8) - 3);
 						}
@@ -336,7 +344,7 @@
 					}else {
 						//Drumkit
 						j = control.musicbox[control.currentbox].start + (11 - control.notey);
-						if (j >= 0 && j < 128) control._driver.noteOn(control.drumkit[control.instrument[control.musicbox[control.currentbox].instr].type-1].voicenote[j], control.drumkit[control.instrument[control.musicbox[control.currentbox].instr].type-1].voicelist[j], control.notelength);
+						if (j >= 0 && j < 128) control._driver.noteOn(control.drumkit[control.instrument[control.musicbox[control.currentbox].instr].type-1].voicenote[j],control.drumkit[control.instrument[control.musicbox[control.currentbox].instr].type-1].voicelist[j], control.notelength);
 					}
 				}
 			}
