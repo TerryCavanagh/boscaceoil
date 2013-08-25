@@ -67,7 +67,6 @@ package {
 			if (note > topnote) topnote = note;
 			if (note < bottomnote) bottomnote = note;
 			notespan = topnote-bottomnote;
-			//trace("added note index ", numnotes - 1, ": position: ", noteindex, ", note: ", note, ", length: ", time);
 		}
 		
 		public function noteat(noteindex:int, note:int):Boolean {

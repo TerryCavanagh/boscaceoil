@@ -71,6 +71,24 @@
 		}
 	}
 	
+	if (control.copykeyheld) {
+		if (!key.isDown(Keyboard.C) && !key.isDown(Keyboard.V)) {
+			control.copykeyheld = false;
+		}
+	}
+	
+	if (control.timelinecurx > -1) {
+		if (key.ctrlheld && !control.copykeyheld) {
+			if (key.isDown(Keyboard.C)) {
+				control.copykeyheld = true;
+				control.arrange.copy();
+			}else if (key.isDown(Keyboard.V)) {
+				control.copykeyheld = true;
+				control.arrange.paste(control.arrange.viewstart + control.timelinecurx);
+			}
+		}
+	}
+	
 	if (control.cursorx > -1 && control.cursory > -1 && control.currentbox > -1 && !control.clicklist) {
 		if (key.press && control.dragaction == 0) {
 			//Add note 
@@ -143,6 +161,11 @@
 						control.boxcount = control.list.selection + 1;
 						control.list.close();
 					}
+					
+					if (control.list.type == control.LIST_BUFFERSIZE) {
+						control.setbuffersize(control.list.selection);
+						control.list.close();
+					}
 				}else {
 					control.list.close();
 				}
@@ -151,6 +174,7 @@
 				//Change tabs
 				if (control.mx < (gfx.screenwidth-20) / 3) {
 					control.currenttab = 0;
+					control.secretmenu = 0;
 				}else if (control.mx < (2*(gfx.screenwidth-20)) / 3) {
 					control.currenttab = 1;
 				}else if (control.mx >= gfx.screenwidth - 20) {
@@ -306,6 +330,21 @@
 							}
 						}
 					}
+				}else if (control.currenttab == 3) {					
+					//Buffer size control
+					if (help.inboxw(control.mx, control.my, 150, (gfx.linesize * 3), 70, 10)) {
+						control.filllist(control.LIST_BUFFERSIZE);
+						control.list.init(gfx, 135, (gfx.linesize * 4) - 3);
+					}
+					//Swing controls
+					if (help.inboxw(control.mx, control.my, 100, (gfx.linesize * 6) - 1, 10, 10)) {
+						control.swing --;
+						if (control.swing < -10) control.swing = -10;
+					}
+					if (help.inboxw(control.mx, control.my, 150, (gfx.linesize * 6) - 1, 10, 10)) {
+						control.swing ++;
+						if (control.swing > 10) control.swing = 10;
+					} 
 				}
 			}else if (control.my > gfx.screenheight - gfx.linesize) {
 				if (control.currentbox > -1) {
@@ -539,6 +578,14 @@
 				control.arrange.viewstart--;
 				if (control.arrange.viewstart < 0) control.arrange.viewstart = 0;
 				control.keydelay = 4;
+				
+				if (control.currenttab == 0) {
+					control.secretmenu++;
+					if(control.secretmenu >= 10) {
+						control.currenttab = 3;
+						control.secretmenu = 0;
+					}
+				}
 			}else if (control.press_right) {
 				control.arrange.viewstart++;
 				if (control.arrange.viewstart > 1000) control.arrange.viewstart = 1000;

@@ -42,7 +42,9 @@ package{
 			
 			screen = new Bitmap(screenbuffer);
 			screen.width = 768;
-			screen.height = 480;
+			screen.height = 480; 
+			screen.x = 0;
+			screen.y = 0; 
 			addChild(screen);				
 		}
 

@@ -9,10 +9,36 @@ package {
 			for (var i:int = 0; i < 1000; i++) {
 				bar.push(new barclass);
 			}
+			for (i = 0; i < 100; i++) {
+				copybuffer.push(new barclass);
+			}
+			copybuffersize = 0;
+			
 			for (i = 0; i < 8; i++) {
 				channelon.push(true);
 			}
 			clear();
+		}
+		
+		public function copy():void {
+			for (var i:int = loopstart; i < loopend; i++) {
+				for (var j:int = 0; j < 8; j++) {
+					copybuffer[i-loopstart].channel[j] = bar[i].channel[j];
+				}
+			}
+			copybuffersize = loopend-loopstart;
+		}
+		
+		public function paste(t:int):void {
+			for (var i:int = 0; i < copybuffersize; i++) {
+				insertbar(t);
+			}
+			
+			for (i = t; i < t + copybuffersize; i++) {
+				for (var j:int = 0; j < 8; j++) {
+					bar[i].channel[j] = copybuffer[i - t].channel[j];
+				}
+			}
 		}
 		
 		public function clear():void {
@@ -67,6 +93,9 @@ package {
 			}
 			lastbar--;
 		}
+		
+		public var copybuffer:Vector.<barclass> = new Vector.<barclass>;
+		public var copybuffersize:int;
 		
 		public var bar:Vector.<barclass> = new Vector.<barclass>;
 		public var channelon:Vector.<Boolean> = new Vector.<Boolean>;

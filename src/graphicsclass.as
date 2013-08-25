@@ -330,6 +330,9 @@
 					  control.drawnoteposition = ((control.drawnoteposition * 8) / control.musicbox[t].notespan) + 2;
 					}else {
 						control.drawnoteposition++;
+						if (control.musicbox[t].notespan < 6) {
+							control.drawnoteposition += 6 - control.musicbox[t].notespan;
+						}
 					}
 					if (control.drawnoteposition >= 1 && control.drawnoteposition < 11) {
 					  fillrect(xp + 21 + (mbi * 2), yp + 11 - control.drawnoteposition, control.drawnotelength, 1, 105 + (temppal * 10));
@@ -460,7 +463,7 @@
 			}else{
 			  bigprint(10, linesize * 2 - 5, "BOSCA CEOIL", 255 - (help.glow * 4), 64 + (help.glow * 2), 255 - help.glow, false, 3);
 			}
-			print(165, (linesize * 4)+4, "v1.0", 2, false, true);
+			print(160, (linesize * 4)+4, "v1.01", 2, false, true);
 			
 			
 			print(10, (linesize * 5)+5, "Created by Terry Cavanagh", 2, false, true);

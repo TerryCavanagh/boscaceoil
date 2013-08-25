@@ -44,9 +44,10 @@
 		public var LIST_SELECTINSTRUMENT:int = 4;
 		public var LIST_BARCOUNT:int = 5;
 		public var LIST_BOXCOUNT:int = 6;
+		public var LIST_BUFFERSIZE:int = 7;
 		
 		public function controlclass():void {
-			version = 1;
+			version = 2;
 			clicklist = false;
 			
 			test = false; teststring = "TEST = True";
@@ -110,6 +111,8 @@
 			scalename[CHORD_SUS2] = "Chord: sus2";
 			
 			looptime = 0;
+			swingoff = 0;
+			SetSwing(); //Swing functions submitted on gibhub via @increpare, cheers!
 			
 			_presets = new SiONPresetVoice();
 			voicelist = new voicelistclass();
@@ -159,13 +162,25 @@
 			
 			boxcount = 16; barcount = 4;
 			
-			_driver = new SiONDriver(2048); //2048, 4096
+			programsettings = SharedObject.getLocal("boscaceoil_settings");
+			
+			if (programsettings.data.buffersize == undefined) {
+				buffersize = 2048;
+				programsettings.data.buffersize = buffersize;
+				programsettings.flush();
+				programsettings.close();
+      } else {
+				buffersize = programsettings.data.buffersize;
+				programsettings.flush();
+				programsettings.close();
+      }
+			
+			
+			_driver = new SiONDriver(buffersize); currentbuffersize = buffersize;
 			_driver.setBeatCallbackInterval(1);
-			_driver.setTimerInterruption(1, _onTimerInterruption);
+			_driver.setTimerInterruption(1, _onTimerInterruption);			
 			
 			_driver.addEventListener(SiONEvent.STREAM, onStream);
-			_data = new ByteArray();
-			_data.endian = Endian.LITTLE_ENDIAN;
 			
 			_driver.bpm = bpm; //Default
 			_driver.play(null, false);
@@ -175,6 +190,7 @@
 			if(musicplaying){
 				if (looptime >= boxcount) {
 					looptime-= boxcount;
+					SetSwing();
 					arrange.currentbar++;
 					if (arrange.currentbar >= arrange.loopend) {
 						arrange.currentbar = arrange.loopstart;
@@ -232,7 +248,44 @@
 				}
 				
 				looptime = looptime + 1;
+				SetSwing();
 			}
+		}
+		
+	  private function SetSwing():void{  
+      if (_driver == null) return;
+      
+      //swing goes from -10 to 10
+      //fswing goes from 0.2 - 1.8
+      var fswing:Number = 0.2+(swing+10)*(1.8-0.2)/20.0;
+      
+			if (swing == 0) {
+				if (swingoff == 1) {
+					_driver.setTimerInterruption(1, _onTimerInterruption);
+					swingoff = 0;
+				}
+			}else {
+				swingoff = 1;
+				if (looptime%2==0)
+				{
+					_driver.setTimerInterruption(fswing, _onTimerInterruption);
+				}
+				else        
+				{
+					_driver.setTimerInterruption(2-fswing, _onTimerInterruption);
+				}
+			}
+    }
+		
+		public function setbuffersize(t:int):void {
+			if (t == 0) buffersize = 2048;
+			if (t == 1) buffersize = 4096;
+			if (t == 2) buffersize = 8192;
+			
+			programsettings = SharedObject.getLocal("boscaceoil_settings");			
+			programsettings.data.buffersize = buffersize;
+			programsettings.flush();
+			programsettings.close();
 		}
 		
 		public function adddrumkitnote(t:int, name:String, voice:String, note:int = 60):void {
@@ -390,7 +443,12 @@
 				musicbox[currentbox].notes[i].x = pianoroll[musicbox[currentbox].notes[i].x];
 			}
 			musicbox[currentbox].scale = t;
-			musicbox[currentbox].start = scalesize * 3;
+			if (musicbox[currentbox].bottomnote < 250) {
+				musicbox[currentbox].start = invertpianoroll[musicbox[currentbox].bottomnote] - 2;
+				if (musicbox[currentbox].start < 0) musicbox[currentbox].start = 0;
+			}else{
+			  musicbox[currentbox].start = scalesize * 3;
+			}
 			musicbox[currentbox].setnotespan();
 		}
 		
@@ -400,8 +458,13 @@
 			setscale(musicbox[t].scale);			
 			updatepianoroll();
 			
-			if(instrument[musicbox[t].instr].type==0){
-			  musicbox[t].start = scalesize * 3;
+			if (instrument[musicbox[t].instr].type == 0) {
+				if (musicbox[t].bottomnote < 250) {
+					musicbox[t].start = invertpianoroll[musicbox[t].bottomnote] - 2;
+					if (musicbox[t].start < 0) musicbox[t].start = 0;
+				}else{
+					musicbox[t].start = scalesize * 3;
+				}
 			}else {
 				musicbox[t].start = 0;
 			}
@@ -527,6 +590,17 @@
 				musicbox[a].notes[j].height = musicbox[b].notes[j].height;
 			}
 			
+			for (j = 0; j < 16; j++){
+			  musicbox[a].cutoffgraph[j] = musicbox[b].cutoffgraph[j]
+				musicbox[a].resonancegraph[j] = musicbox[b].resonancegraph[j]
+				musicbox[a].volumegraph[j] = musicbox[b].volumegraph[j]
+			}
+			
+		  musicbox[a].recordfilter = musicbox[b].recordfilter;
+		  musicbox[a].topnote = musicbox[b].topnote;
+			musicbox[a].bottomnote = musicbox[b].bottomnote;
+			musicbox[a].notespan = musicbox[b].notespan;
+			
 		  musicbox[a].start = musicbox[b].start;
 		  musicbox[a].key = musicbox[b].key;
 		  musicbox[a].instr = musicbox[b].instr;
@@ -629,17 +703,23 @@
 					}
 					list.numitems = numinstrument;
 				break;
+				case LIST_BUFFERSIZE:
+					list.item[0] = "2048 (default, high performance)";
+					list.item[1] = "4096 (try if you get cracking on wav exports)";
+					list.item[2] = "8192 (slow, not recommended)";
+					list.numitems = 3;
+				break;
 			}
 		}
 		
 		public function setinstrumenttoindex(t:int):void {
 			voicelist.index = instrument[t].index;
 			if (help.Left(voicelist.voice[voicelist.index], 7) == "drumkit") {
-			  instrument[currentinstrument].type = int(help.Right(voicelist.voice[voicelist.index]));
-				instrument[currentinstrument].updatefilter();
-				drumkit[instrument[currentinstrument].type-1].updatefilter(instrument[currentinstrument].cutoff, instrument[currentinstrument].resonance);
+			  instrument[t].type = int(help.Right(voicelist.voice[voicelist.index]));
+				instrument[t].updatefilter();
+				drumkit[instrument[t].type-1].updatefilter(instrument[t].cutoff, instrument[t].resonance);
 			}else {
-				instrument[currentinstrument].type = 0;
+				instrument[t].type = 0;
 				instrument[t].voice = _presets[voicelist.voice[voicelist.index]];
 				instrument[t].updatefilter();
 			}
@@ -656,6 +736,12 @@
 			  instrument[currentinstrument].type = int(help.Right(voicelist.voice[voicelist.index]));
 				instrument[currentinstrument].updatefilter();
 				drumkit[instrument[currentinstrument].type-1].updatefilter(instrument[currentinstrument].cutoff, instrument[currentinstrument].resonance);
+				
+				if (currentbox > -1) {
+				  if (musicbox[currentbox].start > drumkit[instrument[currentinstrument].type-1].size) {
+						musicbox[currentbox].start = 0;
+					}
+				}
 			}else {
 				instrument[currentinstrument].type = 0;
 				instrument[currentinstrument].voice = _presets[voicelist.voice[voicelist.index]];
@@ -675,6 +761,7 @@
 		public function makefilestring():void {
 			filestring = "";
 			filestring += String(version) + ",";
+			filestring += String(swing)+",";
 			filestring += String(bpm) + ",";
 			filestring += String(boxcount) + ",";
 			filestring += String(barcount) + ",";
@@ -686,6 +773,7 @@
 				filestring += String(instrument[i].palette) + ",";
 				filestring += String(instrument[i].cutoff) + ",";
 				filestring += String(instrument[i].resonance) + ",";
+				filestring += String(instrument[i].volume) + ",";
 			}
 			//Next, musicboxes
 			filestring += String(numboxes) + ",";
@@ -741,55 +829,122 @@
 		public function convertfilestring():void {
 			fi = 0;
 			version = readfilestream();
-			bpm = readfilestream();
-			boxcount = readfilestream();
-			barcount = readfilestream();
-			numinstrument = readfilestream();
-			for (i = 0; i < numinstrument; i++) {
-				instrument[i].index = readfilestream();
-				setinstrumenttoindex(i);
-				instrument[i].type = readfilestream();
-				instrument[i].palette= readfilestream();
-				instrument[i].cutoff= readfilestream();
-				instrument[i].resonance = readfilestream();
-				instrument[i].updatefilter();
-				if(instrument[i].type>0){
-				  drumkit[instrument[i].type-1].updatefilter(instrument[i].cutoff, instrument[i].resonance);
-				}
-			}
-			//Next, musicboxes
-			numboxes = readfilestream();
-			for (i = 0; i < numboxes; i++) {
-			  musicbox[i].key = readfilestream();
-				musicbox[i].scale = readfilestream();
-				musicbox[i].instr = readfilestream();
-				musicbox[i].palette = readfilestream();
-			  musicbox[i].numnotes = readfilestream();
-				for (j = 0; j < musicbox[i].numnotes; j++) {
-				  musicbox[i].notes[j].x = readfilestream();
-				  musicbox[i].notes[j].y = readfilestream();
-				  musicbox[i].notes[j].width = readfilestream();
-				  musicbox[i].notes[j].height = readfilestream();
-				}
-				musicbox[i].findtopnote(); musicbox[i].findbottomnote(); 
-				musicbox[i].notespan = musicbox[i].topnote-musicbox[i].bottomnote;
-			  musicbox[i].recordfilter = readfilestream();
-				if (musicbox[i].recordfilter == 1) {
-				  for (j = 0; j < 16; j++) {
-						musicbox[i].volumegraph[j] = readfilestream();
-						musicbox[i].cutoffgraph[j] = readfilestream();
-						musicbox[i].resonancegraph[j] = readfilestream();
+			if (version == 2) {
+				swing = readfilestream();
+				bpm = readfilestream();
+				boxcount = readfilestream();
+				barcount = readfilestream();
+				numinstrument = readfilestream();
+				for (i = 0; i < numinstrument; i++) {
+					instrument[i].index = readfilestream();
+					setinstrumenttoindex(i);
+					instrument[i].type = readfilestream();
+					instrument[i].palette= readfilestream();
+					instrument[i].cutoff= readfilestream();
+					instrument[i].resonance = readfilestream();
+					instrument[i].volume = readfilestream();
+					instrument[i].updatefilter();
+					if(instrument[i].type>0){
+						drumkit[instrument[i].type-1].updatefilter(instrument[i].cutoff, instrument[i].resonance);
+						drumkit[instrument[i].type-1].updatevolume(instrument[i].volume);
 					}
 				}
-			}
-			//Next, arrangements
-			arrange.lastbar = readfilestream();
-			arrange.loopstart = readfilestream();
-			arrange.loopend = readfilestream();
-			for (i = 0; i < arrange.lastbar; i++) {
-				for (j = 0; j < 8; j++) {
-			    arrange.bar[i].channel[j] = readfilestream();
+				//Next, musicboxes
+				numboxes = readfilestream();
+				for (i = 0; i < numboxes; i++) {
+					musicbox[i].key = readfilestream();
+					musicbox[i].scale = readfilestream();
+					musicbox[i].instr = readfilestream();
+					musicbox[i].palette = readfilestream();
+					musicbox[i].numnotes = readfilestream();
+					for (j = 0; j < musicbox[i].numnotes; j++) {
+						musicbox[i].notes[j].x = readfilestream();
+						musicbox[i].notes[j].y = readfilestream();
+						musicbox[i].notes[j].width = readfilestream();
+						musicbox[i].notes[j].height = readfilestream();
+					}
+					musicbox[i].findtopnote(); musicbox[i].findbottomnote(); 
+					musicbox[i].notespan = musicbox[i].topnote-musicbox[i].bottomnote;
+					musicbox[i].recordfilter = readfilestream();
+					if (musicbox[i].recordfilter == 1) {
+						for (j = 0; j < 16; j++) {
+							musicbox[i].volumegraph[j] = readfilestream();
+							musicbox[i].cutoffgraph[j] = readfilestream();
+							musicbox[i].resonancegraph[j] = readfilestream();
+						}
+					}
 				}
+				//Next, arrangements
+				arrange.lastbar = readfilestream();
+				arrange.loopstart = readfilestream();
+				arrange.loopend = readfilestream();
+				for (i = 0; i < arrange.lastbar; i++) {
+					for (j = 0; j < 8; j++) {
+						arrange.bar[i].channel[j] = readfilestream();
+					}
+				}
+			}else {
+				//opps, the file we're loading is out of date. Let's try to convert it
+				legacy_convertfilestring(version);
+				version = 2;
+			}
+		}
+		
+		public function legacy_convertfilestring(t:int):void {
+			switch(t) {
+				case 1: //Original release, had a bug where volume info wasn't saved
+					bpm = readfilestream();
+					swing = 0;
+					boxcount = readfilestream();
+					barcount = readfilestream();
+					numinstrument = readfilestream();
+					for (i = 0; i < numinstrument; i++) {
+						instrument[i].index = readfilestream();
+						setinstrumenttoindex(i);
+						instrument[i].type = readfilestream();
+						instrument[i].palette= readfilestream();
+						instrument[i].cutoff= readfilestream();
+						instrument[i].resonance = readfilestream();
+						instrument[i].updatefilter();
+						if(instrument[i].type>0){
+							drumkit[instrument[i].type-1].updatefilter(instrument[i].cutoff, instrument[i].resonance);
+						}
+					}
+					//Next, musicboxes
+					numboxes = readfilestream();
+					for (i = 0; i < numboxes; i++) {
+						musicbox[i].key = readfilestream();
+						musicbox[i].scale = readfilestream();
+						musicbox[i].instr = readfilestream();
+						musicbox[i].palette = readfilestream();
+						musicbox[i].numnotes = readfilestream();
+						for (j = 0; j < musicbox[i].numnotes; j++) {
+							musicbox[i].notes[j].x = readfilestream();
+							musicbox[i].notes[j].y = readfilestream();
+							musicbox[i].notes[j].width = readfilestream();
+							musicbox[i].notes[j].height = readfilestream();
+						}
+						musicbox[i].findtopnote(); musicbox[i].findbottomnote(); 
+						musicbox[i].notespan = musicbox[i].topnote-musicbox[i].bottomnote;
+						musicbox[i].recordfilter = readfilestream();
+						if (musicbox[i].recordfilter == 1) {
+							for (j = 0; j < 16; j++) {
+								musicbox[i].volumegraph[j] = readfilestream();
+								musicbox[i].cutoffgraph[j] = readfilestream();
+								musicbox[i].resonancegraph[j] = readfilestream();
+							}
+						}
+					}
+					//Next, arrangements
+					arrange.lastbar = readfilestream();
+					arrange.loopstart = readfilestream();
+					arrange.loopend = readfilestream();
+					for (i = 0; i < arrange.lastbar; i++) {
+						for (j = 0; j < 8; j++) {
+							arrange.bar[i].channel[j] = readfilestream();
+						}
+					}
+				break;
 			}
 		}
 		
@@ -851,8 +1006,12 @@
 			numinstrument = 1;
 			numboxes = 0;
 			arrange.clear();
+			arrange.currentbar = 0; arrange.viewstart = 0;
 			
 			convertfilestring();
+			
+			changemusicbox(0);
+			looptime = 0;
 			
 			fixmouseclicks = true;
 		}
@@ -870,13 +1029,17 @@
 			arrange.loopstart = 0; arrange.loopend = arrange.lastbar;
 			musicplaying = true;
 			looptime = 0;	arrange.currentbar = arrange.loopstart;
+			SetSwing();
+			
+			//Clear the wav buffer
+			_data = new ByteArray();
+			_data.endian = Endian.LITTLE_ENDIAN;
 			
 			followmode = true;
 			nowexporting = true;
 		}
 		
 		public function savewav():void {
-		  _driver.removeEventListener(SiONEvent.STREAM, onStream);
 			nowexporting = false; followmode = false;
 			
 			_wav = new ByteArray();
@@ -933,8 +1096,9 @@
 		
 		public var press_up:Boolean, press_down:Boolean, press_left:Boolean, press_right:Boolean, press_space:Boolean, press_enter:Boolean;
 		public var keypriority:int = 0;
-		public var keyheld:Boolean;
+		public var keyheld:Boolean = false;;
 		public var clicklist:Boolean;
+		public var copykeyheld:Boolean = false;
 		
 		public var keydelay:int, keyboardpressed:int = 0;
 		public var fixmouseclicks:Boolean = false;
@@ -998,8 +1162,15 @@
 		public var followmode:Boolean = false;
 		public var bpm:int;
 		public var version:int;
+		public var swing:int;
+		public var swingoff:int;
+		
+		public var secretmenu:int=0;
 		
 		public var doubleclickcheck:int;
+		
+		public var programsettings:SharedObject;
+		public var buffersize:int, currentbuffersize:int;
 		
 		private var _data:ByteArray;
 		private var _wav:ByteArray;

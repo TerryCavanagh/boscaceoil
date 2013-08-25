@@ -1,0 +1,22 @@
+Version 1.01 (25th August 2013)
+---------
+
+ New Features:
+  - You can copy and paste columns from the arrangement view - copy the entire currently looping region with CTRL+C, and paste it with CTRL+V.
+  - A hidden advanced control panel lets you change sound buffer size (for higher quality wav exports). To acce ss this panel, HOLD LEFT on the file menu.
+  - Swing control (thanks @increpare!). This is in the advanced control panel too.
+
+ Bugfixes:
+  - Fixed a bug that caused instruments to get mixed up sometimes
+  - Instrument volumes are now saved correctly!
+  - WAV exporter now works properly when used multiple times
+  - Deleting patterns no longer screws up advanced filter settings
+ 
+ Little things:
+  - Patterns in arrangement view are a bit more legible when selected
+  - Default vertical positions of patterns in pattern editor now based on lowest note rather than O4
+
+Version 1.0 (23rd August 2013)
+---------
+
+Inital release.
