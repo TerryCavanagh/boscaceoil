@@ -153,6 +153,7 @@
 						control.list.close();
 					}
 					
+					/* NOT USING DROP DOWN LIST FOR PATTERN LENGTHS ANYMORE
 					if (control.list.type == control.LIST_BARCOUNT) {
 						control.barcount = control.list.selection + 1;
 						control.list.close();
@@ -161,6 +162,7 @@
 						control.boxcount = control.list.selection + 1;
 						control.list.close();
 					}
+					*/
 					
 					if (control.list.type == control.LIST_BUFFERSIZE) {
 						control.setbuffersize(control.list.selection);
@@ -214,13 +216,23 @@
 							if (control.bpm > 220) control.bpm = 220;
 							control._driver.bpm = control.bpm;
 						}
-						if (help.inboxw(control.mx, control.my, 290, (gfx.linesize * 7), 35, 10)) {
-							control.filllist(control.LIST_BARCOUNT);
-							control.list.init(gfx, 295, (gfx.linesize * 8) - 3);
+						if (help.inboxw(control.mx, control.my, 290, (gfx.linesize * 7) - 1, 10, 10)) {
+							control.barcount--;
+							if (control.barcount < 1) control.barcount = 1;
 						}
-						if (help.inboxw(control.mx, control.my, 330, (gfx.linesize * 7), 35, 10)) {
-							control.filllist(control.LIST_BOXCOUNT);
-							control.list.init(gfx, 335, (gfx.linesize * 8) - 3);
+						if (help.inboxw(control.mx, control.my, 320, (gfx.linesize * 7) - 1, 10, 10)) {
+							control.barcount++;
+							if (control.barcount > 32) control.barcount = 32;
+						}
+						if (help.inboxw(control.mx, control.my, 335, (gfx.linesize * 7) - 1, 10, 10)) {
+							control.boxcount--;
+							if (control.boxcount < 1) control.boxcount = 1;
+							control.doublesize = control.boxcount > 16;
+						}
+						if (help.inboxw(control.mx, control.my, 365, (gfx.linesize * 7) - 1, 10, 10)) {
+							control.boxcount++;
+							if (control.boxcount > 32) control.boxcount = 32;
+							control.doublesize = control.boxcount > 16;
 						}
 					}
 				}else if (control.currenttab == 1) {

@@ -108,8 +108,13 @@
 		
 		public function drawpatterneditor(control:controlclass):void {
 			//Pattern editor
-			control.boxsize = (screenwidth - 30) / 16;
-			control.barsize = control.boxsize * control.barcount;
+			if (control.doublesize) {
+				control.boxsize = (screenwidth - 30) / 32;
+				control.barsize = control.boxsize * control.barcount;
+			}else{
+				control.boxsize = (screenwidth - 30) / 16;
+				control.barsize = control.boxsize * control.barcount;
+			}
 			
 			//Background alternating colour rows
 			for (i = 0; i < 12; i++){
@@ -129,8 +134,14 @@
 			}
 			
 			//Reduced patternsize? Just draw over it!
-			if (control.boxcount < 16) {
-				fillrect(21 + (control.boxcount * control.boxsize), pianorollposition + linesize, screenwidth, linesize*12, 103 + (control.musicbox[control.currentbox].palette * 10));
+			if (control.doublesize) {
+				if (control.boxcount < 32) {
+					fillrect(21 + (control.boxcount * control.boxsize), pianorollposition + linesize, screenwidth, linesize*12, 103 + (control.musicbox[control.currentbox].palette * 10));
+				}
+			}else{
+				if (control.boxcount < 16) {
+					fillrect(21 + (control.boxcount * control.boxsize), pianorollposition + linesize, screenwidth, linesize*12, 103 + (control.musicbox[control.currentbox].palette * 10));
+				}
 			}
 			
 			//Note names
@@ -217,8 +228,14 @@
 							fillrect(21 + (i * control.boxsize), pianorollposition + (linesize * 12) - (control.drawnoteposition * linesize) + 8, control.drawnotelength, 2, 104+(control.musicbox[control.currentbox].palette*10));
 							fillrect(21 + (i * control.boxsize) + control.drawnotelength - 2, pianorollposition + (linesize * 12) - (control.drawnoteposition * linesize), 2, linesize, 104 + (control.musicbox[control.currentbox].palette * 10));
 							
-							if (control.musicbox[control.currentbox].notes[j].y + control.musicbox[control.currentbox].notes[j].width> 16) {
-								print(21 + (i * control.boxsize), pianorollposition + (linesize * 12) - (control.drawnoteposition * linesize), String(int(control.musicbox[control.currentbox].notes[j].y)), 12);
+							if (control.doublesize) {
+								if (control.musicbox[control.currentbox].notes[j].y + control.musicbox[control.currentbox].notes[j].width > 32) {
+									print(21 + (i * control.boxsize), pianorollposition + (linesize * 12) - (control.drawnoteposition * linesize), String(int(control.musicbox[control.currentbox].notes[j].y)), 12);
+								}
+							}else {
+								if (control.musicbox[control.currentbox].notes[j].y + control.musicbox[control.currentbox].notes[j].width > 16) {
+									print(21 + (i * control.boxsize), pianorollposition + (linesize * 12) - (control.drawnoteposition * linesize), String(int(control.musicbox[control.currentbox].notes[j].y)), 12);
+								}
 							}
 						}
 					}
@@ -239,7 +256,7 @@
 					drawbox(20 + (2 * control.boxsize), pianorollposition + linesize +(control.cursory * linesize), control.boxsize * 12, linesize, 0);
 				}else{
 					drawbox(20 + (control.cursorx * control.boxsize), pianorollposition + linesize +(control.cursory * linesize), control.boxsize * control.notelength, linesize, 0);
-					if (control.notelength > 16) {
+					if (control.notelength > control.boxcount) {
 						print(20 + (control.cursorx * control.boxsize), pianorollposition + linesize +(control.cursory * linesize) - linesize, String(control.notelength), 0);
 					}
 				}
@@ -318,11 +335,20 @@
 			for (mbj = 0; mbj < control.musicbox[t].numnotes; mbj++) {
 				mbi = control.musicbox[t].notes[mbj].width;
 				control.drawnoteposition = control.musicbox[t].notes[mbj].x;
-				control.drawnotelength = control.musicbox[t].notes[mbj].y * 2;
-				if (mbi + control.musicbox[t].notes[mbj].y > 16) {
+				if (control.doublesize) {
+					control.drawnotelength = control.musicbox[t].notes[mbj].y;
+				}else{
+				  control.drawnotelength = control.musicbox[t].notes[mbj].y * 2;
+				}
+				if (mbi + control.musicbox[t].notes[mbj].y > control.boxcount) {
 					//54 for each bar
-					control.drawnotelength = 54 - (21 + (mbi * 2));
-					control.drawnotelength += (54 * (control.musicbox[t].notes[mbj].y - (16 - mbi)) / 16);
+					if (control.doublesize) {
+						control.drawnotelength = 54 - (21 + mbi);
+						control.drawnotelength += (54 * (control.musicbox[t].notes[mbj].y - (control.boxcount - mbi)) / control.boxcount);
+					}else{
+						control.drawnotelength = 54 - (21 + (mbi * 2));
+						control.drawnotelength += (54 * (control.musicbox[t].notes[mbj].y - (control.boxcount - mbi)) / control.boxcount);
+					}
 				}
 				if (control.drawnoteposition > -1) {			
 					control.drawnoteposition -= control.musicbox[t].bottomnote;
@@ -335,7 +361,11 @@
 						}
 					}
 					if (control.drawnoteposition >= 1 && control.drawnoteposition < 11) {
-					  fillrect(xp + 21 + (mbi * 2), yp + 11 - control.drawnoteposition, control.drawnotelength, 1, 105 + (temppal * 10));
+				    if (control.doublesize) {
+							fillrect(xp + 21 + mbi, yp + 11 - control.drawnoteposition, control.drawnotelength, 1, 105 + (temppal * 10));
+						}else{
+					    fillrect(xp + 21 + (mbi * 2), yp + 11 - control.drawnoteposition, control.drawnotelength, 1, 105 + (temppal * 10));
+						}
 					}
 				}
 			}
@@ -463,12 +493,12 @@
 			}else{
 			  bigprint(10, linesize * 2 - 5, "BOSCA CEOIL", 255 - (help.glow * 4), 64 + (help.glow * 2), 255 - help.glow, false, 3);
 			}
-			print(160, (linesize * 4)+4, "v1.01", 2, false, true);
+			print(160, (linesize * 4)+4, "v1.02", 2, false, true);
 			
 			
 			print(10, (linesize * 5)+5, "Created by Terry Cavanagh", 2, false, true);
 			print(10, (linesize * 6)+5, "SiON softsynth library by Kei Mesuda", 2, false, true);
-			print(10, (linesize * 7)+5, "Distributed under FreeBSD license", 2, false, true);
+			print(10, (linesize * 7)+5, "Hold left for advanced options", 2, false, true);
       print(10, (linesize * 9) + 5, "http://www.distractionware.com", 2, false, true);
 			
 			//Button
@@ -488,19 +518,52 @@
 			fillrect(305 -2, (linesize * 4)+5 -2, 75, 10, 1);
 			print(305 + 7, (linesize * 4)+5 - 1, "SAVE .ceol", 0, false, true);
 			
-			//fillrect(305 -2, (linesize * 4)+5 -2, 75, 10, 1);
 			fillrect(220, (linesize * 7)-1, 160, linesize, 1);
 			rprint(280, (linesize * 7) - 1, "PATTERN", 0, true);
-		  drawicon(290, (linesize * 7)-1, 0);
+		  drawicon(290, (linesize * 7)-1, 3);
 			print(305, (linesize * 7) - 1, String(control.barcount), 0, false, true);
-			drawicon(330, (linesize * 7)-1, 0);
+			drawicon(320, (linesize * 7) - 1, 2);
+			drawicon(335, (linesize * 7)-1, 3);
 			print(345, (linesize * 7) - 1, String(control.boxcount), 0, false, true);
+			drawicon(365, (linesize * 7)-1, 2);
 			
 			fillrect(220, (linesize * 9)-1, 160, linesize, 1);
 			rprint(280, (linesize * 9) - 1, "BPM", 0, true);
 			drawicon(305, (linesize * 9)-1, 3);
 			print(320, (linesize * 9) - 1, String(control.bpm), 0, false, true);
 			drawicon(350, (linesize * 9)-1, 2);
+		}
+		
+		public function drawadvancedmenu(control:controlclass):void {
+			print(2, linesize + 2, "ADVANCED SETTINGS AND OPTIONS", 0);
+			
+			fillrect(20, (linesize * 3)+2, 160+50, linesize, 1);
+			rprint(130, (linesize * 3) +2, "SOUND BUFFER SIZE", 0, true);
+			drawicon(155, (linesize * 3) + 2, 0);
+			print(170, (linesize * 3) +2, String(control.buffersize), 0, false, true);
+			
+			if (control.buffersize != control.currentbuffersize) {
+			  if (help.slowsine >= 32) {
+				  print(37, (linesize * 4) + 7, "REQUIRES RESTART TO TAKE EFFECT", 0);
+				}else {
+				  print(37, (linesize * 4) + 7, "REQUIRES RESTART TO TAKE EFFECT", 15);
+				}
+			}else{
+			  print(37, (linesize * 4) + 7, "REQUIRES RESTART TO TAKE EFFECT", 2);
+			}
+			
+			fillrect(20, (linesize * 6) + 2, 160, linesize, 1);
+      rprint(80, (linesize * 6) + 2, "SWING", 0, true);
+      drawicon(105, (linesize * 6) + 2, 3);
+			if(control.swing==-10){
+        print(120, (linesize * 6) + 2, String(control.swing), 0, false, true);
+			}else if (control.swing < 0 || control.swing == 10 ) {
+				print(125, (linesize * 6) + 2, String(control.swing), 0, false, true);
+			}else{
+				print(130, (linesize * 6) + 2, String(control.swing), 0, false, true);
+			}
+      drawicon(150, (linesize * 6) + 2, 2);
+			print(37, (linesize * 7) + 7, "EXPERIMENTAL: Swing function by @increpare", 2);
 		}
 		
 		public function drawpatternmanager(control:controlclass):void {

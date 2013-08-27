@@ -17,35 +17,7 @@
 	
 	switch(control.currenttab) {
 		case 3:
-			gfx.print(2, gfx.linesize + 2, "ADVANCED SETTINGS AND OPTIONS", 0);
-			
-			gfx.fillrect(20, (gfx.linesize * 3)+2, 160+50, gfx.linesize, 1);
-			gfx.rprint(130, (gfx.linesize * 3) +2, "SOUND BUFFER SIZE", 0, true);
-			gfx.drawicon(155, (gfx.linesize * 3) + 2, 0);
-			gfx.print(170, (gfx.linesize * 3) +2, String(control.buffersize), 0, false, true);
-			
-			if (control.buffersize != control.currentbuffersize) {
-			  if (help.slowsine >= 32) {
-				  gfx.print(37, (gfx.linesize * 4) + 7, "REQUIRES RESTART TO TAKE EFFECT", 0);
-				}else {
-				  gfx.print(37, (gfx.linesize * 4) + 7, "REQUIRES RESTART TO TAKE EFFECT", 15);
-				}
-			}else{
-			  gfx.print(37, (gfx.linesize * 4) + 7, "REQUIRES RESTART TO TAKE EFFECT", 2);
-			}
-			
-			gfx.fillrect(20, (gfx.linesize * 6) + 2, 160, gfx.linesize, 1);
-      gfx.rprint(80, (gfx.linesize * 6) + 2, "SWING", 0, true);
-      gfx.drawicon(105, (gfx.linesize * 6) + 2, 3);
-			if(control.swing==-10){
-        gfx.print(120, (gfx.linesize * 6) + 2, String(control.swing), 0, false, true);
-			}else if (control.swing < 0 || control.swing == 10 ) {
-				gfx.print(125, (gfx.linesize * 6) + 2, String(control.swing), 0, false, true);
-			}else{
-				gfx.print(130, (gfx.linesize * 6) + 2, String(control.swing), 0, false, true);
-			}
-      gfx.drawicon(150, (gfx.linesize * 6) + 2, 2);
-			gfx.print(37, (gfx.linesize * 7) + 7, "EXPERIMENTAL: Swing function by @increpare", 2);
+			gfx.drawadvancedmenu(control);
 		break;
 		case 0:
 			gfx.drawmenu(control);

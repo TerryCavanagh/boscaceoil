@@ -1123,6 +1123,7 @@
 		public var boxsize:int, boxcount:int;
 		public var barsize:int, barcount:int;
 		public var notelength:int;
+		public var doublesize:Boolean;
 		
 		public var barposition:Number = 0;
 		public var drawnoteposition:int, drawnotelength:int;
