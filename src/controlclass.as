@@ -8,6 +8,7 @@
 	import org.si.sion.SiONData;
 	import org.si.sion.utils.SiONPresetVoice;
 	import org.si.sion.SiONVoice;
+	import org.si.sion.effector.*;
   import org.si.sion.events.*;
 	import flash.filesystem.*;
   import flash.net.FileFilter;
@@ -42,9 +43,7 @@
 		public var LIST_INSTRUMENT:int = 2;
 		public var LIST_CATEGORY:int = 3;
 		public var LIST_SELECTINSTRUMENT:int = 4;
-		public var LIST_BARCOUNT:int = 5;
-		public var LIST_BOXCOUNT:int = 6;
-		public var LIST_BUFFERSIZE:int = 7;
+		public var LIST_BUFFERSIZE:int = 5;
 		
 		public function controlclass():void {
 			version = 2;
@@ -178,12 +177,48 @@
 			
 			_driver = new SiONDriver(buffersize); currentbuffersize = buffersize;
 			_driver.setBeatCallbackInterval(1);
-			_driver.setTimerInterruption(1, _onTimerInterruption);			
+			_driver.setTimerInterruption(1, _onTimerInterruption);
+			
+			globaldelay = 0;
+			globalchorus = 0;
+			//_driver.effector.slot0 = [new SiEffectStereoDelay((500*globaldelay)/100,0.2,false)];
+      //_driver.effector.slot1 = [new SiEffectStereoChorus(20, 0.2, 4, 20)];
+			//_driver.effector.slot2 = [new SiEffectStereoReverb(0.7, 0.4, 0.8, 0.3)];
 			
 			_driver.addEventListener(SiONEvent.STREAM, onStream);
 			
 			_driver.bpm = bpm; //Default
 			_driver.play(null, false);
+		}
+		
+		public function updateeffects():void {
+			//Some half finished code: I can't figure out why only the effector in slot0
+			//seems to work. Will try to sort it out later.
+			
+			//start by turning everything off:
+			_driver.effector.clear(0);
+			_driver.effector.clear(1);
+			//_driver.effector.slot2 = [];
+			//_driver.effector.slot3 = [];
+			
+			if (globaldelay < 5) {
+				//If not using delay
+				if (globalchorus < 5) {
+				  //If not using chorus	(and !delay)
+				}else{
+					_driver.effector.connect(0, new SiEffectStereoChorus(5.0 + ((60.0 * globaldelay) / 100),0.2,4,20));
+				}
+			}else {
+				//If using delay
+			  _driver.effector.connect(0, new SiEffectStereoDelay((300 * globaldelay) / 100, 0.1, false));
+				
+				if (globalchorus < 5) {
+				  //If not using chorus	(but using delay)
+				}else {
+				  //If using chorus	(and using delay)
+					_driver.effector.connect(1, new SiEffectStereoChorus(5.0 + ((60.0 * globaldelay) / 100),0.2,4,20));
+				}
+			}
 		}
 		
 		public function _onTimerInterruption():void {
@@ -636,12 +671,6 @@
 		public function filllist(t:int):void {
 			list.type = t;
 			switch(t) {
-				case LIST_BARCOUNT: case LIST_BOXCOUNT: 
-					for (i = 0; i < 16; i++) {
-						list.item[i] = String(i + 1);
-					}
-					list.numitems = 16;
-				break;
 				case LIST_KEY:
 					for (i = 0; i < 12; i++) {
 						list.item[i] = notename[i];
@@ -810,7 +839,7 @@
 		}
 		
 		public function newsong():void {
-			bpm = 120; boxcount = 16; barcount = 4;
+			bpm = 120; boxcount = 16; barcount = 4; doublesize = false;
 			arrange.clear();
 			musicbox[0].clear();
 			changekey(0); changescale(0);
@@ -832,7 +861,7 @@
 			if (version == 2) {
 				swing = readfilestream();
 				bpm = readfilestream();
-				boxcount = readfilestream();
+				boxcount = readfilestream(); doublesize = boxcount > 16;
 				barcount = readfilestream();
 				numinstrument = readfilestream();
 				for (i = 0; i < numinstrument; i++) {
@@ -895,7 +924,7 @@
 				case 1: //Original release, had a bug where volume info wasn't saved
 					bpm = readfilestream();
 					swing = 0;
-					boxcount = readfilestream();
+					boxcount = readfilestream(); doublesize = boxcount > 16;
 					barcount = readfilestream();
 					numinstrument = readfilestream();
 					for (i = 0; i < numinstrument; i++) {
@@ -1175,5 +1204,9 @@
 		
 		private var _data:ByteArray;
 		private var _wav:ByteArray;
+		
+		//Global effects
+		public var globaldelay:int;
+		public var globalchorus:int;
 	}
 }

@@ -153,17 +153,6 @@
 						control.list.close();
 					}
 					
-					/* NOT USING DROP DOWN LIST FOR PATTERN LENGTHS ANYMORE
-					if (control.list.type == control.LIST_BARCOUNT) {
-						control.barcount = control.list.selection + 1;
-						control.list.close();
-					}
-					if (control.list.type == control.LIST_BOXCOUNT) {
-						control.boxcount = control.list.selection + 1;
-						control.list.close();
-					}
-					*/
-					
 					if (control.list.type == control.LIST_BUFFERSIZE) {
 						control.setbuffersize(control.list.selection);
 						control.list.close();
@@ -344,9 +333,9 @@
 					}
 				}else if (control.currenttab == 3) {					
 					//Buffer size control
-					if (help.inboxw(control.mx, control.my, 150, (gfx.linesize * 3), 70, 10)) {
+					if (help.inboxw(control.mx, control.my, 120, (gfx.linesize * 3), 70, 10)) {
 						control.filllist(control.LIST_BUFFERSIZE);
-						control.list.init(gfx, 135, (gfx.linesize * 4) - 3);
+						control.list.init(gfx, 105, (gfx.linesize * 4) - 3);
 					}
 					//Swing controls
 					if (help.inboxw(control.mx, control.my, 100, (gfx.linesize * 6) - 1, 10, 10)) {
@@ -394,7 +383,21 @@
 		}
 		
 		if (key.press && !control.clicklist) {
-			if (control.currenttab == 2) {
+			if (control.currenttab == 3) {
+				if (control.mx >= gfx.screenwidth - 130 && control.my >= (gfx.linesize * 3) + 2 && control.my <= (gfx.linesize * 3) + 12 ) {
+					i = control.mx - (gfx.screenwidth - 120);
+					if (i < 0) i = 0; if(i>100) i=100;
+					
+					control.globaldelay = i;
+					control.updateeffects();
+				}else if (control.mx >= gfx.screenwidth - 130 && control.my >= (gfx.linesize * 5) + 2 && control.my <= (gfx.linesize * 5) + 12 ) {
+					i = control.mx - (gfx.screenwidth - 120);
+					if (i < 0) i = 0; if(i>100) i=100;
+					
+					control.globalchorus = i;
+					control.updateeffects();
+				}
+			}else if (control.currenttab == 2) {
 				if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 10) {				
 					if (control.mx >= 140 && control.my > 35 && control.mx < gfx.screenwidth - 25) {
 						i = control.mx - 140; j = control.my - 40;

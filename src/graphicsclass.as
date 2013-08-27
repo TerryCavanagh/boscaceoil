@@ -498,7 +498,7 @@
 			
 			print(10, (linesize * 5)+5, "Created by Terry Cavanagh", 2, false, true);
 			print(10, (linesize * 6)+5, "SiON softsynth library by Kei Mesuda", 2, false, true);
-			print(10, (linesize * 7)+5, "Hold left for advanced options", 2, false, true);
+			print(10, (linesize * 7)+5, "Hold LEFT for advanced options", 2, false, true);
       print(10, (linesize * 9) + 5, "http://www.distractionware.com", 2, false, true);
 			
 			//Button
@@ -535,21 +535,17 @@
 		}
 		
 		public function drawadvancedmenu(control:controlclass):void {
-			print(2, linesize + 2, "ADVANCED SETTINGS AND OPTIONS", 0);
-			
-			fillrect(20, (linesize * 3)+2, 160+50, linesize, 1);
-			rprint(130, (linesize * 3) +2, "SOUND BUFFER SIZE", 0, true);
-			drawicon(155, (linesize * 3) + 2, 0);
-			print(170, (linesize * 3) +2, String(control.buffersize), 0, false, true);
+			fillrect(20, (linesize * 3)+2, 160, linesize, 1);
+			rprint(100, (linesize * 3) +2, "SOUND BUFFER ", 0, true);
+			drawicon(125, (linesize * 3) + 2, 0);
+			print(140, (linesize * 3) +2, String(control.buffersize), 0, false, true);
 			
 			if (control.buffersize != control.currentbuffersize) {
 			  if (help.slowsine >= 32) {
-				  print(37, (linesize * 4) + 7, "REQUIRES RESTART TO TAKE EFFECT", 0);
+				  print(24, (linesize * 4) + 7, "REQUIRES RESTART", 0);
 				}else {
-				  print(37, (linesize * 4) + 7, "REQUIRES RESTART TO TAKE EFFECT", 15);
+				  print(24, (linesize * 4) + 7, "REQUIRES RESTART", 15);
 				}
-			}else{
-			  print(37, (linesize * 4) + 7, "REQUIRES RESTART TO TAKE EFFECT", 2);
 			}
 			
 			fillrect(20, (linesize * 6) + 2, 160, linesize, 1);
@@ -563,7 +559,30 @@
 				print(130, (linesize * 6) + 2, String(control.swing), 0, false, true);
 			}
       drawicon(150, (linesize * 6) + 2, 2);
-			print(37, (linesize * 7) + 7, "EXPERIMENTAL: Swing function by @increpare", 2);
+			print(24, (linesize * 7) + 7, "Swing function by @increpare", 2);
+			
+			//Switches for global controls!
+			fillrect(screenwidth - 120, (linesize * 3)+2, 110, 10, 6);
+      rprint(screenwidth - 130, (linesize * 3) + 2, "DELAY", 0, true);
+				
+			j = 0;
+			fillrect(screenwidth - 120 +j, (linesize * 3) + 2, 10, 10, 6);
+			fillrect(screenwidth - 120 +j+ 1, (linesize * 3) + 2 + 1, 8, 8, 5);		
+				
+			j = int((control.globaldelay));
+			fillrect(screenwidth - 120 +j, (linesize * 3) + 2, 10, 10, 1);
+			fillrect(screenwidth - 120 +j + 1, (linesize * 3) + 2 + 1, 8, 8, 2);
+			
+			fillrect(screenwidth - 120, (linesize * 5)+2, 110, 10, 6);
+      rprint(screenwidth - 130, (linesize * 5) + 2, "CHORUS", 0, true);
+				
+			j = 0;
+			fillrect(screenwidth - 120 +j, (linesize * 5) + 2, 10, 10, 6);
+			fillrect(screenwidth - 120 +j+ 1, (linesize * 5) + 2 + 1, 8, 8, 5);		
+				
+			j = int((control.globalchorus));
+			fillrect(screenwidth - 120 +j, (linesize * 5) + 2, 10, 10, 1);
+			fillrect(screenwidth - 120 +j+ 1, (linesize * 5) + 2 + 1, 8, 8, 2);
 		}
 		
 		public function drawpatternmanager(control:controlclass):void {
