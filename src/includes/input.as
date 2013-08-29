@@ -44,7 +44,7 @@
 		if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 10) {
 			if (control.currenttab == 1) {
 				//Priority: Timeline, Pattern manager, arrangements
-				if (control.mx > (gfx.patternwidth * 6)) {
+				if (control.mx > (gfx.patterncount * 6)) {
 					//Pattern Manager
 					control.patterncury = control.my - gfx.linesize - 2;
 					control.patterncury = (control.patterncury - (control.patterncury % gfx.patternheight)) / gfx.patternheight;
@@ -157,21 +157,29 @@
 						control.setbuffersize(control.list.selection);
 						control.list.close();
 					}
+					
+					if (control.list.type == control.LIST_SCREENSIZE) {
+						gfx.changewindowsize(control.list.selection + 1);
+						control.list.close();
+					}
 				}else {
 					control.list.close();
 				}
 				control.clicklist = true;
 			}else if (control.my <= gfx.linesize) {
 				//Change tabs
-				if (control.mx < (gfx.screenwidth-20) / 3) {
+				if (control.mx < (gfx.screenwidth-40) / 3) {
 					control.currenttab = 0;
 					control.secretmenu = 0;
-				}else if (control.mx < (2*(gfx.screenwidth-20)) / 3) {
+				}else if (control.mx < (2*(gfx.screenwidth-40)) / 3) {
 					control.currenttab = 1;
 				}else if (control.mx >= gfx.screenwidth - 20) {
 					if (control.fullscreen) {control.fullscreen = false;
 					}else {control.fullscreen = true;}
 					updategraphicsmode(control);
+				}else if (control.mx >= gfx.screenwidth - 40) {
+					control.filllist(control.LIST_SCREENSIZE);
+					control.list.init(gfx, gfx.screenwidth - 40, gfx.linesize - 2);
 				}else{
 					control.currenttab = 2;
 				}
@@ -550,13 +558,25 @@
 		}
 	}
 	
-	if (key.mousewheel < 0) {
-		control.notelength--;
-		if (control.notelength < 1) control.notelength = 1;
-		key.mousewheel = 0;
-	}else if (key.mousewheel > 0) {
-		control.notelength++;
-		key.mousewheel = 0;
+	if (control.my > gfx.pianorollposition) {
+		if (key.mousewheel < 0) {
+			control.notelength--;
+			if (control.notelength < 1) control.notelength = 1;
+			key.mousewheel = 0;
+		}else if (key.mousewheel > 0) {
+			control.notelength++;
+			key.mousewheel = 0;
+		}
+	}else {
+		if (key.mousewheel < 0) {
+			gfx.zoom--; if (gfx.zoom < 1) gfx.zoom = 1;
+			gfx.setzoomlevel(gfx.zoom);
+			key.mousewheel = 0;
+		}else if (key.mousewheel > 0) {
+			gfx.zoom++; if (gfx.zoom > 4) gfx.zoom = 4;
+			gfx.setzoomlevel(gfx.zoom);
+			key.mousewheel = 0;
+		}
 	}
 	
 	if (control.keydelay <= 0) {	

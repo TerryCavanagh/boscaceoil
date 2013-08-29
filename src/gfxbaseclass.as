@@ -1,19 +1,22 @@
 package{
-	import air.update.logging.Level;
 	import flash.display.*;
 	import flash.geom.*;
   import flash.events.*;
   import flash.net.*;
 	import flash.text.*;
+	import flash.display.NativeWindow;
 	
 	public class gfxbaseclass extends Sprite {
 		//Initialise arrays here
 		public function initgfx():void {
 			//We initialise a few things
+			screenscale = 2;
+			
 			screenwidth = 384; screenheight = 240;
 			screenwidthmid = screenwidth / 2; screenheightmid = screenheight / 2;
 			screenviewwidth = screenwidth; screenviewheight = screenheight;
-			linesize = 10; patternheight = 12; patternwidth = 54;
+			linesize = 10; patternheight = 12; patterncount = 54;
+			setzoomlevel(4);
 			pianorollposition = linesize * 10;
 			
 			fontsize.push(0); fontsize.push(0); fontsize.push(0); fontsize.push(0);		
@@ -41,11 +44,24 @@ package{
 			buttonpress = 0;
 			
 			screen = new Bitmap(screenbuffer);
-			screen.width = 768;
-			screen.height = 480; 
+			screen.width = screenwidth * 2;
+			screen.height = screenheight * 2; 
 			screen.x = 0;
 			screen.y = 0; 
-			addChild(screen);				
+			addChild(screen);
+		}
+		
+		public function setzoomlevel(t:int):void {
+			zoom = t;
+			patternwidth = 22 + (zoom * 8);
+		}
+		
+		public function changewindowsize(t:int):void {
+			screenscale = t;
+			if (stage && stage.nativeWindow) {
+				stage.nativeWindow.width = (screenwidth * t) + 18;
+				stage.nativeWindow.height = (screenheight * t) + 45;
+			}
 		}
 
 		public function settrect(x:int, y:int, w:int, h:int):void {
@@ -291,7 +307,8 @@ package{
 		public var screenwidth:int, screenheight:int;
 		public var screenwidthmid:int, screenheightmid:int;
 		public var screenviewwidth:int, screenviewheight:int;
-		public var linesize:int, patternheight:int, patternwidth:int;
+		public var screenscale:int;
+		public var linesize:int, patternheight:int, patternwidth:int, patterncount:int;
 		public var pianorollposition:int;
 		
 		public var temp:int, temp2:int, temp3:int;
@@ -299,6 +316,8 @@ package{
 		public var stemp:String;
 		public var buffer:BitmapData;
 		public var temppal:int;
+		
+		public var zoom:int, zoomoffset:Number;
 		
 		public var tempicon:BitmapData;
 		//Actual backgrounds

@@ -327,64 +327,56 @@
 		
 		public function drawmusicbox(control:controlclass, xp:int, yp:int, t:int, enabled:Boolean=true):void {
 			//Draw a little music box containing our notes!
-			temppal = control.musicbox[t].palette;
-			if (!enabled) temppal = 21;
-			
-			fillrect(xp, yp, 54, 12, 100 + (temppal * 10));
-			fillrect(xp+22, yp+1, 31, 10, 101 + (temppal * 10));
-			for (mbj = 0; mbj < control.musicbox[t].numnotes; mbj++) {
-				mbi = control.musicbox[t].notes[mbj].width;
-				control.drawnoteposition = control.musicbox[t].notes[mbj].x;
-				if (control.doublesize) {
-					control.drawnotelength = control.musicbox[t].notes[mbj].y;
-				}else{
-				  control.drawnotelength = control.musicbox[t].notes[mbj].y * 2;
-				}
-				if (mbi + control.musicbox[t].notes[mbj].y > control.boxcount) {
-					//54 for each bar
-					if (control.doublesize) {
-						control.drawnotelength = 54 - (21 + mbi);
-						control.drawnotelength += (54 * (control.musicbox[t].notes[mbj].y - (control.boxcount - mbi)) / control.boxcount);
-					}else{
-						control.drawnotelength = 54 - (21 + (mbi * 2));
-						control.drawnotelength += (54 * (control.musicbox[t].notes[mbj].y - (control.boxcount - mbi)) / control.boxcount);
+			if (xp < screenwidth) {
+				temppal = control.musicbox[t].palette;
+				if (!enabled) temppal = 21;
+				
+				zoomoffset = zoom / 2;
+				if (control.doublesize) zoomoffset = zoomoffset / 2;
+				
+				fillrect(xp, yp, patternwidth, 12, 100 + (temppal * 10));
+				fillrect(xp+22, yp+1, patternwidth - 23, 10, 101 + (temppal * 10));
+				for (mbj = 0; mbj < control.musicbox[t].numnotes; mbj++) {
+					mbi = control.musicbox[t].notes[mbj].width;
+					control.drawnoteposition = control.musicbox[t].notes[mbj].x;
+					control.drawnotelength = Math.ceil(control.musicbox[t].notes[mbj].y * zoomoffset);
+					if (mbi + control.musicbox[t].notes[mbj].y > control.boxcount) {
+						//patternwidth for each bar
+						control.drawnotelength = patternwidth - (21 + int(mbi * zoomoffset));
+						control.drawnotelength += (patternwidth * (control.musicbox[t].notes[mbj].y - (control.boxcount - mbi)) / control.boxcount);
 					}
-				}
-				if (control.drawnoteposition > -1) {			
-					control.drawnoteposition -= control.musicbox[t].bottomnote;
-					if(control.musicbox[t].notespan>10){
-					  control.drawnoteposition = ((control.drawnoteposition * 8) / control.musicbox[t].notespan) + 2;
-					}else {
-						control.drawnoteposition++;
-						if (control.musicbox[t].notespan < 6) {
-							control.drawnoteposition += 6 - control.musicbox[t].notespan;
+					if (control.drawnoteposition > -1) {			
+						control.drawnoteposition -= control.musicbox[t].bottomnote;
+						if(control.musicbox[t].notespan>10){
+							control.drawnoteposition = ((control.drawnoteposition * 8) / control.musicbox[t].notespan) + 2;
+						}else {
+							control.drawnoteposition++;
+							if (control.musicbox[t].notespan < 6) {
+								control.drawnoteposition += 6 - control.musicbox[t].notespan;
+							}
 						}
-					}
-					if (control.drawnoteposition >= 1 && control.drawnoteposition < 11) {
-				    if (control.doublesize) {
-							fillrect(xp + 21 + mbi, yp + 11 - control.drawnoteposition, control.drawnotelength, 1, 105 + (temppal * 10));
-						}else{
-					    fillrect(xp + 21 + (mbi * 2), yp + 11 - control.drawnoteposition, control.drawnotelength, 1, 105 + (temppal * 10));
+						if (control.drawnoteposition >= 1 && control.drawnoteposition < 11) {
+							fillrect(xp + 21 + int(mbi * zoomoffset), yp + 11 - control.drawnoteposition, control.drawnotelength, 1, 105 + (temppal * 10));
 						}
 					}
 				}
-			}
-			
-			fillrect(xp, yp, 20, 12, 101 + (temppal * 10));
-			fillrect(xp, yp, 20, 8, 100 + (temppal * 10));
-			
-			fillrect(xp + 21, yp, 1, 12, 100 + (temppal * 10));
-			fillrect(xp + 53, yp, 1, 12, 100 + (temppal * 10));
-			
-			if (control.currentbox == t) {
-				drawbox(xp, yp, patternwidth, patternheight, 9);
-				drawbox(xp + 1, yp + 1, patternwidth - 2, patternheight - 2, 12);
-			}
-			
-			if (t + 1 < 10) {
-			  print(xp + 5, yp + 1, String(t + 1), 2, false, true);
-			}else {
-				print(xp + 2, yp + 1, String(t + 1), 2, false, true);
+				
+				fillrect(xp, yp, 20, 12, 101 + (temppal * 10));
+				fillrect(xp, yp, 20, 8, 100 + (temppal * 10));
+				
+				fillrect(xp + 21, yp, 1, 12, 100 + (temppal * 10));
+				fillrect(xp + patternwidth - 1, yp, 1, 12, 100 + (temppal * 10));
+				
+				if (control.currentbox == t) {
+					drawbox(xp, yp, patternwidth, patternheight, 9);
+					drawbox(xp + 1, yp + 1, patternwidth - 2, patternheight - 2, 12);
+				}
+				
+				if (t + 1 < 10) {
+					print(xp + 5, yp + 1, String(t + 1), 2, false, true);
+				}else {
+					print(xp + 2, yp + 1, String(t + 1), 2, false, true);
+				}
 			}
 		}
 		
@@ -402,12 +394,12 @@
 			}
 			
 			//Draw bars
-			for (i = 0; i < 7; i++) {
+			for (i = 0; i < 12; i++) {
 				drawline((i * patternwidth), linesize, i * patternwidth, pianorollposition+5, 6);
 			}
 			
 			//Draw patterns
-			for (k = 6; k >= 0; k--) {
+			for (k = 12; k >= 0; k--) {
 				for (j = 0; j < 8; j++) {
 					if (k + control.arrange.viewstart > -1) {
 						if (control.arrange.bar[k + control.arrange.viewstart].channel[j] > -1) {
@@ -441,13 +433,13 @@
 		
 		public function drawtimeline(control:controlclass):void {
 			//From here: TIMELINE
-			fillrect(0, pianorollposition + 4, patternwidth * 6, 6, 6);
-			for (i = 0; i < 7; i++) {
+			fillrect(0, pianorollposition + 4, patterncount * 6, 6, 6);
+			for (i = 0; i < 13; i++) {
 				drawline((i * patternwidth), pianorollposition+4, i * patternwidth, pianorollposition+10, 14);
 			}
 			
 			if (control.dragaction == 3) {
-				for (i = 0; i < 7; i++) {
+				for (i = 0; i < 13; i++) {
 					if (i + control.arrange.viewstart == control.dragx 
 					|| (i + control.arrange.viewstart >= control.dragx && i + control.arrange.viewstart < control.timelinecurx + control.arrange.viewstart + 1)
 					|| (i + control.arrange.viewstart < control.dragx && i + control.arrange.viewstart >= control.timelinecurx + control.arrange.viewstart + 1)) {
@@ -456,7 +448,7 @@
 				}
 			}
 			
-			for (i = 0; i < 7; i++) {
+			for (i = 0; i < 13; i++) {
 				if (i + control.arrange.viewstart >= control.arrange.loopstart && i + control.arrange.viewstart < control.arrange.loopend) {
 					if (i + control.arrange.viewstart == control.arrange.loopstart) {
 						fillrect((i * patternwidth), pianorollposition+5, 2, 4, 2);
@@ -489,11 +481,11 @@
 		public function drawmenu(control:controlclass):void {
 			bigprint(12, (linesize * 2) + 2 - 5, "BOSCA CEOIL", 0, 0, 0, false, 3);
 			if (control.looptime % control.barcount==1) {
-				bigprint(10-2+(Math.random()*4), linesize*2-5-6+(Math.random()*4), "BOSCA CEOIL", 255 - (help.glow*4), 64 + (help.glow*2), 255 - help.glow, false, 3);
+				bigprint(10-2+(Math.random()*4), linesize*2-5-6+(Math.random()*4), "BOSCA CEOIL", 255 - (help.glow*4), 255 - help.glow, 64 + (help.glow*2), false, 3);
 			}else{
-			  bigprint(10, linesize * 2 - 5, "BOSCA CEOIL", 255 - (help.glow * 4), 64 + (help.glow * 2), 255 - help.glow, false, 3);
+			  bigprint(10, linesize * 2 - 5, "BOSCA CEOIL", 255 - (help.glow * 4), 255 - help.glow, 64 + (help.glow * 2), false, 3);
 			}
-			print(160, (linesize * 4)+4, "v1.02", 2, false, true);
+			print(165, (linesize * 4)+4, "v1.1", 2, false, true);
 			
 			
 			print(10, (linesize * 5)+5, "Created by Terry Cavanagh", 2, false, true);
@@ -587,37 +579,38 @@
 		
 		public function drawpatternmanager(control:controlclass):void {
 			//From here, PATTERN Manager
-			fillrect(patternwidth * 6, linesize, screenwidth - (patternwidth * 6), pianorollposition, 2);
+			patterncount = 54;
+			fillrect(patterncount * 6, linesize, screenwidth - (patterncount * 6), pianorollposition, 2);
 			
 			//Button
-			fillrect((patternwidth * 6) + 5, linesize + pianorollposition - 14 + 4, screenwidth - (patternwidth * 6) - 8, 10, 12);
+			fillrect((patterncount * 6) + 5, linesize + pianorollposition - 14 + 4, screenwidth - (patterncount * 6) - 8, 10, 12);
 			if (buttonpress > 0) {
-				fillrect((patternwidth * 6) + 5, linesize + pianorollposition - 14+4, screenwidth - (patternwidth * 6) - 8, 10, 1);
-				print((patternwidth * 6) + 9, linesize + pianorollposition - 14 + 4, "ADD NEW", 0, false, true);
+				fillrect((patterncount * 6) + 5, linesize + pianorollposition - 14+4, screenwidth - (patterncount * 6) - 8, 10, 1);
+				print((patterncount * 6) + 9, linesize + pianorollposition - 14 + 4, "ADD NEW", 0, false, true);
 			}else {
-				fillrect((patternwidth * 6) + 5-2, linesize + pianorollposition - 14+2, screenwidth - (patternwidth * 6) - 8, 10, 1);
-				print((patternwidth * 6) + 7, linesize + pianorollposition - 14 + 2, "ADD NEW", 0, false, true);
+				fillrect((patterncount * 6) + 5-2, linesize + pianorollposition - 14+2, screenwidth - (patterncount * 6) - 8, 10, 1);
+				print((patterncount * 6) + 7, linesize + pianorollposition - 14 + 2, "ADD NEW", 0, false, true);
 			}
 			
 			//List
 			for (k = 0; k < 7; k++) {
 				if (k==0 && control.patternmanagerview > 0 && control.numboxes > 0) {
 					//Draw scrollup
-					drawicon((patternwidth * 6) + 26, linesize + 4 + (k * patternheight), 1);
+					drawicon((patterncount * 6) + 26, linesize + 4 + (k * patternheight), 1);
 				}else if (k == 6 && k + control.patternmanagerview < control.numboxes) {
 					//Draw scrolldown
-					drawicon((patternwidth * 6) + 26, linesize + 2 + (k * patternheight), 0);
+					drawicon((patterncount * 6) + 26, linesize + 2 + (k * patternheight), 0);
 				}else {
 					//Normal
 					if (control.patternmanagerview + k < control.numboxes) {
-				    drawmusicbox(control, (patternwidth * 6) + 3, linesize + 2 + (k * patternheight), control.patternmanagerview + k);
+				    drawmusicbox(control, (patterncount * 6) + 3, linesize + 2 + (k * patternheight), control.patternmanagerview + k);
 					}
 				}
 			}
 			
 			//Draw the cursor
 			if (control.patterncury > -1) {
-			  drawbox((patternwidth * 6) + 3, linesize + 2 + (control.patterncury * patternheight), patternwidth, patternheight, 0);
+			  drawbox((patterncount * 6) + 3, linesize + 2 + (control.patterncury * patternheight), patterncount, patternheight, 0);
 			}
 		}
 		

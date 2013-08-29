@@ -12,6 +12,7 @@
   import org.si.sion.events.*;
 	import flash.filesystem.*;
   import flash.net.FileFilter;
+  import flash.system.Capabilities;
 		
 	public class controlclass extends Sprite{
 		public var SCALE_NORMAL:int = 0;
@@ -44,6 +45,7 @@
 		public var LIST_CATEGORY:int = 3;
 		public var LIST_SELECTINSTRUMENT:int = 4;
 		public var LIST_BUFFERSIZE:int = 5;
+		public var LIST_SCREENSIZE:int = 6;
 		
 		public function controlclass():void {
 			version = 2;
@@ -737,6 +739,16 @@
 					list.item[1] = "4096 (try if you get cracking on wav exports)";
 					list.item[2] = "8192 (slow, not recommended)";
 					list.numitems = 3;
+				break;
+			  case LIST_SCREENSIZE:
+				  i = 1;
+					var sw:int = flash.system.Capabilities.screenResolutionX;
+					var sh:int = flash.system.Capabilities.screenResolutionY;
+					while (384 * i < sw && 240 * i < sh) {
+					  list.item[i - 1] = "x" + String(i);
+						i++;
+					}
+					list.numitems = i - 1;
 				break;
 			}
 		}
