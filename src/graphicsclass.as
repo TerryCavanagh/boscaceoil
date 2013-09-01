@@ -31,6 +31,7 @@
 			pal[14].setto(32, 32, 32);         //Very dark grey
 			pal[15].setto(255, 0, 0);           //Red
 			pal[16].setto(0, 128, 255);           //Cyan
+			pal[17].setto(0, 0, 128);           //Dark Blue
 			
 			//Blue
 			pal[100].setto(5, 84, 185);       //Bar, Bright
@@ -490,7 +491,7 @@
 			
 			print(10, (linesize * 5)+5, "Created by Terry Cavanagh", 2, false, true);
 			print(10, (linesize * 6)+5, "SiON softsynth library by Kei Mesuda", 2, false, true);
-			print(10, (linesize * 7)+5, "Hold LEFT for advanced options", 2, false, true);
+			print(10, (linesize * 7)+5, "Distributed under FreeBSD licence", 2, false, true);
       print(10, (linesize * 9) + 5, "http://www.distractionware.com", 2, false, true);
 			
 			//Button
@@ -555,26 +556,16 @@
 			
 			//Switches for global controls!
 			fillrect(screenwidth - 120, (linesize * 3)+2, 110, 10, 6);
-      rprint(screenwidth - 130, (linesize * 3) + 2, "DELAY", 0, true);
+      drawicon(screenwidth - 135, (linesize * 3) + 2, 0);
+      rprint(screenwidth - 140, (linesize * 3) + 2, control.effectname[control.effecttype], 0, true);
 				
 			j = 0;
 			fillrect(screenwidth - 120 +j, (linesize * 3) + 2, 10, 10, 6);
 			fillrect(screenwidth - 120 +j+ 1, (linesize * 3) + 2 + 1, 8, 8, 5);		
 				
-			j = int((control.globaldelay));
+			j = int((control.effectvalue));
 			fillrect(screenwidth - 120 +j, (linesize * 3) + 2, 10, 10, 1);
 			fillrect(screenwidth - 120 +j + 1, (linesize * 3) + 2 + 1, 8, 8, 2);
-			
-			fillrect(screenwidth - 120, (linesize * 5)+2, 110, 10, 6);
-      rprint(screenwidth - 130, (linesize * 5) + 2, "CHORUS", 0, true);
-				
-			j = 0;
-			fillrect(screenwidth - 120 +j, (linesize * 5) + 2, 10, 10, 6);
-			fillrect(screenwidth - 120 +j+ 1, (linesize * 5) + 2 + 1, 8, 8, 5);		
-				
-			j = int((control.globalchorus));
-			fillrect(screenwidth - 120 +j, (linesize * 5) + 2, 10, 10, 1);
-			fillrect(screenwidth - 120 +j+ 1, (linesize * 5) + 2 + 1, 8, 8, 2);
 		}
 		
 		public function drawpatternmanager(control:controlclass):void {

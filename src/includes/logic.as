@@ -1,6 +1,7 @@
 ﻿public function logic(key:KeyPoll, gfx:graphicsclass, control:controlclass):void {
 	var i:int, j:int, k:int;
 	
+	if (control.messagedelay > 0) control.messagedelay--;
   if (control.doubleclickcheck > 0) control.doubleclickcheck--;
 	if (gfx.buttonpress > 0) gfx.buttonpress--;
 	

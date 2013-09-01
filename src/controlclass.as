@@ -8,6 +8,7 @@
 	import org.si.sion.SiONData;
 	import org.si.sion.utils.SiONPresetVoice;
 	import org.si.sion.SiONVoice;
+	import org.si.sion.sequencer.SiMMLTrack;
 	import org.si.sion.effector.*;
   import org.si.sion.events.*;
 	import flash.filesystem.*;
@@ -46,9 +47,10 @@
 		public var LIST_SELECTINSTRUMENT:int = 4;
 		public var LIST_BUFFERSIZE:int = 5;
 		public var LIST_SCREENSIZE:int = 6;
+		public var LIST_EFFECTS:int = 7;
 		
 		public function controlclass():void {
-			version = 2;
+			version = 3;
 			clicklist = false;
 			
 			test = false; teststring = "TEST = True";
@@ -170,6 +172,8 @@
 				programsettings.data.buffersize = buffersize;
 				programsettings.flush();
 				programsettings.close();
+				programsettings.data.fullscreen = 0;
+				programsettings.data.windowsize = 2;
       } else {
 				buffersize = programsettings.data.buffersize;
 				programsettings.flush();
@@ -181,46 +185,64 @@
 			_driver.setBeatCallbackInterval(1);
 			_driver.setTimerInterruption(1, _onTimerInterruption);
 			
-			globaldelay = 0;
-			globalchorus = 0;
-			//_driver.effector.slot0 = [new SiEffectStereoDelay((500*globaldelay)/100,0.2,false)];
-      //_driver.effector.slot1 = [new SiEffectStereoChorus(20, 0.2, 4, 20)];
-			//_driver.effector.slot2 = [new SiEffectStereoReverb(0.7, 0.4, 0.8, 0.3)];
+			effecttype = 0;
+			effectvalue = 0;
+			effectname.push("DELAY"); 
+			effectname.push("CHORUS"); 
+			effectname.push("REVERB"); 
+			effectname.push("DISTORTION"); 
+			effectname.push("LOW BOOST"); 
+			effectname.push("COMPRESSOR"); 
+			effectname.push("HIGH PASS");  
 			
 			_driver.addEventListener(SiONEvent.STREAM, onStream);
 			
 			_driver.bpm = bpm; //Default
 			_driver.play(null, false);
+			
+			startup = 1;
+			if (invokefile != "null") {
+				invokeceol(invokefile);
+				invokefile = "null";
+			}
 		}
 		
+		public function notecut():void {
+			for each (var trk:SiMMLTrack in _driver.sequencer.tracks) trk.keyOff();
+		}
+			
 		public function updateeffects():void {
-			//Some half finished code: I can't figure out why only the effector in slot0
-			//seems to work. Will try to sort it out later.
+			//So, I can't see to figure out WHY only one effect at a time seems to work.
+			//If anyone else can, please, by all means update this code!
 			
 			//start by turning everything off:
 			_driver.effector.clear(0);
-			_driver.effector.clear(1);
-			//_driver.effector.slot2 = [];
-			//_driver.effector.slot3 = [];
 			
-			if (globaldelay < 5) {
-				//If not using delay
-				if (globalchorus < 5) {
-				  //If not using chorus	(and !delay)
-				}else{
-					_driver.effector.connect(0, new SiEffectStereoChorus(5.0 + ((60.0 * globaldelay) / 100),0.2,4,20));
-				}
-			}else {
-				//If using delay
-			  _driver.effector.connect(0, new SiEffectStereoDelay((300 * globaldelay) / 100, 0.1, false));
-				
-				if (globalchorus < 5) {
-				  //If not using chorus	(but using delay)
-				}else {
-				  //If using chorus	(and using delay)
-					_driver.effector.connect(1, new SiEffectStereoChorus(5.0 + ((60.0 * globaldelay) / 100),0.2,4,20));
+			if (effectvalue > 5) {
+				if (effecttype == 0) {
+					_driver.effector.connect(0, new SiEffectStereoDelay((300 * effectvalue) / 100, 0.1, false));
+				}else if (effecttype == 1) {
+					_driver.effector.connect(0, new SiEffectStereoChorus(20, 0.2, 4, 10 + ((50 * effectvalue) / 100)));
+				}else if (effecttype == 2) {
+					_driver.effector.connect(0, new SiEffectStereoReverb(0.7, 0.4+ ((0.5 * effectvalue) / 100), 0.8, 0.3));
+				}else if (effecttype == 3) {
+					_driver.effector.connect(0, new SiEffectDistortion(-20 - ((80 * effectvalue) / 100), 18, 2400, 1));
+				}else if (effecttype == 4) {
+					_driver.effector.connect(0, new SiFilterLowBoost(3000, 1, 4 + ((6 * effectvalue) / 100)));
+				}else if (effecttype == 5) {
+					_driver.effector.connect(0, new SiEffectCompressor(0.7, 50, 20, 20, -6, 0.2 + ((0.6 * effectvalue) / 100)));
+				}else if (effecttype == 6) {
+					_driver.effector.connect(0, new SiCtrlFilterHighPass(((1.0 * effectvalue) / 100),0.9));
 				}
 			}
+			/*
+			effectname.push("DELAY"); 
+			effectname.push("CHORUS"); 
+			effectname.push("REVERB"); 
+			effectname.push("DISTORTION"); 
+			effectname.push("LOW BOOST"); 
+			effectname.push("COMPRESSOR"); 
+			effectname.push("HIGH PASS");  */
 		}
 		
 		public function _onTimerInterruption():void {
@@ -313,6 +335,36 @@
 				}
 			}
     }
+		
+		public function loadscreensettings(gfx:graphicsclass):void {
+			programsettings = SharedObject.getLocal("boscaceoil_settings");		
+			
+			if (programsettings.data.fullscreen == 0) {
+				fullscreen = false;
+			}else {
+				fullscreen = true;
+			}
+			
+			gfx.changewindowsize(programsettings.data.windowsize);
+			
+			programsettings.flush();
+			programsettings.close();
+		}
+		
+		public function savescreensettings(gfx:graphicsclass):void {
+			programsettings = SharedObject.getLocal("boscaceoil_settings");		
+			
+			if (!fullscreen){
+				programsettings.data.fullscreen = 0;
+			}else {
+				programsettings.data.fullscreen = 1;
+			}
+			
+			programsettings.data.windowsize = gfx.screenscale;
+			
+			programsettings.flush();
+			programsettings.close();
+		}
 		
 		public function setbuffersize(t:int):void {
 			if (t == 0) buffersize = 2048;
@@ -750,6 +802,12 @@
 					}
 					list.numitems = i - 1;
 				break;
+			  case LIST_EFFECTS:
+				  for (i = 0; i < 7; i++) {
+						list.item[i] = effectname[i];
+					}
+					list.numitems = 7;
+				break;
 			}
 		}
 		
@@ -803,6 +861,8 @@
 			filestring = "";
 			filestring += String(version) + ",";
 			filestring += String(swing)+",";
+			filestring += String(effecttype) + ",";
+			filestring += String(effectvalue) + ",";
 			filestring += String(bpm) + ",";
 			filestring += String(boxcount) + ",";
 			filestring += String(barcount) + ",";
@@ -832,7 +892,7 @@
 				}
 				filestring += String(musicbox[i].recordfilter) + ",";
 				if (musicbox[i].recordfilter == 1) {
-					for (j = 0; j < 16; j++) {
+					for (j = 0; j < 32; j++) {
 				    filestring += String(musicbox[i].volumegraph[j]) + ",";
 				    filestring += String(musicbox[i].cutoffgraph[j]) + ",";
 				    filestring += String(musicbox[i].resonancegraph[j]) + ",";
@@ -852,6 +912,8 @@
 		
 		public function newsong():void {
 			bpm = 120; boxcount = 16; barcount = 4; doublesize = false;
+			effectvalue = 0; effecttype = 0; updateeffects();
+			_driver.bpm = bpm;
 			arrange.clear();
 			musicbox[0].clear();
 			changekey(0); changescale(0);
@@ -860,6 +922,7 @@
 			numinstrument = 1;
 			instrumentmanagerview = 0;
 			patternmanagerview = 0;
+			showmessage("NEW SONG CREATED");
 		}
 		
 		public function readfilestream():int {
@@ -870,9 +933,11 @@
 		public function convertfilestring():void {
 			fi = 0;
 			version = readfilestream();
-			if (version == 2) {
+			if (version == 3) {
 				swing = readfilestream();
-				bpm = readfilestream();
+				effecttype = readfilestream();
+				effectvalue = readfilestream(); updateeffects();
+				bpm = readfilestream();	_driver.bpm = bpm;
 				boxcount = readfilestream(); doublesize = boxcount > 16;
 				barcount = readfilestream();
 				numinstrument = readfilestream();
@@ -908,7 +973,7 @@
 					musicbox[i].notespan = musicbox[i].topnote-musicbox[i].bottomnote;
 					musicbox[i].recordfilter = readfilestream();
 					if (musicbox[i].recordfilter == 1) {
-						for (j = 0; j < 16; j++) {
+						for (j = 0; j < 32; j++) {
 							musicbox[i].volumegraph[j] = readfilestream();
 							musicbox[i].cutoffgraph[j] = readfilestream();
 							musicbox[i].resonancegraph[j] = readfilestream();
@@ -927,15 +992,71 @@
 			}else {
 				//opps, the file we're loading is out of date. Let's try to convert it
 				legacy_convertfilestring(version);
-				version = 2;
+				version = 3;
 			}
 		}
 		
 		public function legacy_convertfilestring(t:int):void {
 			switch(t) {
+				case 2: //Before effects and 32 note patterns
+					swing = readfilestream();
+					effecttype = 0; effectvalue = 0;
+					bpm = readfilestream();	_driver.bpm = bpm;
+					boxcount = readfilestream(); doublesize = boxcount > 16;
+					barcount = readfilestream();
+					numinstrument = readfilestream();
+					for (i = 0; i < numinstrument; i++) {
+						instrument[i].index = readfilestream();
+						setinstrumenttoindex(i);
+						instrument[i].type = readfilestream();
+						instrument[i].palette= readfilestream();
+						instrument[i].cutoff= readfilestream();
+						instrument[i].resonance = readfilestream();
+						instrument[i].volume = readfilestream();
+						instrument[i].updatefilter();
+						if(instrument[i].type>0){
+							drumkit[instrument[i].type-1].updatefilter(instrument[i].cutoff, instrument[i].resonance);
+							drumkit[instrument[i].type-1].updatevolume(instrument[i].volume);
+						}
+					}
+					//Next, musicboxes
+					numboxes = readfilestream();
+					for (i = 0; i < numboxes; i++) {
+						musicbox[i].key = readfilestream();
+						musicbox[i].scale = readfilestream();
+						musicbox[i].instr = readfilestream();
+						musicbox[i].palette = readfilestream();
+						musicbox[i].numnotes = readfilestream();
+						for (j = 0; j < musicbox[i].numnotes; j++) {
+							musicbox[i].notes[j].x = readfilestream();
+							musicbox[i].notes[j].y = readfilestream();
+							musicbox[i].notes[j].width = readfilestream();
+							musicbox[i].notes[j].height = readfilestream();
+						}
+						musicbox[i].findtopnote(); musicbox[i].findbottomnote(); 
+						musicbox[i].notespan = musicbox[i].topnote-musicbox[i].bottomnote;
+						musicbox[i].recordfilter = readfilestream();
+						if (musicbox[i].recordfilter == 1) {
+							for (j = 0; j < 16; j++) {
+								musicbox[i].volumegraph[j] = readfilestream();
+								musicbox[i].cutoffgraph[j] = readfilestream();
+								musicbox[i].resonancegraph[j] = readfilestream();
+							}
+						}
+					}
+					//Next, arrangements
+					arrange.lastbar = readfilestream();
+					arrange.loopstart = readfilestream();
+					arrange.loopend = readfilestream();
+					for (i = 0; i < arrange.lastbar; i++) {
+						for (j = 0; j < 8; j++) {
+							arrange.bar[i].channel[j] = readfilestream();
+						}
+					}
+				break;
 				case 1: //Original release, had a bug where volume info wasn't saved
-					bpm = readfilestream();
-					swing = 0;
+					bpm = readfilestream();	_driver.bpm = bpm; 
+					swing = 0; effecttype = 0; effectvalue = 0;
 					boxcount = readfilestream(); doublesize = boxcount > 16;
 					barcount = readfilestream();
 					numinstrument = readfilestream();
@@ -1023,6 +1144,7 @@
 			stream.close();
 			
 			fixmouseclicks = true;
+			showmessage("SONG SAVED");
 		}
 		
 		public function loadceol():void {
@@ -1031,6 +1153,32 @@
 			file.browseForOpen("Load .ceol File", [ceolFilter]);
 			
 			fixmouseclicks = true;
+		}
+		
+		public function invokeceol(t:String):void { 
+			file = new File();
+			file.nativePath = t;
+			
+			stream = new FileStream();
+			stream.open(file, FileMode.READ);
+			filestring = stream.readUTFBytes(stream.bytesAvailable);
+			stream.close();
+			
+			filestream = new Array();
+			filestream = filestring.split(",");
+			
+			numinstrument = 1;
+			numboxes = 0;
+			arrange.clear();
+			arrange.currentbar = 0; arrange.viewstart = 0;
+			
+			convertfilestring();
+			
+			changemusicbox(0);
+			looptime = 0;
+			
+			fixmouseclicks = true;
+			showmessage("SONG LOADED");
 		}
 		
 		private function onloadceol(e:Event):void {  
@@ -1055,6 +1203,12 @@
 			looptime = 0;
 			
 			fixmouseclicks = true;
+			showmessage("SONG LOADED");
+		}
+		
+		public function showmessage(t:String):void {
+			message = t;
+			messagedelay = 90;
 		}
 		
 		public function onStream(e : SiONEvent) : void{
@@ -1122,6 +1276,7 @@
 			stream.close();
 			
 			fixmouseclicks = true;
+			showmessage("SONG EXPORTED AS WAV");
 		}
 		
 		public var file:File, stream:FileStream;
@@ -1207,8 +1362,6 @@
 		public var swing:int;
 		public var swingoff:int;
 		
-		public var secretmenu:int=0;
-		
 		public var doubleclickcheck:int;
 		
 		public var programsettings:SharedObject;
@@ -1217,8 +1370,13 @@
 		private var _data:ByteArray;
 		private var _wav:ByteArray;
 		
+		public var message:String;
+		public var messagedelay:int = 0;
+		public var startup:int = 0, invokefile:String = "null";
+		
 		//Global effects
-		public var globaldelay:int;
-		public var globalchorus:int;
+		public var effecttype:int;
+		public var effectvalue:int;
+		public var effectname:Vector.<String> = new Vector.<String>;
 	}
 }

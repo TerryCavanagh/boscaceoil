@@ -79,13 +79,18 @@
 	
 	if (control.timelinecurx > -1) {
 		if (key.ctrlheld && !control.copykeyheld) {
-			if (key.isDown(Keyboard.C)) {
-				control.copykeyheld = true;
-				control.arrange.copy();
-			}else if (key.isDown(Keyboard.V)) {
+		  if (key.isDown(Keyboard.V)) {
 				control.copykeyheld = true;
 				control.arrange.paste(control.arrange.viewstart + control.timelinecurx);
 			}
+		}
+	}
+	
+	if (key.ctrlheld && !control.copykeyheld) {
+		if (key.isDown(Keyboard.C)) {
+			control.copykeyheld = true;
+			control.arrange.copy();
+			control.showmessage("PATTERNS COPIED");
 		}
 	}
 	
@@ -98,7 +103,11 @@
 				}
 			}else{
 				control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + (11 - control.cursory)];
-				if(!control.musicbox[control.currentbox].noteat(control.cursorx, control.currentnote)){
+				if (control.musicbox[control.currentbox].noteat(control.cursorx, control.currentnote)) {
+					control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + (11 - control.cursory)];
+				  control.musicbox[control.currentbox].removenote(control.cursorx, control.currentnote);
+					control.musicbox[control.currentbox].addnote(control.cursorx, control.currentnote, control.notelength);
+				}else{
 					control.musicbox[control.currentbox].addnote(control.cursorx, control.currentnote, control.notelength);
 				}
 			}
@@ -158,8 +167,16 @@
 						control.list.close();
 					}
 					
+					if (control.list.type == control.LIST_EFFECTS) {
+						control.effecttype = control.list.selection;
+						control.updateeffects();
+						control.list.close();
+					}
+					
 					if (control.list.type == control.LIST_SCREENSIZE) {
 						gfx.changewindowsize(control.list.selection + 1);
+						control.fullscreen = false;
+						control.savescreensettings(gfx);
 						control.list.close();
 					}
 				}else {
@@ -168,11 +185,12 @@
 				control.clicklist = true;
 			}else if (control.my <= gfx.linesize) {
 				//Change tabs
-				if (control.mx < (gfx.screenwidth-40) / 3) {
+				if (control.mx < (gfx.screenwidth-40) / 4) {
 					control.currenttab = 0;
-					control.secretmenu = 0;
-				}else if (control.mx < (2*(gfx.screenwidth-40)) / 3) {
+				}else if (control.mx < (2*(gfx.screenwidth-40)) / 4) {
 					control.currenttab = 1;
+				}else if (control.mx < (3*(gfx.screenwidth-40)) / 4) {
+					control.currenttab = 2;
 				}else if (control.mx >= gfx.screenwidth - 20) {
 					if (control.fullscreen) {control.fullscreen = false;
 					}else {control.fullscreen = true;}
@@ -181,7 +199,7 @@
 					control.filllist(control.LIST_SCREENSIZE);
 					control.list.init(gfx, gfx.screenwidth - 40, gfx.linesize - 2);
 				}else{
-					control.currenttab = 2;
+					control.currenttab = 3;
 				}
 			}else if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 10) {				
 				if (control.currenttab == 0) {
@@ -354,6 +372,11 @@
 						control.swing ++;
 						if (control.swing > 10) control.swing = 10;
 					} 
+					//Effects
+					if (help.inboxw(control.mx, control.my, gfx.screenwidth - 150, (gfx.linesize * 3), 25, 10)) {
+						control.filllist(control.LIST_EFFECTS);
+						control.list.init(gfx, gfx.screenwidth - 150, (gfx.linesize * 4) - 3);
+					}
 				}
 			}else if (control.my > gfx.screenheight - gfx.linesize) {
 				if (control.currentbox > -1) {
@@ -392,17 +415,11 @@
 		
 		if (key.press && !control.clicklist) {
 			if (control.currenttab == 3) {
-				if (control.mx >= gfx.screenwidth - 130 && control.my >= (gfx.linesize * 3) + 2 && control.my <= (gfx.linesize * 3) + 12 ) {
-					i = control.mx - (gfx.screenwidth - 120);
+				if (control.mx >= gfx.screenwidth - 125 && control.my >= (gfx.linesize * 3) + 2 && control.my <= (gfx.linesize * 3) + 12 ) {
+					i = control.mx - (gfx.screenwidth - 115);
 					if (i < 0) i = 0; if(i>100) i=100;
 					
-					control.globaldelay = i;
-					control.updateeffects();
-				}else if (control.mx >= gfx.screenwidth - 130 && control.my >= (gfx.linesize * 5) + 2 && control.my <= (gfx.linesize * 5) + 12 ) {
-					i = control.mx - (gfx.screenwidth - 120);
-					if (i < 0) i = 0; if(i>100) i=100;
-					
-					control.globalchorus = i;
+					control.effectvalue = i;
 					control.updateeffects();
 				}
 			}else if (control.currenttab == 2) {
@@ -568,11 +585,11 @@
 			key.mousewheel = 0;
 		}
 	}else {
-		if (key.mousewheel < 0) {
+		if (key.mousewheel < 0 || (key.shiftheld && (control.press_down || control.press_left))) {
 			gfx.zoom--; if (gfx.zoom < 1) gfx.zoom = 1;
 			gfx.setzoomlevel(gfx.zoom);
 			key.mousewheel = 0;
-		}else if (key.mousewheel > 0) {
+		}else if (key.mousewheel > 0  || (key.shiftheld && (control.press_up||control.press_right))) {
 			gfx.zoom++; if (gfx.zoom > 4) gfx.zoom = 4;
 			gfx.setzoomlevel(gfx.zoom);
 			key.mousewheel = 0;
@@ -613,14 +630,6 @@
 				control.arrange.viewstart--;
 				if (control.arrange.viewstart < 0) control.arrange.viewstart = 0;
 				control.keydelay = 4;
-				
-				if (control.currenttab == 0) {
-					control.secretmenu++;
-					if(control.secretmenu >= 10) {
-						control.currenttab = 3;
-						control.secretmenu = 0;
-					}
-				}
 			}else if (control.press_right) {
 				control.arrange.viewstart++;
 				if (control.arrange.viewstart > 1000) control.arrange.viewstart = 1000;
@@ -642,7 +651,12 @@
 			control.musicplaying = !control.musicplaying;
 			control.looptime = 0;
 			control.arrange.currentbar = control.arrange.loopstart;
+			if (!control.musicplaying) control.notecut();
 			control.keyheld = true;
 		}
+	}
+	
+	if (key.isDown(Keyboard.ESCAPE)) {
+		NativeApplication.nativeApplication.exit(0);
 	}
 }
