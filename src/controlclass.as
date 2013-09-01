@@ -208,7 +208,8 @@
 		}
 		
 		public function notecut():void {
-			for each (var trk:SiMMLTrack in _driver.sequencer.tracks) trk.keyOff();
+			//This is broken, try to fix later
+			//for each (var trk:SiMMLTrack in _driver.sequencer.tracks) trk.keyOff();
 		}
 			
 		public function updateeffects():void {
