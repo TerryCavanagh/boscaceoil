@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<application xmlns="http://ns.adobe.com/air/application/3.7">
+	
+	<id>BoscaCeoil</id> 
+	<versionNumber>1.1</versionNumber> 
+	<filename>BoscaCeoil</filename> 
+	
+	<name>Bosca Ceoil</name> 
+	<description></description> 
+	<copyright></copyright> 
+	
+	<icon> 
+    <image16x16>assets/bc_16.png</image16x16> 
+    <image32x32>assets/bc_32.png</image32x32> 
+    <image48x48>assets/bc_48.png</image48x48> 
+    <image128x128>assets/bc_128.png</image128x128> 
+  </icon> 
+	
+	<initialWindow> 
+		<title>Bosca Ceoil</title> 
+		<content>BoscaCeoil.swf</content> 
+		<systemChrome>standard</systemChrome> 
+		<transparent>false</transparent> 
+		<visible>true</visible> 
+		<minimizable>true</minimizable> 
+		<maximizable>true</maximizable> 
+		<resizable>true</resizable> 
+	</initialWindow> 
+	
+	<fileTypes>
+    <fileType> 
+      <name>foo.ceol</name> 
+      <extension>ceol</extension> 
+      <description>CEOL music file</description> 
+      <contentType>text/plain</contentType> 
+    </fileType>
+  </fileTypes>
+	
+	<!-- 
+	More options:
+	http://livedocs.adobe.com/flex/3/html/File_formats_1.html#1043413
+	-->
+</application>
