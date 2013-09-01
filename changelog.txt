@@ -1,3 +1,28 @@
+Version 1.1 (1st September 2013)
+---------
+
+ - You can now zoom the arrangement view. (Use the mouse wheel, or SHIFT+ARROWS)
+ - Now supports double pattern sizes: up to 32 notes per pattern instead of 16.
+ - Added global effects (delay, chorus, distortion, a bunch more!)
+ - Added tab for advanced settings (replaces the weird HOLD LEFT secret)
+ - The .ceol file type is properly associated now. You can double click a .ceol file to load it.
+ 
+LITTLE THINGS:
+
+ - You can use WASD instead of the arrow keys now.
+ - Long notes stop playing when you start and stop the track.
+ - Support for different window sizes (x1, x2, x3 etc)
+ - Placing a short note on a long note removes the long note.
+ - Escape key quits.
+ - Added program icon.
+ 
+BUGS:
+ 
+ - BPM now set correctly when creating new song / loading a song with a different BPM.
+ - Copying columns works properly now.
+ - Fixed fullscreen setting bug. Should remember fullscreen/window settings.
+
+
 Version 1.01 (25th August 2013)
 ---------
 
