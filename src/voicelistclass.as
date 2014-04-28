@@ -380,8 +380,8 @@ package {
 			create("WIND", "E.Flute 2", "valsound.wind4", 4);
 			create("WIND", "Flute + Bell", "valsound.wind5", 5);
 			create("WIND", "Old flute", "valsound.wind6", 0);
-			create("WIND", "Whitsle 1", "valsound.wind7", 1);
-			create("WIND", "Whitsle 2", "valsound.wind8", 2);
+			create("WIND", "Whistle 1", "valsound.wind7", 1);
+			create("WIND", "Whistle 2", "valsound.wind8", 2);
 			
 			create("WORLD", "Banjo (Harpci)", "valsound.world1", 3);
 			create("WORLD", "KOTO", "valsound.world2", 4);
