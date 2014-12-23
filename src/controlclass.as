@@ -1234,14 +1234,13 @@
 				addExtensionToFile(file, "xm");
 			}
 			
-			var xmbytes:IDataOutput = new ByteArray();
-			xmbytes.endian = Endian.LITTLE_ENDIAN;
-			xmbytes.writeUTFBytes('Extended module: ');
-			xmbytes.writeInt(26);
+
+			var xm:TrackerModuleXM = new TrackerModuleXM();
+			xm.loadFromLiveBoscaCeoilModel(this, file.name);
 
 			stream = new FileStream();
 			stream.open(file, FileMode.WRITE);
-			stream.writeBytes(xmbytes, 0, xmbytes.length);
+			xm.writeToStream(stream);
 			stream.close();
 			
 			fixmouseclicks = true;
