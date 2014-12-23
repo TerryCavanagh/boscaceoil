@@ -6,6 +6,26 @@ Terry Cavanagh / http://www.distractionware.com
 
 -=-=-=-=-=-=-=-=
 
+### Pre-requisites
+Make sure you've got the AIR SDK installed. You'll also need a copy of a particular version (0.65) of the SiON library that powers Bosca Ceoil's sound.
+
+
+### Building
+```
+    amxmlc -swf-version 20 -default-frame-rate 60 -default-size 768 480 -library-path+=libs/sion065.swc -source-path+=src -default-background-color 0x000000 -warnings -strict src/Main.as -o BoscaCeoil.swf
+```
+
+### Running
+
+This compiles the app into `BoscaCeoil.swf`, which you can run with:
+
+```
+    adl application.xml
+```
+
+
+
+
 Available under the FreeBSD licence. Fork away!
 
 ---
