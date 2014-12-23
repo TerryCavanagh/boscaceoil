@@ -502,6 +502,10 @@
 			fillrect(305, linesize * 2, 75, 10, 12);
 			fillrect(305 -2, (linesize * 2) -2, 75, 10, 1);
 			print(305 + 2, (linesize * 2) - 1, "EXPORT .wav", 0, false, true);
+
+			fillrect(305, linesize * 3, 75, 10, 12);
+			fillrect(305 -2, (linesize * 3) -2, 75, 10, 1);
+			print(305 + 2, (linesize * 3) - 1, "EXPORT .xm", 0, false, true);
 			
 			fillrect(220, (linesize * 4)+5, 75, 10, 12);
 			fillrect(220 -2, (linesize * 4)+5 -2, 75, 10, 1);

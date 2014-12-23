@@ -1220,6 +1220,33 @@
 			}
 		}
 		
+		public function exportxm():void {
+			file = File.desktopDirectory.resolvePath("*.xm");
+			file.addEventListener(Event.SELECT, onexportxm);
+			file.browseForSave("Export .XM module file");
+			
+			fixmouseclicks = true;
+		}
+		private function onexportxm(e:Event):void {
+			file = e.currentTarget as File;
+			
+			if (!fileHasExtension(file, "xm")) {
+				addExtensionToFile(file, "xm");
+			}
+			
+			var xmbytes:IDataOutput = new ByteArray();
+			xmbytes.endian = Endian.LITTLE_ENDIAN;
+			xmbytes.writeUTFBytes('Extended module: ');
+			xmbytes.writeInt(26);
+
+			stream = new FileStream();
+			stream.open(file, FileMode.WRITE);
+			stream.writeBytes(xmbytes, 0, xmbytes.length);
+			stream.close();
+			
+			fixmouseclicks = true;
+			showmessage("SONG EXPORTED AS XM");
+		}
 		public function exportwav():void {
 			currenttab = 1; clicklist = true;
 			arrange.loopstart = 0; arrange.loopend = arrange.lastbar;
