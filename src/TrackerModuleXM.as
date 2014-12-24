@@ -199,7 +199,7 @@ package {
 					sampleHeadBuf.writeByte(sample.volume);
 					sampleHeadBuf.writeByte(sample.finetune);
 					var sampleType:uint = (sample.loopsForward ? 1 : 0) |
-						(sample.bitsPerSample == 16 ? 1 : 0);
+						(sample.bitsPerSample == 16 ? 2 : 0);
 					sampleHeadBuf.writeByte(sampleType);
 					sampleHeadBuf.writeByte(sample.panning);
 					sampleHeadBuf.writeByte(sample.relativeNoteNumber);
@@ -247,12 +247,12 @@ package {
 				var box:musicphraseclass = bosca.musicbox[whichbox];
 
 				var notes:Vector.<Rectangle> = box.notes;
-				for (var j:uint = 0; j < notes.length; j++) {
+				for (var j:uint = 0; j < box.numnotes; j++) {
 					var boscaNote:Rectangle = notes[j];
 					var timerelativetostartofbar:uint = boscaNote.width; // yes, it's called width. whatever.
 					var notelength:uint = boscaNote.y;
 					var xmnote:XMPatternCell = boscaBoxNoteToXMNote(box, j);
-					// rows[timerelativetostartofbar][i] = xmnote;
+					rows[timerelativetostartofbar].cellOnTrack[i] = xmnote;
 					var endrow:uint = timerelativetostartofbar + notelength;
 					if (endrow >= numrows) { continue; }
 					if (rows[endrow].cellOnTrack[i].note > 0) { continue; } // someone else is already starting to play
@@ -371,7 +371,7 @@ class XMSample {
 	public var finuetune:uint = 0;
 	// type bitfield: looping, 8-bit/16-bit
 	public var panning:uint = 0x80;
-	public var relativeNoteNumber:uint = 0x80;
+	public var relativeNoteNumber:int = 0;
 	protected var _name:ByteArray;
 	public var data:ByteArray;
 	public var bitsPerSample:uint = 8;
@@ -417,6 +417,7 @@ class XMSampleFake extends XMSample {
 			this.data.writeByte(sinewave[i]);
 		}
 		loopLength = sinewave.length;
+		loopsForward = true;
 		volume = 40;
 	}
 }
