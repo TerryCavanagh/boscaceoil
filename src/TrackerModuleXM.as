@@ -68,15 +68,11 @@ package {
 			for (i = 0; i < bosca.numinstrument; i++) {
 				var boscaInstrument:instrumentclass = bosca.instrument[i];
 				var xmInstrument:XMInstrument = new XMInstrument();
-				trace('converting instrument ' + boscaInstrument.name);
 				xmInstrument.name = boscaInstrument.name;
 				xmInstrument.volume = int(boscaInstrument.volume / 4);
 				xmInstrument.addSample(new XMSampleFake());
 				xm.addInstrument(xmInstrument);
 			}
-			trace('instruments = ' + instruments.length);
-			trace('this.instruments = ' + this.instruments.length);
-			trace('xm.instruments = ' + xm.instruments.length);
 		}
 
 		public function writeToStream(stream:IDataOutput):void {
@@ -136,7 +132,6 @@ package {
 				stream.writeBytes(patBodyBuf);
 			}
 
-			trace('writing ' + xm.instruments.length + ' instruments...');
 			for (var instno:uint = 0; instno < xm.instruments.length; instno++) {
 				var inst:XMInstrument = xm.instruments[instno];
 				var instrheadbuf:ByteArray = new ByteArray();
@@ -147,7 +142,6 @@ package {
 				instrheadbuf.writeByte(0); // type
 				instrheadbuf.writeShort(inst.samples.length);
 				if (inst.samples.length < 1) {
-					trace('no samples, writing short header');
 					stream.writeBytes(instrheadbuf);
 				}
 				instrheadbuf.writeUnsignedInt(40); // sampleHeaderSize
@@ -188,7 +182,6 @@ package {
 					instrheadbuf.writeByte(0x00);
 				}
 				stream.writeBytes(instrheadbuf);
-				trace('writing ' + inst.samples.length + ' samples');
 				for (var s:uint = 0; s < inst.samples.length; s++) {
 					var sample:XMSample = inst.samples[s];
 					var sampleHeadBuf:ByteArray = new ByteArray();
@@ -207,18 +200,15 @@ package {
 					sampleHeadBuf.writeMultiByte(sample.name, 'us-ascii');
 					stream.writeBytes(sampleHeadBuf);
 				}
-				trace('sample headers written, now for the data');
 				for (s = 0; s < inst.samples.length; s++) {
 					sample = inst.samples[s];
 					stream.writeBytes(sample.data);
 				}
-				trace('all done, next instrument');
 			}
 		}
 
 		public function addInstrument(instrument:XMInstrument):void {
 			instruments.push(instrument);
-			trace('now we have ' + instruments.length + ' instruments');
 		}
 
 		protected function xmPatternFromBoscaBar(bosca:controlclass, barNum:uint):XMPattern {
