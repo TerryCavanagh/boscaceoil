@@ -6,12 +6,13 @@ package {
 
 	public class TrackerModuleXM {
 		public var songname:ByteArray = new ByteArray();
-		public var trackerName:String = 'FastTracker II      ';
-		public var songLength:uint;
+		public var trackerName:String = 'FastTracker v2.00   ';
+		public var songLength:uint = 0;
 		public var restartPos:uint;
 		public var numChannels:uint = 8; // bosca has a hard-coded limit
-		public var numPatterns:uint;
+		public var numPatterns:uint = 0;
 		public var numInstruments:uint;
+		public var instruments:Vector.<XMInstrument> = new Vector.<XMInstrument>;
 		public var defaultTempo:uint;
 		public var defaultBPM:uint;
 		public var patternOrderTable:Array = [
@@ -39,7 +40,7 @@ package {
 		private var headerSize:uint = 20 + 256;
 		private var idText:String = 'Extended Module: ';
 		private var sep:uint = 26; // DOS EOF
-		private var version:uint = 0x0401;
+		private var version:uint = 0x0104;
 		
 		public var patterns:Vector.<XMPattern> = new Vector.<XMPattern>;
 
@@ -54,7 +55,7 @@ package {
 			xm.defaultBPM = bosca.bpm;
 			xm.defaultTempo = int(bosca.bpm / 20);
 			xm.numChannels = 8;
-			xm.numInstruments = bosca.instrument.length;
+			xm.numInstruments = bosca.numinstrument;
 			for (var i:uint = 0; i < bosca.arrange.lastbar; i++) {
 				var xmpat:XMPattern = xmPatternFromBoscaBar(bosca, i);
 				xm.patterns.push(xmpat);
@@ -63,8 +64,21 @@ package {
 				xm.songLength++;
 			}
 			xm.flags = 0x0100;
-			
+
+			for (i = 0; i < bosca.numinstrument; i++) {
+				var boscaInstrument:instrumentclass = bosca.instrument[i];
+				var xmInstrument:XMInstrument = new XMInstrument();
+				trace('converting instrument ' + boscaInstrument.name);
+				xmInstrument.name = boscaInstrument.name;
+				xmInstrument.volume = int(boscaInstrument.volume / 4);
+				xmInstrument.addSample(new XMSampleFake());
+				xm.addInstrument(xmInstrument);
+			}
+			trace('instruments = ' + instruments.length);
+			trace('this.instruments = ' + this.instruments.length);
+			trace('xm.instruments = ' + xm.instruments.length);
 		}
+
 		public function writeToStream(stream:IDataOutput):void {
 			var xm:TrackerModuleXM = this;
 			var headbuf:ByteArray = new ByteArray;
@@ -121,6 +135,90 @@ package {
 				stream.writeBytes(patbuf);
 				stream.writeBytes(patBodyBuf);
 			}
+
+			trace('writing ' + xm.instruments.length + ' instruments...');
+			for (var instno:uint = 0; instno < xm.instruments.length; instno++) {
+				var inst:XMInstrument = xm.instruments[instno];
+				var instrheadbuf:ByteArray = new ByteArray();
+				instrheadbuf.endian = Endian.LITTLE_ENDIAN;
+				var headerSize:uint = (inst.samples.length < 1) ? 29 : 263;
+				instrheadbuf.writeUnsignedInt(headerSize);
+				instrheadbuf.writeMultiByte(inst.name, 'us-ascii');
+				instrheadbuf.writeByte(0); // type
+				instrheadbuf.writeShort(inst.samples.length);
+				if (inst.samples.length < 1) {
+					trace('no samples, writing short header');
+					stream.writeBytes(instrheadbuf);
+				}
+				instrheadbuf.writeUnsignedInt(40); // sampleHeaderSize
+				for (var kma:uint = 0; kma < inst.keymapAssignments.length; kma++) {
+					instrheadbuf.writeByte(inst.keymapAssignments[kma]);
+				}
+				for (var p:uint = 0; p < 12; p++) {
+					// var point:XMEnvelopePoint = inst.volumeEnvelope.points[p];
+					// instrheadbuf.writeShort(point.x);
+					// instrheadbuf.writeShort(point.y);
+					instrheadbuf.writeShort(0x1111);
+					instrheadbuf.writeShort(0x2222);
+				}
+				for (p = 0; p < 12; p++) {
+					// var point:XMEnvelopePoint = inst.panningEnvelope.points[p];
+					// instrheadbuf.writeShort(point.x);
+					// instrheadbuf.writeShort(point.y);
+					instrheadbuf.writeShort(0xdeed);
+					instrheadbuf.writeShort(0xfeef);
+				}
+				instrheadbuf.writeByte(0); // numVolumePoints
+				instrheadbuf.writeByte(0); // numVolumePoints
+				instrheadbuf.writeByte(0); // volSustainPoint
+				instrheadbuf.writeByte(0); // volLoopStartPoint
+				instrheadbuf.writeByte(0); // volLoopEndPoint
+				instrheadbuf.writeByte(0); // panSustainPoint
+				instrheadbuf.writeByte(0); // panLoopStartPoint
+				instrheadbuf.writeByte(0); // panLoopEndPoint
+				instrheadbuf.writeByte(0); // volumeType
+				instrheadbuf.writeByte(0); // panningType
+				instrheadbuf.writeByte(0); // vibratoType
+				instrheadbuf.writeByte(0); // vibratoSweep
+				instrheadbuf.writeByte(0); // vibratoDepth
+				instrheadbuf.writeByte(0); // vibratoRate
+				instrheadbuf.writeShort(0); // volumeFadeout);
+				// the 22 bytes at offset +241 are reserved
+				for (i = 0; i < 22; i++) {
+					instrheadbuf.writeByte(0x00);
+				}
+				stream.writeBytes(instrheadbuf);
+				trace('writing ' + inst.samples.length + ' samples');
+				for (var s:uint = 0; s < inst.samples.length; s++) {
+					var sample:XMSample = inst.samples[s];
+					var sampleHeadBuf:ByteArray = new ByteArray();
+					sampleHeadBuf.endian = Endian.LITTLE_ENDIAN;
+					sampleHeadBuf.writeUnsignedInt(sample.data.length);
+					sampleHeadBuf.writeUnsignedInt(sample.loopStart);
+					sampleHeadBuf.writeUnsignedInt(sample.loopLength);
+					sampleHeadBuf.writeByte(sample.volume);
+					sampleHeadBuf.writeByte(sample.finetune);
+					var sampleType:uint = (sample.loopsForward ? 1 : 0) |
+						(sample.bitsPerSample == 16 ? 1 : 0);
+					sampleHeadBuf.writeByte(sampleType);
+					sampleHeadBuf.writeByte(sample.panning);
+					sampleHeadBuf.writeByte(sample.relativeNoteNumber);
+					sampleHeadBuf.writeByte(0); // regular 'delta' sample encoding
+					sampleHeadBuf.writeMultiByte(sample.name, 'us-ascii');
+					stream.writeBytes(sampleHeadBuf);
+				}
+				trace('sample headers written, now for the data');
+				for (s = 0; s < inst.samples.length; s++) {
+					sample = inst.samples[s];
+					stream.writeBytes(sample.data);
+				}
+				trace('all done, next instrument');
+			}
+		}
+
+		public function addInstrument(instrument:XMInstrument):void {
+			instruments.push(instrument);
+			trace('now we have ' + instruments.length + ' instruments');
 		}
 
 		protected function xmPatternFromBoscaBar(bosca:controlclass, barNum:uint):XMPattern {
@@ -222,6 +320,103 @@ class XMPatternCell {
 				volume === 0 &&
 				effect === 0 &&
 				effectParam === 0
-			 )
+			 );
+	}
+}
+
+class XMInstrument {
+	import flash.utils.ByteArray;
+	import flash.utils.Endian;
+
+	protected var _name:ByteArray;
+	public var volume:uint = 40;
+	public var samples:Vector.<XMSample> = new Vector.<XMSample>();
+	public var keymapAssignments:Vector.<uint> = Vector.<uint>([
+    0,0,0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,0,0
+  ]);
+
+	public function XMInstrument() {
+		_name = new ByteArray();
+		_name.endian = Endian.LITTLE_ENDIAN;
+		this.name  = '                      ';
+	}
+
+  public function addSample(sample:XMSample):void {
+  	samples.push(sample);
+	}
+	public function get name():String {
+		return _name.toString();
+	}
+	public function set name(unpadded:String):void {
+		_name.clear();
+		_name.writeMultiByte(unpadded.slice(0,22), 'us-ascii');
+		for (var i:uint = _name.length; i < 22; i++) {
+			_name.writeByte(0x20); // space-padded
+		}
+	}
+}
+
+class XMSample {
+	import flash.utils.ByteArray;
+	import flash.utils.Endian;
+
+	public var volume:uint;
+	public var finuetune:uint = 0;
+	// type bitfield: looping, 8-bit/16-bit
+	public var panning:uint = 0x80;
+	public var relativeNoteNumber:uint = 0x80;
+	protected var _name:ByteArray;
+	public var data:ByteArray;
+	public var bitsPerSample:uint = 8;
+	public var finetune:uint = 0;
+	public var loopStart:uint = 0;
+	public var loopLength:uint = 0;
+	public var loopsForward:Boolean = false;
+
+	public function XMSample() {
+		_name = new ByteArray();
+		_name.endian = Endian.LITTLE_ENDIAN;
+		this.name  = '                      ';
+	}
+	public function get name():String {
+		return _name.toString();
+	}
+	public function set name(unpadded:String):void {
+		_name.clear();
+		_name.writeMultiByte(unpadded.slice(0,22), 'us-ascii');
+		for (var i:uint = _name.length; i < 22; i++) {
+			_name.writeByte(0x20); // space-padded
+		}
+	}
+}
+
+class XMSampleFake extends XMSample {
+	import flash.utils.ByteArray;
+	import flash.utils.Endian;
+	public function XMSampleFake() {
+		this.bitsPerSample = 8;
+		this.name = 'fake sample           ';
+		this.data = new ByteArray();
+		var sinewave:Array = [
+			0x0a,0x64,0x08,0x9c,0x06,0x05,0x04,0x03,0x64,0x00,0x00,
+			0x00,0x9c,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,
+			0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,
+			0xd8,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,
+			0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,
+			0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe,0xfe
+		];
+		this.data.endian = Endian.LITTLE_ENDIAN;
+		for (var i:uint = 0; i < sinewave.length; i++) {
+			this.data.writeByte(sinewave[i]);
+		}
+		loopLength = sinewave.length;
+		volume = 40;
 	}
 }
