@@ -12,17 +12,12 @@ package {
 		public var xm:XMSong;
 
 		public function loadFromLiveBoscaCeoilModel(bosca:controlclass, desiredSongName:String):void {
-		  xm = new XMSong;
+			xm = new XMSong;
 
-		  //TODO: move to .name property of XMSong
-		  xm.songname.writeMultiByte(desiredSongName.slice(0,20), 'us-ascii');
-		  while(xm.songname.length < 20) {
-		  	xm.songname.writeByte(0x20); // space-padded
-			}
-
+			xm.songname = desiredSongName;
 			xm.defaultBPM = bosca.bpm;
 			xm.defaultTempo = int(bosca.bpm / 20);
-			xm.numChannels = 8;
+			xm.numChannels = 8; // bosca has a hard-coded limit
 			xm.numInstruments = bosca.numinstrument;
 			for (var i:uint = 0; i < bosca.arrange.lastbar; i++) {
 				var xmpat:XMPattern = xmPatternFromBoscaBar(bosca, i);
@@ -31,7 +26,6 @@ package {
 				xm.numPatterns++;
 				xm.songLength++;
 			}
-			xm.flags = 0x0100; // TODO: move default to XMSong
 
 			for (i = 0; i < bosca.numinstrument; i++) {
 				var boscaInstrument:instrumentclass = bosca.instrument[i];
@@ -44,7 +38,6 @@ package {
 		}
 
 		public function writeToStream(stream:IDataOutput):void {
-			trace('deprecated, use XMSong.writeToStream() instead');
 			xm.writeToStream(stream);
 		}
 
@@ -84,7 +77,7 @@ package {
 					if (endrow >= numrows) { continue; }
 					if (rows[endrow].cellOnTrack[i].note > 0) { continue; } // someone else is already starting to play
 					rows[endrow].cellOnTrack[i] = new XMPatternCell({
-						note: 97,
+						note: 97, // "note off"
 						instrument: 0,
 						volume: 0,
 						effect: 0,
