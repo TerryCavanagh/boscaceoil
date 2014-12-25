@@ -211,7 +211,7 @@ package co.sparemind.trackermodule {
 					sampleHeadBuf.writeByte(sample.volume);
 					sampleHeadBuf.writeByte(sample.finetune);
 					var sampleType:uint = (sample.loopsForward ? 1 : 0) |
-						(sample.bitsPerSample == 16 ? 2 : 0);
+						(sample.bitsPerSample == 16 ? 16 : 0);
 					sampleHeadBuf.writeByte(sampleType);
 					sampleHeadBuf.writeByte(sample.panning);
 					sampleHeadBuf.writeByte(sample.relativeNoteNumber);

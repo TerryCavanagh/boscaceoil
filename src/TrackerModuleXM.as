@@ -1,9 +1,13 @@
 package {
 	import flash.utils.IDataOutput;
+	import flash.utils.ByteArray;
+	import flash.utils.Endian;
 	import flash.geom.Rectangle;
+	import org.si.sion.SiONDriver;
+	import org.si.sion.SiONVoice;
 	import co.sparemind.trackermodule.XMSong;
 	import co.sparemind.trackermodule.XMInstrument;
-	import co.sparemind.trackermodule.XMSampleFake;
+	import co.sparemind.trackermodule.XMSample;
 	import co.sparemind.trackermodule.XMPattern;
 	import co.sparemind.trackermodule.XMPatternLine;
 	import co.sparemind.trackermodule.XMPatternCell;
@@ -32,7 +36,7 @@ package {
 				var xmInstrument:XMInstrument = new XMInstrument();
 				xmInstrument.name = boscaInstrument.name;
 				xmInstrument.volume = int(boscaInstrument.volume / 4);
-				xmInstrument.addSample(new XMSampleFake());
+				xmInstrument.addSample(_sionVoiceToXMSample(boscaInstrument.voice, bosca._driver));
 				xm.addInstrument(xmInstrument);
 			}
 		}
@@ -91,14 +95,36 @@ package {
 		protected function boscaBoxNoteToXMNote(box:musicphraseclass, notenum:uint):XMPatternCell {
 			return new XMPatternCell(
 					{
-					note: box.notes[notenum].x,
+					note: box.notes[notenum].x + 13, // SiON notes are 0-127, XM is 1-96
 					instrument: box.instr + 1,
 					volume: 0,
 					effect: 0,
 					effectParam: 0
 			});
 		}
- 
+
+		protected function _sionVoiceToXMSample(voice:SiONVoice, driver:SiONDriver):XMSample {
+			var xmsample:XMSample = new XMSample;
+			var mml:String  = voice.getMML(0);
+			var renderBuffer:Vector.<Number> = new Vector.<Number>;
+			// XXX: Interferes with regular playback. Find a more reliable way.
+			driver.render(mml + ' t120 %6@0 o5c', renderBuffer, 1);
+			xmsample.relativeNoteNumber = 0;
+			xmsample.name = voice.name;
+			xmsample.volume = 0x40;
+			xmsample.bitsPerSample = 16;
+			xmsample.data = new ByteArray;
+			xmsample.data.endian = Endian.LITTLE_ENDIAN;
+			var previousSample:int = 0;
+			for (var i:uint; i < renderBuffer.length; i++) {
+				var thisSample:int = renderBuffer[i] * 32767; // signed float to 16-bit signed int
+				var sampleDelta:int = thisSample - previousSample;
+				xmsample.data.writeShort(sampleDelta);
+				previousSample = thisSample;
+			}
+			return xmsample;
+		}
+
 	}
 }
 
