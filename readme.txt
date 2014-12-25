@@ -6,24 +6,49 @@ Terry Cavanagh / http://www.distractionware.com
 
 -=-=-=-=-=-=-=-=
 
+## Modifying Bosca Ceoil itself
+
+Bosca Ceoil is an Adobe AIR application, written in the programming language
+called "ActionScript 3". Making changes to Bosca Ceoil involves changing
+ActionScript code.
+
+
 ### Pre-requisites
-Make sure you've got the AIR SDK installed. You'll also need a copy of a particular version (0.65) of the SiON library that powers Bosca Ceoil's sound.
+
+Make sure you've got the [Adobe AIR SDK](http://www.adobe.com/devnet/air/air-sdk-download.html)
+installed. You'll also need a copy of a particular version (0.65) of the
+[SiON library](https://sites.google.com/site/sioncenter/) that powers Bosca
+Ceoil's sound. Download `sion065.swc` and put it in Bosca Ceoil's `libs` folder
+(next to `src` and `assets`).
 
 
 ### Building
+
+The AIR SDK includes a tool called `amxmlc`, which is the compiler we'll use to
+turn the ActionScript 3 code into an .swf "movie" (which is the term for
+`.swf` files even when they represent applications).
+
+The compiler needs quite a few options to produce a working Bosca Ceoil
+"movie":
+
 ```
     amxmlc -swf-version 20 -default-frame-rate 60 -default-size 768 480 -library-path+=libs/sion065.swc -source-path+=src -default-background-color 0x000000 -warnings -strict src/Main.as -o BoscaCeoil.swf
 ```
 
+This compiles the app into `BoscaCeoil.swf`.
+
+
 ### Running
 
-This compiles the app into `BoscaCeoil.swf`, which you can run with:
+The AIR application description file, `application.xml`, tells AIR about the application you'd like to create from which movie files.
+
+The AIR SDK comes with a tool called `adl`, the Application Description Loader, which lets you run Bosca with the newly-compiled SWF:
 
 ```
     adl application.xml
 ```
 
-
+If you want to distribute the application, the AIR SDK contains all the tools you'll need for that.
 
 
 Available under the FreeBSD licence. Fork away!
