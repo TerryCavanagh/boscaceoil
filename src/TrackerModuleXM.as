@@ -144,11 +144,23 @@ package {
 					var timerelativetostartofbar:uint = boscaNote.width; // yes, it's called width. whatever.
 					var notelength:uint = boscaNote.y;
 					var xmnote:XMPatternCell = boscaBoxNoteToXMNote(box, j, instrumentNoteMap);
-					rows[timerelativetostartofbar].cellOnTrack[i] = xmnote;
+
+					// find a clear place to write
+					var targetTrack:uint = i;
+					while (rows[timerelativetostartofbar].cellOnTrack[targetTrack].note > 0) {
+						// track is busy (eg drum hits at once, chords)
+						targetTrack++;
+						if (!(targetTrack < numtracks)) {
+							// too much going on, just ignore this note
+							continue;
+						}
+					}
+
+					rows[timerelativetostartofbar].cellOnTrack[targetTrack] = xmnote;
 					var endrow:uint = timerelativetostartofbar + notelength;
 					if (endrow >= numrows) { continue; }
-					if (rows[endrow].cellOnTrack[i].note > 0) { continue; } // someone else is already starting to play
-					rows[endrow].cellOnTrack[i] = new XMPatternCell({
+					if (rows[endrow].cellOnTrack[targetTrack].note > 0) { continue; } // someone else is already starting to play
+					rows[endrow].cellOnTrack[targetTrack] = new XMPatternCell({
 						note: 97, // "note off"
 						instrument: 0,
 						volume: 0,
