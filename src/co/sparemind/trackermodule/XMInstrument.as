@@ -26,6 +26,15 @@ package co.sparemind.trackermodule {
 		public function addSample(sample:XMSample):void {
 			samples.push(sample);
 		}
+
+		/**
+		 * XM only seems to support 16 samples per instrument
+		 * so this silently discards any past that.
+		 */
+		public function addSamples(extraSamples:Vector.<XMSample>):void {
+			samples = samples.concat(extraSamples).slice(0,16);
+		}
+
 		public function get name():String {
 			return _name.toString();
 		}

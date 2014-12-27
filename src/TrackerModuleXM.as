@@ -36,7 +36,20 @@ package {
 				var xmInstrument:XMInstrument = new XMInstrument();
 				xmInstrument.name = boscaInstrument.name;
 				xmInstrument.volume = int(boscaInstrument.volume / 4);
-				xmInstrument.addSample(_sionVoiceToXMSample(boscaInstrument.voice, bosca._driver));
+				switch (boscaInstrument.type) {
+					case 0:
+						xmInstrument.addSample(_boscaInstrumentToXMSample(boscaInstrument, bosca._driver));
+						break;
+					default:
+						// XXX: bosca ceoil drumkits are converted lossily to a single XM
+						// instrument, but they could be converted to several instruments.
+						var drumkitNumber:uint = boscaInstrument.type - 1;
+						xmInstrument.addSamples(_boscaDrumkitToXMSamples(bosca.drumkit[drumkitNumber], bosca._driver));
+						for (var s:uint = 0; s < xmInstrument.samples.length; s++) {
+							var key:uint = s + 13;
+							xmInstrument.keymapAssignments[key] = s;
+						}
+				}
 				xm.addInstrument(xmInstrument);
 			}
 		}
@@ -103,28 +116,85 @@ package {
 			});
 		}
 
-		protected function _sionVoiceToXMSample(voice:SiONVoice, driver:SiONDriver):XMSample {
+		// this conversion is very lossy.
+		//
+		// bosca drumkits can be much larger than a single XM instrument
+		// and an XM instrument can only have one "relative note" setting all
+		// samples.
+		//
+		protected function _boscaDrumkitToXMSamples(drumkit:drumkitclass, driver:SiONDriver):Vector.<XMSample> {
+			var samples:Vector.<XMSample> = new Vector.<XMSample>
+			for (var d:uint; d < drumkit.size; d++) {
+				var voice:SiONVoice = drumkit.voicelist[d];
+				var samplename:String = drumkit.voicename[d];
+				var sionNoteNum:int = drumkit.voicenote[d];
+				var xmNoteNum:uint = sionNoteNum + 13;
+
+				var xmsample:XMSample = new XMSample;
+				xmsample.relativeNoteNumber = 0;
+				xmsample.name = voice.name;
+				xmsample.volume = 0x40;
+				xmsample.bitsPerSample = 16;
+				xmsample.data = _playSiONNoteTo16BitDeltaSamples(sionNoteNum, voice, 1, driver);
+
+				samples.push(xmsample);
+			}
+			return samples;
+		}
+
+		protected function _boscaInstrumentToXMSample(instrument:instrumentclass, driver:SiONDriver):XMSample {
+			var voice:SiONVoice = instrument.voice;
 			var xmsample:XMSample = new XMSample;
-			var mml:String  = voice.getMML(0);
-			var renderBuffer:Vector.<Number> = new Vector.<Number>;
-			// XXX: Interferes with regular playback. Find a more reliable way.
-			driver.render(mml + ' t120 %6@0 o5c', renderBuffer, 1);
 			xmsample.relativeNoteNumber = 0;
 			xmsample.name = voice.name;
 			xmsample.volume = 0x40;
 			xmsample.bitsPerSample = 16;
-			xmsample.data = new ByteArray;
-			xmsample.data.endian = Endian.LITTLE_ENDIAN;
+
+			// consider voice.preferableNote
+			var c5:int = 60;
+			
+			xmsample.data = _playSiONNoteTo16BitDeltaSamples(c5, voice, 1, driver);
+			return xmsample;
+		}
+
+		protected function _playSiONNoteTo16BitDeltaSamples(note:int, voice:SiONVoice, length:Number, driver:SiONDriver):ByteArray {
+			var deltasamples:ByteArray = new ByteArray;
+			deltasamples.endian = Endian.LITTLE_ENDIAN;
+
+			// XXX: Interferes with regular playback. Find a more reliable way.
+			// driver.renderQueue() might work
+			driver.stop();
+
+			var renderBuffer:Vector.<Number> = new Vector.<Number>;
+			// XXX: only works for %6 (FM synth) voices.
+			// theoretically voice.moduleType is 6 for FM and switchable
+			var mml:String = voice.getMML(voice.channelNum) + ' %6,' + voice.channelNum + '@' + voice.toneNum + ' ' + _mmlNoteFromSiONNoteNumber(note);
+			driver.render(mml, renderBuffer, 1);
+
+			// delta encoding algorithm that module formats like XM use
 			var previousSample:int = 0;
 			for (var i:uint; i < renderBuffer.length; i++) {
 				var thisSample:int = renderBuffer[i] * 32767; // signed float to 16-bit signed int
 				var sampleDelta:int = thisSample - previousSample;
-				xmsample.data.writeShort(sampleDelta);
+				deltasamples.writeShort(sampleDelta);
 				previousSample = thisSample;
 			}
-			return xmsample;
+
+			return deltasamples;
 		}
 
+		/**
+		 *
+		 * I'm sure there's a better way to do this (eg maybe there's an MML
+		 * command for "play note number").
+		 */
+		protected function _mmlNoteFromSiONNoteNumber(noteNum:int):String {
+			var noteNames:Vector.<String> = Vector.<String>(['c', 'c+', 'd', 'd+', 'e', 'f', 'f+', 'g', 'g+', 'a', 'a+', 'b']);
+
+			var octave:int = int(noteNum / 12);
+			var noteName:String = noteNames[noteNum % 12];
+			return 'o' + octave + noteName;
+		}
 	}
 }
 
