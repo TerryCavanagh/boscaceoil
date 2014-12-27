@@ -16,6 +16,8 @@ package {
 		public var xm:XMSong;
 
 		public function loadFromLiveBoscaCeoilModel(bosca:controlclass, desiredSongName:String):void {
+			var boscaInstrument:instrumentclass;
+
 			xm = new XMSong;
 
 			xm.songname = desiredSongName;
@@ -23,8 +25,20 @@ package {
 			xm.defaultTempo = int(bosca.bpm / 20);
 			xm.numChannels = 8; // bosca has a hard-coded limit
 			xm.numInstruments = bosca.numinstrument;
+
+			var notesByEachInstrumentNumber:Vector.<Vector.<int>> = _notesUsedByEachInstrumentAcrossEntireSong(bosca);
+
+			// map notes to other notes (mostly for drums)
+			var perInstrumentBoscaNoteToXMNoteMap:Vector.<Vector.<uint>> = new Vector.<Vector.<uint>>;
+			for (i = 0; i < bosca.numinstrument; i++) {
+				boscaInstrument = bosca.instrument[i];
+				var boscaNoteToXMNoteMapForThisInstrument:Vector.<uint> = _boscaNoteToXMNoteMapForInstrument(boscaInstrument, notesByEachInstrumentNumber[i]);
+				perInstrumentBoscaNoteToXMNoteMap[i] = boscaNoteToXMNoteMapForThisInstrument;
+			}
+
+			// pattern arrangement
 			for (var i:uint = 0; i < bosca.arrange.lastbar; i++) {
-				var xmpat:XMPattern = xmPatternFromBoscaBar(bosca, i);
+				var xmpat:XMPattern = xmPatternFromBoscaBar(bosca, i, perInstrumentBoscaNoteToXMNoteMap);
 				xm.patterns.push(xmpat);
 				xm.patternOrderTable[i] = i;
 				xm.numPatterns++;
@@ -32,8 +46,9 @@ package {
 			}
 
 			for (i = 0; i < bosca.numinstrument; i++) {
-				var boscaInstrument:instrumentclass = bosca.instrument[i];
+				boscaInstrument = bosca.instrument[i];
 				var xmInstrument:XMInstrument = new XMInstrument();
+				var notesUsed:Vector.<int> = notesByEachInstrumentNumber[i];
 				xmInstrument.name = boscaInstrument.name;
 				xmInstrument.volume = int(boscaInstrument.volume / 4);
 				switch (boscaInstrument.type) {
@@ -44,9 +59,10 @@ package {
 						// XXX: bosca ceoil drumkits are converted lossily to a single XM
 						// instrument, but they could be converted to several instruments.
 						var drumkitNumber:uint = boscaInstrument.type - 1;
-						xmInstrument.addSamples(_boscaDrumkitToXMSamples(bosca.drumkit[drumkitNumber], bosca._driver));
-						for (var s:uint = 0; s < xmInstrument.samples.length; s++) {
-							var key:uint = s + 13;
+						xmInstrument.addSamples(_boscaDrumkitToXMSamples(bosca.drumkit[drumkitNumber], notesUsed, perInstrumentBoscaNoteToXMNoteMap[i], bosca._driver));
+						for (var s:uint = 0; s < notesUsed.length; s++) {
+							var sionNote:int = notesUsed[s];
+							var key:uint = perInstrumentBoscaNoteToXMNoteMap[i][sionNote] - 1; // 0th key is note 1
 							xmInstrument.keymapAssignments[key] = s;
 						}
 				}
@@ -58,7 +74,43 @@ package {
 			xm.writeToStream(stream);
 		}
 
-		protected function xmPatternFromBoscaBar(bosca:controlclass, barNum:uint):XMPattern {
+		public function _notesUsedByEachInstrumentAcrossEntireSong(bosca:controlclass):Vector.<Vector.<int>> {
+			var seenNotePerInstrument:Array = [];
+			var i:uint;
+			var n:int;
+
+			// start with a clear 2d array
+			for (i = 0; i < bosca.instrument.length; i++) {
+				seenNotePerInstrument[i] = [];
+			}
+
+			// build a 2d sparse boolean array of notes used
+			for (i = 0; i < bosca.musicbox.length; i++) {
+				var box:musicphraseclass = bosca.musicbox[i];
+				var instrumentNum:int = box.instr;
+
+				for (n = 0; n < box.notes.length; n++) {
+					var noteNum:int = box.notes[n].x;
+					seenNotePerInstrument[instrumentNum][noteNum] = true;
+				}
+			}
+
+			// map the sparse boolean array into a list of list of ints
+			var notesUsedByEachInstrument:Vector.<Vector.<int>> = new Vector.<Vector.<int>>;
+			for (i = 0; i < seenNotePerInstrument.length; i++) {
+				var notesUsedByThisInstrument:Vector.<int> = new Vector.<int>;
+				for (n = 0; n < seenNotePerInstrument[i].length; n++) {
+					if (seenNotePerInstrument[i][n]) {
+						notesUsedByThisInstrument.push(n);
+					}
+				}
+				notesUsedByEachInstrument.push(notesUsedByThisInstrument);
+			}
+
+			return notesUsedByEachInstrument;
+		}
+
+		protected function xmPatternFromBoscaBar(bosca:controlclass, barNum:uint, instrumentNoteMap:Vector.<Vector.<uint>>):XMPattern {
 			var numtracks:uint = 8;
 			var numrows:uint = bosca.boxcount;
 			var pattern:XMPattern = new XMPattern(numrows);
@@ -88,7 +140,7 @@ package {
 					var boscaNote:Rectangle = notes[j];
 					var timerelativetostartofbar:uint = boscaNote.width; // yes, it's called width. whatever.
 					var notelength:uint = boscaNote.y;
-					var xmnote:XMPatternCell = boscaBoxNoteToXMNote(box, j);
+					var xmnote:XMPatternCell = boscaBoxNoteToXMNote(box, j, instrumentNoteMap);
 					rows[timerelativetostartofbar].cellOnTrack[i] = xmnote;
 					var endrow:uint = timerelativetostartofbar + notelength;
 					if (endrow >= numrows) { continue; }
@@ -105,10 +157,12 @@ package {
 			return pattern;
 		}
 
-		protected function boscaBoxNoteToXMNote(box:musicphraseclass, notenum:uint):XMPatternCell {
+		protected function boscaBoxNoteToXMNote(box:musicphraseclass, notenum:uint, noteMapping:Vector.<Vector.<uint>>):XMPatternCell {
+			var sionNoteNum:int = box.notes[notenum].x;
+			var xmNoteNum:uint = noteMapping[box.instr][sionNoteNum];
 			return new XMPatternCell(
 					{
-					note: box.notes[notenum].x + 13, // SiON notes are 0-127, XM is 1-96
+					note: xmNoteNum,
 					instrument: box.instr + 1,
 					volume: 0,
 					effect: 0,
@@ -116,26 +170,71 @@ package {
 			});
 		}
 
-		// this conversion is very lossy.
-		//
+		protected function _boscaNoteToXMNoteMapForInstrument(boscaInstrument:instrumentclass, usefulNotes:Vector.<int>):Vector.<uint> {
+			if (boscaInstrument.type > 0) {
+				return _boscaDrumkitToXMNoteMap(usefulNotes);
+			}
+
+			return _boscaNoteToXMNoteMapLinear();
+		}
+
+		protected function _boscaNoteToXMNoteMapLinear():Vector.<uint> {
+			var map:Vector.<uint> = new Vector.<uint>;
+			for (var scionNote:int = 0; scionNote < 127; scionNote++) {
+				var maybeXMNote:int = scionNote + 13;
+				var xmNote:uint;
+				if (maybeXMNote < 1) { // too low for XM
+					map[scionNote] = 0;
+					continue;
+				}
+				if (maybeXMNote > 95) { // too high for XM
+					map[scionNote] = 0;
+					continue;
+				}
+				map[scionNote] = uint(maybeXMNote);
+			}
+			return map;
+		}
+
+		protected function _boscaDrumkitToXMNoteMap(necessaryNotes:Vector.<int>):Vector.<uint> {
+			var map:Vector.<uint> = new Vector.<uint>;
+			var startAt:int = 49; // 1 = low C, 49 = middle C, 96 = highest B
+			var scionNote:int;
+			var i:uint;
+			for (scionNote = 0; scionNote < 128; scionNote++) {
+				map[scionNote] = 0; // not used anyway
+			}
+
+			for (i = 0; i < necessaryNotes.length; i++) {
+				var necessaryNote:int = necessaryNotes[i];
+				var xmNote:uint = i + startAt;
+				map[necessaryNote] = xmNote;
+			}
+
+			return map;
+		}
+
 		// bosca drumkits can be much larger than a single XM instrument
 		// and an XM instrument can only have one "relative note" setting all
 		// samples.
 		//
-		protected function _boscaDrumkitToXMSamples(drumkit:drumkitclass, driver:SiONDriver):Vector.<XMSample> {
-			var samples:Vector.<XMSample> = new Vector.<XMSample>
-			for (var d:uint; d < drumkit.size; d++) {
+		protected function _boscaDrumkitToXMSamples(drumkit:drumkitclass, whichDrumNumbers:Vector.<int>, noteMapping:Vector.<uint>, driver:SiONDriver):Vector.<XMSample> {
+			var samples:Vector.<XMSample> = new Vector.<XMSample>;
+			for (var di:uint = 0; di < whichDrumNumbers.length; di++) {
+			  var d:uint = whichDrumNumbers[di];
 				var voice:SiONVoice = drumkit.voicelist[d];
 				var samplename:String = drumkit.voicename[d];
 				var sionNoteNum:int = drumkit.voicenote[d];
-				var xmNoteNum:uint = sionNoteNum + 13;
+				var xmNoteNum:uint = noteMapping[sionNoteNum];
+
+				var compensationNeeded:int = 0; //49 - xmNoteNum;
 
 				var xmsample:XMSample = new XMSample;
 				xmsample.relativeNoteNumber = 0;
 				xmsample.name = voice.name;
 				xmsample.volume = 0x40;
 				xmsample.bitsPerSample = 16;
-				xmsample.data = _playSiONNoteTo16BitDeltaSamples(sionNoteNum, voice, 1, driver);
+				xmsample.data = _playSiONNoteTo16BitDeltaSamples(sionNoteNum + compensationNeeded, voice, 1, driver);
 
 				samples.push(xmsample);
 			}
