@@ -65,6 +65,9 @@ package {
 							var key:uint = perInstrumentBoscaNoteToXMNoteMap[i][sionNote] - 1; // 0th key is note 1
 							xmInstrument.keymapAssignments[key] = s;
 						}
+						for each (var sample:XMSample in xmInstrument.samples) {
+							sample.volume = xmInstrument.volume;
+						}
 				}
 				xm.addInstrument(xmInstrument);
 			}
@@ -238,7 +241,7 @@ package {
 				xmsample.name = voice.name;
 				xmsample.volume = 0x40;
 				xmsample.bitsPerSample = 16;
-				xmsample.data = _playSiONNoteTo16BitDeltaSamples(sionNoteNum + compensationNeeded, voice, 1, driver);
+				xmsample.data = _playSiONNoteTo16BitDeltaSamples(sionNoteNum + compensationNeeded, voice, 32, driver);
 
 				samples.push(xmsample);
 			}
@@ -248,7 +251,7 @@ package {
 		protected function _boscaInstrumentToXMSample(instrument:instrumentclass, driver:SiONDriver):XMSample {
 			var voice:SiONVoice = instrument.voice;
 			var xmsample:XMSample = new XMSample;
-			xmsample.relativeNoteNumber = 0;
+			xmsample.relativeNoteNumber = +3;
 			xmsample.name = voice.name;
 			xmsample.volume = 0x40;
 			xmsample.bitsPerSample = 16;
@@ -256,7 +259,7 @@ package {
 			// consider voice.preferableNote
 			var c5:int = 60;
 			
-			xmsample.data = _playSiONNoteTo16BitDeltaSamples(c5, voice, 1, driver);
+			xmsample.data = _playSiONNoteTo16BitDeltaSamples(c5, voice, 16, driver);
 			return xmsample;
 		}
 
@@ -271,7 +274,8 @@ package {
 			var renderBuffer:Vector.<Number> = new Vector.<Number>;
 			// XXX: only works for %6 (FM synth) voices.
 			// theoretically voice.moduleType is 6 for FM and switchable
-			var mml:String = voice.getMML(voice.channelNum) + ' %6,' + voice.channelNum + '@' + voice.toneNum + ' ' + _mmlNoteFromSiONNoteNumber(note);
+			var mml:String = voice.getMML(voice.channelNum) + ' %6,' + voice.channelNum + '@' + voice.toneNum + ' ' + _mmlNoteFromSiONNoteNumber(note); // theoretically, command 'n60' plays note 60
+			trace(mml);
 			driver.render(mml, renderBuffer, 1);
 
 			// delta encoding algorithm that module formats like XM use
