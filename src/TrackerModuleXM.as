@@ -282,6 +282,7 @@ package {
 				deltasamples.writeShort(sampleDelta);
 				previousSample = thisSample;
 			}
+			driver.play();
 
 			return deltasamples;
 		}
