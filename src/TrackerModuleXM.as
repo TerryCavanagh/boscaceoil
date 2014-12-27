@@ -80,16 +80,16 @@ package {
 			var n:int;
 
 			// start with a clear 2d array
-			for (i = 0; i < bosca.instrument.length; i++) {
+			for (i = 0; i < bosca.numinstrument; i++) {
 				seenNotePerInstrument[i] = [];
 			}
 
 			// build a 2d sparse boolean array of notes used
-			for (i = 0; i < bosca.musicbox.length; i++) {
+			for (i = 0; i < bosca.numboxes; i++) {
 				var box:musicphraseclass = bosca.musicbox[i];
 				var instrumentNum:int = box.instr;
 
-				for (n = 0; n < box.notes.length; n++) {
+				for (n = 0; n < box.numnotes; n++) {
 					var noteNum:int = box.notes[n].x;
 					seenNotePerInstrument[instrumentNum][noteNum] = true;
 				}
@@ -187,7 +187,7 @@ package {
 					map[scionNote] = 0;
 					continue;
 				}
-				if (maybeXMNote > 95) { // too high for XM
+				if (maybeXMNote > 96) { // too high for XM
 					map[scionNote] = 0;
 					continue;
 				}
@@ -200,14 +200,18 @@ package {
 			var map:Vector.<uint> = new Vector.<uint>;
 			var startAt:int = 49; // 1 = low C, 49 = middle C, 96 = highest B
 			var scionNote:int;
-			var i:uint;
+			var offset:uint;
+
+			// start with a clear map for the unused notes
 			for (scionNote = 0; scionNote < 128; scionNote++) {
 				map[scionNote] = 0; // not used anyway
 			}
 
-			for (i = 0; i < necessaryNotes.length; i++) {
-				var necessaryNote:int = necessaryNotes[i];
-				var xmNote:uint = i + startAt;
+			// fill up the used notes in the middle where sampling doesn't change
+			// much
+			for (offset = 0; offset < necessaryNotes.length; offset++) {
+				var necessaryNote:int = necessaryNotes[offset];
+				var xmNote:uint = startAt + offset;
 				map[necessaryNote] = xmNote;
 			}
 
@@ -221,7 +225,7 @@ package {
 		protected function _boscaDrumkitToXMSamples(drumkit:drumkitclass, whichDrumNumbers:Vector.<int>, noteMapping:Vector.<uint>, driver:SiONDriver):Vector.<XMSample> {
 			var samples:Vector.<XMSample> = new Vector.<XMSample>;
 			for (var di:uint = 0; di < whichDrumNumbers.length; di++) {
-			  var d:uint = whichDrumNumbers[di];
+				var d:uint = whichDrumNumbers[di];
 				var voice:SiONVoice = drumkit.voicelist[d];
 				var samplename:String = drumkit.voicename[d];
 				var sionNoteNum:int = drumkit.voicenote[d];
