@@ -1220,6 +1220,32 @@
 			}
 		}
 		
+		public function exportxm():void {
+			file = File.desktopDirectory.resolvePath("*.xm");
+			file.addEventListener(Event.SELECT, onexportxm);
+			file.browseForSave("Export .XM module file");
+			
+			fixmouseclicks = true;
+		}
+		private function onexportxm(e:Event):void {
+			file = e.currentTarget as File;
+			
+			if (!fileHasExtension(file, "xm")) {
+				addExtensionToFile(file, "xm");
+			}
+			
+
+			var xm:TrackerModuleXM = new TrackerModuleXM();
+			xm.loadFromLiveBoscaCeoilModel(this, file.name);
+
+			stream = new FileStream();
+			stream.open(file, FileMode.WRITE);
+			xm.writeToStream(stream);
+			stream.close();
+			
+			fixmouseclicks = true;
+			showmessage("SONG EXPORTED AS XM");
+		}
 		public function exportwav():void {
 			currenttab = 1; clicklist = true;
 			arrange.loopstart = 0; arrange.loopend = arrange.lastbar;

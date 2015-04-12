@@ -209,6 +209,9 @@
 							if (control.my >= gfx.linesize * 2 && control.my <= gfx.linesize * 3) {
 								control.exportwav();
 							}
+							if (control.my >= gfx.linesize * 3 && control.my <= gfx.linesize * 4) {
+								control.exportxm();
+							}
 							if (control.my >= gfx.linesize * 4 && control.my <= gfx.linesize * 5) {
 								control.saveceol();
 							}
