@@ -55,8 +55,10 @@ package{
   	include "includes/render.as";
 		
 		public function Main():void {
+			CONFIG::desktop {
 			NativeApplication.nativeApplication.setAsDefaultApplication("ceol");
 			NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvokeEvent);
+			}
 			
 			key = new KeyPoll(stage);
 			control = new controlclass();
@@ -122,6 +124,7 @@ package{
 			control.savescreensettings(gfx);
 		}
 		
+		CONFIG::desktop {
 		public function onInvokeEvent(event:InvokeEvent):void{
 			if (event.arguments.length > 0) {
 				if (control.startup == 0) {
@@ -132,6 +135,7 @@ package{
 					control.invokeceol(event.arguments[0]);
 				}
 			}
+		}
 		}
 		
 		public var gfx:graphicsclass = new graphicsclass();

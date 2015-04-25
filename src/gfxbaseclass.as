@@ -4,7 +4,9 @@ package{
   import flash.events.*;
   import flash.net.*;
 	import flash.text.*;
+	CONFIG::desktop {
 	import flash.display.NativeWindow;
+	}
 	
 	public class gfxbaseclass extends Sprite {
 		//Initialise arrays here
@@ -57,10 +59,12 @@ package{
 		}
 		
 		public function changewindowsize(t:int):void {
+			CONFIG::desktop {
 			screenscale = t;
 			if (stage && stage.nativeWindow) {
 				stage.nativeWindow.width = (screenwidth * t) + 18;
 				stage.nativeWindow.height = (screenheight * t) + 45;
+			}
 			}
 		}
 

@@ -1111,25 +1111,32 @@
 			}
 		}
 		
+		CONFIG::desktop {
 		public function fileHasExtension(file:File, extension:String):Boolean {     
 			if (!file.extension || file.extension.toLowerCase() != extension) {         
 				return false;     
 			}                 
 			return true; 
 		}
+		}
 		
+		CONFIG::desktop {
 		public function addExtensionToFile(file:File, extension:String):void {     
 			file.url += "." + extension; 
 		}
+		}
 		
 		public function saveceol():void {
+			CONFIG::desktop {
 			file = File.desktopDirectory.resolvePath("*.ceol");
       file.addEventListener(Event.SELECT, onsaveceol);
 			file.browseForSave("Save .ceol File");
 			
 			fixmouseclicks = true;
+			}
 		}
 		
+		CONFIG::desktop {
 		private function onsaveceol(e:Event):void {    
 			file = e.currentTarget as File;
 			
@@ -1147,16 +1154,20 @@
 			fixmouseclicks = true;
 			showmessage("SONG SAVED");
 		}
+		}
 		
 		public function loadceol():void {
+			CONFIG::desktop {
 			file = File.desktopDirectory.resolvePath("");
       file.addEventListener(Event.SELECT, onloadceol);
 			file.browseForOpen("Load .ceol File", [ceolFilter]);
 			
 			fixmouseclicks = true;
+			}
 		}
 		
 		public function invokeceol(t:String):void { 
+			CONFIG::desktop {
 			file = new File();
 			file.nativePath = t;
 			
@@ -1180,8 +1191,10 @@
 			
 			fixmouseclicks = true;
 			showmessage("SONG LOADED");
+			}
 		}
 		
+		CONFIG::desktop {
 		private function onloadceol(e:Event):void {  
 			file = e.currentTarget as File;
 			
@@ -1206,6 +1219,7 @@
 			fixmouseclicks = true;
 			showmessage("SONG LOADED");
 		}
+		}
 		
 		public function showmessage(t:String):void {
 			message = t;
@@ -1221,12 +1235,15 @@
 		}
 		
 		public function exportxm():void {
+			CONFIG::desktop {
 			file = File.desktopDirectory.resolvePath("*.xm");
 			file.addEventListener(Event.SELECT, onexportxm);
 			file.browseForSave("Export .XM module file");
 			
 			fixmouseclicks = true;
+			}
 		}
+		CONFIG::desktop {
 		private function onexportxm(e:Event):void {
 			file = e.currentTarget as File;
 			
@@ -1246,7 +1263,9 @@
 			fixmouseclicks = true;
 			showmessage("SONG EXPORTED AS XM");
 		}
+		}
 		public function exportwav():void {
+			CONFIG::desktop {
 			currenttab = 1; clicklist = true;
 			arrange.loopstart = 0; arrange.loopend = arrange.lastbar;
 			musicplaying = true;
@@ -1259,9 +1278,11 @@
 			
 			followmode = true;
 			nowexporting = true;
+			}
 		}
 		
 		public function savewav():void {
+			CONFIG::desktop {
 			nowexporting = false; followmode = false;
 			
 			_wav = new ByteArray();
@@ -1288,8 +1309,10 @@
 			file.browseForSave("Export .wav File");
 			
 			fixmouseclicks = true;
+			}
 		}
 		
+		CONFIG::desktop {
 		private function onsavewav(e:Event):void {    
 			file = e.currentTarget as File;
 			
@@ -1305,8 +1328,11 @@
 			fixmouseclicks = true;
 			showmessage("SONG EXPORTED AS WAV");
 		}
+		}
 		
+		CONFIG::desktop {
 		public var file:File, stream:FileStream;
+		}
 		public var filestring:String, fi:int;
 		public var filestream:Array;
 		public var ceolFilter:FileFilter = new FileFilter("Ceol", "*.ceol");
