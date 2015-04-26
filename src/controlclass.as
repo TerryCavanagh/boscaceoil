@@ -14,6 +14,7 @@
 	import flash.filesystem.*;
   import flash.net.FileFilter;
   import flash.system.Capabilities;
+  import flash.external.ExternalInterface;
 		
 	public class controlclass extends Sprite{
 		public var SCALE_NORMAL:int = 0;
@@ -1135,6 +1136,13 @@
 			fixmouseclicks = true;
 			}
 		}
+
+		public function saveceolWeb():void {
+			makefilestring();
+			ExternalInterface.call("saveCeol", filestring);
+			showmessage("SONG SAVED");
+			fixmouseclicks = true;
+		}
 		
 		CONFIG::desktop {
 		private function onsaveceol(e:Event):void {    
@@ -1165,6 +1173,14 @@
 			fixmouseclicks = true;
 			}
 		}
+
+		public function loadceolWeb():void {
+			filestring = ExternalInterface.call("loadCeol");
+			loadfilestring(filestring);
+
+			fixmouseclicks = true;
+			showmessage("SONG LOADED");
+		}
 		
 		public function invokeceol(t:String):void { 
 			CONFIG::desktop {
@@ -1176,18 +1192,7 @@
 			filestring = stream.readUTFBytes(stream.bytesAvailable);
 			stream.close();
 			
-			filestream = new Array();
-			filestream = filestring.split(",");
-			
-			numinstrument = 1;
-			numboxes = 0;
-			arrange.clear();
-			arrange.currentbar = 0; arrange.viewstart = 0;
-			
-			convertfilestring();
-			
-			changemusicbox(0);
-			looptime = 0;
+			loadfilestring(filestring);
 			
 			fixmouseclicks = true;
 			showmessage("SONG LOADED");
@@ -1203,8 +1208,16 @@
 			filestring = stream.readUTFBytes(stream.bytesAvailable);
 			stream.close();
 			
+			loadfilestring(filestring);
+
+			fixmouseclicks = true;
+			showmessage("SONG LOADED");
+		}
+		}
+
+		private function loadfilestring(s:String):void {
 			filestream = new Array();
-			filestream = filestring.split(",");
+			filestream = s.split(",");
 			
 			numinstrument = 1;
 			numboxes = 0;
@@ -1215,10 +1228,6 @@
 			
 			changemusicbox(0);
 			looptime = 0;
-			
-			fixmouseclicks = true;
-			showmessage("SONG LOADED");
-		}
 		}
 		
 		public function showmessage(t:String):void {

@@ -213,14 +213,22 @@
 								control.exportxm();
 							}
 							if (control.my >= gfx.linesize * 4 && control.my <= gfx.linesize * 5) {
-								control.saveceol();
+								if (CONFIG::desktop) {
+									control.saveceol();
+								} else {
+									control.saveceolWeb();
+								}
 							}
 						}else if (control.mx > 210) {
 							if (control.my >= gfx.linesize * 2 && control.my <= gfx.linesize * 3) {
 								control.newsong();
 							}
 							if (control.my >= gfx.linesize * 4 && control.my <= gfx.linesize * 5) {
-								control.loadceol();
+								if (CONFIG::desktop) {
+									control.loadceol();
+								} else {
+									control.loadceolWeb();
+								}
 							}
 						}
 					}else {
