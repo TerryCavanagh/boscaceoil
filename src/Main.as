@@ -47,6 +47,7 @@ package{
 	import flash.utils.Timer;
 	import flash.events.InvokeEvent;
 	import flash.desktop.NativeApplication;
+	import flash.external.ExternalInterface;
 
 	public class Main extends Sprite{
   	include "keypoll.as";
@@ -73,6 +74,35 @@ package{
 			control.loadscreensettings(gfx);
 			updategraphicsmode(control);
 			
+			if (CONFIG::desktop) {
+				_timer.addEventListener(TimerEvent.TIMER, mainloop);
+				_timer.start();
+			} else {
+				if (ExternalInterface.available) {
+					if (_isContainerReady()) {
+						_startMainLoop();
+					} else {
+						// If the container is not ready, set up a Timer to call the
+						// container at 100ms intervals. Once the container responds that
+						// it's ready, the timer will be stopped.
+						var pageReadyTimer:Timer = new Timer(100);
+						pageReadyTimer.addEventListener(TimerEvent.TIMER, function (e:TimerEvent):void {
+							if (_isContainerReady()) {
+								Timer(e.target).stop();
+								_startMainLoop();
+							}
+						});
+						pageReadyTimer.start();
+					}
+				}
+			}
+		}
+
+		private function _isContainerReady():Boolean {
+			return ExternalInterface.call("isReady");
+		}
+
+		private function _startMainLoop():void {
 			_timer.addEventListener(TimerEvent.TIMER, mainloop);
 			_timer.start();
 		}
