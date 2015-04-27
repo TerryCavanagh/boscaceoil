@@ -99,10 +99,11 @@ package{
 		}
 
 		private function _isContainerReady():Boolean {
-			return ExternalInterface.call("isReady");
+			return ExternalInterface.call("Bosca.isReady");
 		}
 
 		private function _startMainLoop():void {
+			control.loadceolWeb();
 			_timer.addEventListener(TimerEvent.TIMER, mainloop);
 			_timer.start();
 		}

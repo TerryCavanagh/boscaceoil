@@ -1139,7 +1139,7 @@
 
 		public function saveceolWeb():void {
 			makefilestring();
-			ExternalInterface.call("saveCeol", filestring);
+			ExternalInterface.call("Bosca.saveCeol", filestring);
 			showmessage("SONG SAVED");
 			fixmouseclicks = true;
 		}
@@ -1175,11 +1175,14 @@
 		}
 
 		public function loadceolWeb():void {
-			filestring = ExternalInterface.call("loadCeol");
-			loadfilestring(filestring);
+			var ceolStr:String = ExternalInterface.call("Bosca.loadCeol");
+			if (ceolStr != "") {
+				filestring = ceolStr;
+				loadfilestring(filestring);
+				showmessage("SONG LOADED");
+			}
 
 			fixmouseclicks = true;
-			showmessage("SONG LOADED");
 		}
 		
 		public function invokeceol(t:String):void { 
