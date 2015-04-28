@@ -199,7 +199,13 @@
 			_driver.addEventListener(SiONEvent.STREAM, onStream);
 			
 			_driver.bpm = bpm; //Default
+			CONFIG::desktop {
+			/*
+				Calling _driver.play after loading the initial .ceol
+				prevents a weird bpm bug. So don't do it here.
+			*/
 			_driver.play(null, false);
+			}
 			
 			startup = 1;
 			if (invokefile != "null") {

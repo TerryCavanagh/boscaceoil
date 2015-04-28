@@ -105,6 +105,12 @@ package{
 		private function _startMainLoop():void {
 			_setupContainerCallbacks();
 			control.loadceolWeb();
+			/*
+				Calling _driver.play before loading the initial .ceol,
+				like how it's usually done in the controlclass constructor,
+				causes a weird bpm bug. So call it here instead.
+			*/
+			control._driver.play(null, false);
 			_timer.addEventListener(TimerEvent.TIMER, mainloop);
 			_timer.start();
 		}
