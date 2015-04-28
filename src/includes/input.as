@@ -205,6 +205,7 @@
 				if (control.currenttab == 0) {
 					if(control.my<(gfx.linesize * 7)){
 						//Files
+					if (CONFIG::desktop) {
 						if (control.mx > 300) {
 							if (control.my >= gfx.linesize * 2 && control.my <= gfx.linesize * 3) {
 								control.exportwav();
@@ -213,24 +214,17 @@
 								control.exportxm();
 							}
 							if (control.my >= gfx.linesize * 4 && control.my <= gfx.linesize * 5) {
-								if (CONFIG::desktop) {
-									control.saveceol();
-								} else {
-									control.saveceolWeb();
-								}
+								control.saveceol();
 							}
 						}else if (control.mx > 210) {
 							if (control.my >= gfx.linesize * 2 && control.my <= gfx.linesize * 3) {
 								control.newsong();
 							}
 							if (control.my >= gfx.linesize * 4 && control.my <= gfx.linesize * 5) {
-								if (CONFIG::desktop) {
-									control.loadceol();
-								} else {
-									control.loadceolWeb();
-								}
+								control.loadceol();
 							}
 						}
+					}
 					}else {
 						if (help.inboxw(control.mx, control.my, 300, (gfx.linesize * 9) - 1, 10, 10)) {
 							control.bpm -= 5;

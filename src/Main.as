@@ -103,9 +103,14 @@ package{
 		}
 
 		private function _startMainLoop():void {
+			_setupContainerCallbacks();
 			control.loadceolWeb();
 			_timer.addEventListener(TimerEvent.TIMER, mainloop);
 			_timer.start();
+		}
+
+		private function _setupContainerCallbacks():void {
+			ExternalInterface.addCallback("getCeolString", control.getCeolString);
 		}
 			
 		public function _input():void {

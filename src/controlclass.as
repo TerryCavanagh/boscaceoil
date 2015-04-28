@@ -1137,11 +1137,9 @@
 			}
 		}
 
-		public function saveceolWeb():void {
+		public function getCeolString():String {
 			makefilestring();
-			ExternalInterface.call("Bosca.saveCeol", filestring);
-			showmessage("SONG SAVED");
-			fixmouseclicks = true;
+			return filestring;
 		}
 		
 		CONFIG::desktop {
