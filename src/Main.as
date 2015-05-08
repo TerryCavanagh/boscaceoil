@@ -99,24 +99,20 @@ package{
 		}
 
 		private function _isContainerReady():Boolean {
-			return ExternalInterface.call("Bosca.isReady");
+			return ExternalInterface.call("Bosca._isReady");
 		}
 
 		private function _startMainLoop():void {
 			_setupContainerCallbacks();
-			control.loadceolWeb();
-			/*
-				Calling _driver.play before loading the initial .ceol,
-				like how it's usually done in the controlclass constructor,
-				causes a weird bpm bug. So call it here instead.
-			*/
-			control._driver.play(null, false);
+			control.invokeCeolWeb(ExternalInterface.call("Bosca._getStartupCeol"));
 			_timer.addEventListener(TimerEvent.TIMER, mainloop);
 			_timer.start();
 		}
 
 		private function _setupContainerCallbacks():void {
 			ExternalInterface.addCallback("getCeolString", control.getCeolString);
+			ExternalInterface.addCallback("invokeCeolWeb", control.invokeCeolWeb);
+			ExternalInterface.addCallback("newSong", control.newsong);
 		}
 			
 		public function _input():void {

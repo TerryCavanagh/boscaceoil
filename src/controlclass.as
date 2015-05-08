@@ -199,13 +199,7 @@
 			_driver.addEventListener(SiONEvent.STREAM, onStream);
 			
 			_driver.bpm = bpm; //Default
-			CONFIG::desktop {
-			/*
-				Calling _driver.play after loading the initial .ceol
-				prevents a weird bpm bug. So don't do it here.
-			*/
 			_driver.play(null, false);
-			}
 			
 			startup = 1;
 			if (invokefile != "null") {
@@ -919,6 +913,7 @@
 		}
 		
 		public function newsong():void {
+			currenttab = 0;
 			bpm = 120; boxcount = 16; barcount = 4; doublesize = false;
 			effectvalue = 0; effecttype = 0; updateeffects();
 			_driver.bpm = bpm;
@@ -927,6 +922,10 @@
 			changekey(0); changescale(0);
 			arrange.bar[0].channel[0] = 0;
 			numboxes = 1; currentbox = 0;
+			// default instrument: grand piano
+			instrument[0] = new instrumentclass();
+			instrument[0].voice = _presets["midi.piano1"];
+			instrument[0].updatefilter();
 			numinstrument = 1;
 			instrumentmanagerview = 0;
 			patternmanagerview = 0;
@@ -1178,17 +1177,6 @@
 			}
 		}
 
-		public function loadceolWeb():void {
-			var ceolStr:String = ExternalInterface.call("Bosca.loadCeol");
-			if (ceolStr != "") {
-				filestring = ceolStr;
-				loadfilestring(filestring);
-				showmessage("SONG LOADED");
-			}
-
-			fixmouseclicks = true;
-		}
-		
 		public function invokeceol(t:String):void { 
 			CONFIG::desktop {
 			file = new File();
@@ -1204,6 +1192,20 @@
 			fixmouseclicks = true;
 			showmessage("SONG LOADED");
 			}
+		}
+
+		public function invokeCeolWeb(ceolStr:String):void {
+			currenttab = 0;
+			if (ceolStr != "") {
+				filestring = ceolStr;
+				loadfilestring(filestring);
+				showmessage("SONG LOADED");
+			} else {
+				newsong();
+			}
+			// BPM doesn't always get set right unless calling _driver.play again
+			_driver.play(null, false);
+			fixmouseclicks = true;
 		}
 		
 		CONFIG::desktop {
