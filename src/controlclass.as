@@ -1178,6 +1178,8 @@
 			changemusicbox(0);
 			looptime = 0;
 			
+			_driver.play(null, false);
+
 			fixmouseclicks = true;
 			showmessage("SONG LOADED");
 		}
@@ -1203,6 +1205,8 @@
 			changemusicbox(0);
 			looptime = 0;
 			
+			_driver.play(null, false);
+
 			fixmouseclicks = true;
 			showmessage("SONG LOADED");
 		}
