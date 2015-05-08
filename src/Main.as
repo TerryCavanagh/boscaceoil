@@ -113,6 +113,7 @@ package{
 			ExternalInterface.addCallback("getCeolString", control.getCeolString);
 			ExternalInterface.addCallback("invokeCeolWeb", control.invokeCeolWeb);
 			ExternalInterface.addCallback("newSong", control.newsong);
+			ExternalInterface.addCallback("exportWav", control.exportwav);
 		}
 			
 		public function _input():void {

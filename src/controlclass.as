@@ -15,6 +15,7 @@
   import flash.net.FileFilter;
   import flash.system.Capabilities;
   import flash.external.ExternalInterface;
+  import mx.utils.Base64Encoder;
 		
 	public class controlclass extends Sprite{
 		public var SCALE_NORMAL:int = 0;
@@ -1283,7 +1284,6 @@
 		}
 		}
 		public function exportwav():void {
-			CONFIG::desktop {
 			currenttab = 1; clicklist = true;
 			arrange.loopstart = 0; arrange.loopend = arrange.lastbar;
 			musicplaying = true;
@@ -1296,11 +1296,9 @@
 			
 			followmode = true;
 			nowexporting = true;
-			}
 		}
 		
 		public function savewav():void {
-			CONFIG::desktop {
 			nowexporting = false; followmode = false;
 			
 			_wav = new ByteArray();
@@ -1322,11 +1320,15 @@
 			_data.position = 0;
 			_wav.writeBytes(_data);
 			
+			CONFIG::desktop {
 			file = File.desktopDirectory.resolvePath("*.wav");
       file.addEventListener(Event.SELECT, onsavewav);
 			file.browseForSave("Export .wav File");
 			
 			fixmouseclicks = true;
+			}
+			if (!CONFIG::desktop) {
+				onsavewavWeb();
 			}
 		}
 		
@@ -1346,6 +1348,14 @@
 			fixmouseclicks = true;
 			showmessage("SONG EXPORTED AS WAV");
 		}
+		}
+
+		private function onsavewavWeb():void {
+			var b64:Base64Encoder = new Base64Encoder();
+			_wav.position = 0;
+			//_wav.compress();
+			b64.encodeBytes(_wav);
+	    ExternalInterface.call('Bosca._wavRecorded', b64.toString());
 		}
 		
 		CONFIG::desktop {
