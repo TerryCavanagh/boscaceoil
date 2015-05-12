@@ -23,6 +23,10 @@ package co.sparemind.trackermodule {
 		 * In practice some players care about the tracker name so
 		 * there are a couple "safe" values.
 		 */
+		public function XMSong() {
+			
+		}
+		 
 		public var trackerName:String = 'FastTracker v2.00   ';
 		public var songLength:uint = 0;
 		public var restartPos:uint;

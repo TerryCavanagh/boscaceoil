@@ -8,6 +8,10 @@ package{
 	
 	public class gfxbaseclass extends Sprite {
 		//Initialise arrays here
+		public function gfxbaseclass() {
+			
+		}
+		
 		public function initgfx():void {
 			//We initialise a few things
 			screenscale = 2;

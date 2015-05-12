@@ -49,6 +49,11 @@
 		public var LIST_SCREENSIZE:int = 6;
 		public var LIST_EFFECTS:int = 7;
 		
+		public var MENUTAB_FILE:int = 0;
+		public var MENUTAB_ARRANGEMENTS:int = 1;
+		public var MENUTAB_INSTRUMENTS:int = 2;
+		public var MENUTAB_ADVANCED:int = 3;
+		
 		public function controlclass():void {
 			version = 3;
 			clicklist = false;
@@ -1178,6 +1183,9 @@
 			changemusicbox(0);
 			looptime = 0;
 			
+			//BPM Fix contributed by Chris Kim 
+			_driver.play(null, false);
+			
 			fixmouseclicks = true;
 			showmessage("SONG LOADED");
 		}
@@ -1203,6 +1211,9 @@
 			changemusicbox(0);
 			looptime = 0;
 			
+			//BPM Fix contributed by Chris Kim 
+			_driver.play(null, false);
+			
 			fixmouseclicks = true;
 			showmessage("SONG LOADED");
 		}
@@ -1220,7 +1231,18 @@
 			}
 		}
 		
+		public function stopmusic():void {
+			if (musicplaying) {
+				musicplaying = !musicplaying;
+				looptime = 0;
+				arrange.currentbar = arrange.loopstart;
+				if (!musicplaying) notecut();
+			}
+		}
+		
 		public function exportxm():void {
+			stopmusic();
+			
 			file = File.desktopDirectory.resolvePath("*.xm");
 			file.addEventListener(Event.SELECT, onexportxm);
 			file.browseForSave("Export .XM module file");
@@ -1234,10 +1256,9 @@
 				addExtensionToFile(file, "xm");
 			}
 			
-
 			var xm:TrackerModuleXM = new TrackerModuleXM();
 			xm.loadFromLiveBoscaCeoilModel(this, file.name);
-
+			
 			stream = new FileStream();
 			stream.open(file, FileMode.WRITE);
 			xm.writeToStream(stream);

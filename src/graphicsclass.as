@@ -486,13 +486,14 @@
 			}else{
 			  bigprint(10, linesize * 2 - 5, "BOSCA CEOIL", 255 - (help.glow * 4), 255 - help.glow, 64 + (help.glow * 2), false, 3);
 			}
-			print(165, (linesize * 4)+4, "v1.1", 2, false, true);
+			print(165, (linesize * 4)+4, "v1.2", 2, false, true);
 			
 			
-			print(10, (linesize * 5)+5, "Created by Terry Cavanagh", 2, false, true);
-			print(10, (linesize * 6)+5, "SiON softsynth library by Kei Mesuda", 2, false, true);
-			print(10, (linesize * 7)+5, "Distributed under FreeBSD licence", 2, false, true);
-      print(10, (linesize * 9) + 5, "http://www.distractionware.com", 2, false, true);
+			print(10, (linesize * 5) + 5, "SiON softsynth library by Kei Mesuda", 2, false, true);
+			print(10, (linesize * 6) + 5, "XM Exporter by Rob Hunter", 2, false, true);
+			print(10, (linesize * 7) + 5, "Distributed under FreeBSD licence", 2, false, true);
+			
+      print(10, (linesize * 9)+5, "Created by Terry Cavanagh", 2, false, true);
 			
 			//Button
 			fillrect(220, linesize * 2, 75, 10, 12);

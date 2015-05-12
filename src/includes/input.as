@@ -202,7 +202,7 @@
 					control.currenttab = 3;
 				}
 			}else if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 10) {				
-				if (control.currenttab == 0) {
+				if (control.currenttab == control.MENUTAB_FILE) {
 					if(control.my<(gfx.linesize * 7)){
 						//Files
 						if (control.mx > 300) {
@@ -253,7 +253,7 @@
 							control.doublesize = control.boxcount > 16;
 						}
 					}
-				}else if (control.currenttab == 1) {
+				}else if (control.currenttab == control.MENUTAB_ARRANGEMENTS) {
 					//Arrangements
 					//Timeline
 					if (control.timelinecurx > -1) {
@@ -327,7 +327,7 @@
 						
 						//control.arrange.bar[control.arrangecurx + control.arrange.viewstart].channel[control.arrangecury] = control.currentbox;
 					}
-				}else if (control.currenttab == 2) {
+				}else if (control.currenttab == control.MENUTAB_INSTRUMENTS) {
 					//Instrument Manager
 					if (control.instrumentcury > -1) {
 						if (control.instrumentcury == 0 && control.instrumentmanagerview > 0 && control.numinstrument > 0) {
@@ -360,7 +360,7 @@
 							}
 						}
 					}
-				}else if (control.currenttab == 3) {					
+				}else if (control.currenttab == control.MENUTAB_ADVANCED) {					
 					//Buffer size control
 					if (help.inboxw(control.mx, control.my, 120, (gfx.linesize * 3), 70, 10)) {
 						control.filllist(control.LIST_BUFFERSIZE);
@@ -651,10 +651,7 @@
 	
 	if (!control.keyheld) {
 		if (control.press_space || control.press_enter) {
-			control.musicplaying = !control.musicplaying;
-			control.looptime = 0;
-			control.arrange.currentbar = control.arrange.loopstart;
-			if (!control.musicplaying) control.notecut();
+			control.stopmusic();
 			control.keyheld = true;
 		}
 	}

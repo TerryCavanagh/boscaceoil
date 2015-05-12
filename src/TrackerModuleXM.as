@@ -13,21 +13,25 @@ package {
 	import co.sparemind.trackermodule.XMPatternCell;
 
 	public class TrackerModuleXM {
+		public function TrackerModuleXM() {
+			
+		}
+		
 		public var xm:XMSong;
 
 		public function loadFromLiveBoscaCeoilModel(bosca:controlclass, desiredSongName:String):void {
 			var boscaInstrument:instrumentclass;
-
+			
 			xm = new XMSong;
-
+			
 			xm.songname = desiredSongName;
 			xm.defaultBPM = bosca.bpm;
 			xm.defaultTempo = int(bosca.bpm / 20);
 			xm.numChannels = 8; // bosca has a hard-coded limit
 			xm.numInstruments = bosca.numinstrument;
-
+			
 			var notesByEachInstrumentNumber:Vector.<Vector.<int>> = _notesUsedByEachInstrumentAcrossEntireSong(bosca);
-
+			
 			// map notes to other notes (mostly for drums)
 			var perInstrumentBoscaNoteToXMNoteMap:Vector.<Vector.<uint>> = new Vector.<Vector.<uint>>;
 			for (i = 0; i < bosca.numinstrument; i++) {
@@ -35,7 +39,7 @@ package {
 				var boscaNoteToXMNoteMapForThisInstrument:Vector.<uint> = _boscaNoteToXMNoteMapForInstrument(boscaInstrument, notesByEachInstrumentNumber[i]);
 				perInstrumentBoscaNoteToXMNoteMap[i] = boscaNoteToXMNoteMapForThisInstrument;
 			}
-
+			
 			// pattern arrangement
 			for (var i:uint = 0; i < bosca.arrange.lastbar; i++) {
 				var xmpat:XMPattern = xmPatternFromBoscaBar(bosca, i, perInstrumentBoscaNoteToXMNoteMap);
@@ -44,7 +48,7 @@ package {
 				xm.numPatterns++;
 				xm.songLength++;
 			}
-
+			
 			for (i = 0; i < bosca.numinstrument; i++) {
 				boscaInstrument = bosca.instrument[i];
 				var xmInstrument:XMInstrument = new XMInstrument();
@@ -53,22 +57,24 @@ package {
 				xmInstrument.volume = int(boscaInstrument.volume / 4);
 				switch (boscaInstrument.type) {
 					case 0:
-						xmInstrument.addSample(_boscaInstrumentToXMSample(boscaInstrument, bosca._driver));
+				    xmInstrument.addSample(_boscaInstrumentToXMSample(boscaInstrument, bosca._driver));
 						break;
 					default:
 						// XXX: bosca ceoil drumkits are converted lossily to a single XM
 						// instrument, but they could be converted to several instruments.
-						var drumkitNumber:uint = boscaInstrument.type - 1;
-						xmInstrument.addSamples(_boscaDrumkitToXMSamples(bosca.drumkit[drumkitNumber], notesUsed, perInstrumentBoscaNoteToXMNoteMap[i], bosca._driver));
-						for (var s:uint = 0; s < notesUsed.length; s++) {
+				    var drumkitNumber:uint = boscaInstrument.type - 1;
+				    xmInstrument.addSamples(_boscaDrumkitToXMSamples(bosca.drumkit[drumkitNumber], notesUsed, perInstrumentBoscaNoteToXMNoteMap[i], bosca._driver));
+				   	for (var s:uint = 0; s < notesUsed.length; s++) {
 							var sionNote:int = notesUsed[s];
 							var key:uint = perInstrumentBoscaNoteToXMNoteMap[i][sionNote] - 1; // 0th key is note 1
 							xmInstrument.keymapAssignments[key] = s;
 						}
-						for each (var sample:XMSample in xmInstrument.samples) {
+						
+				    for each (var sample:XMSample in xmInstrument.samples) {
 							sample.volume = xmInstrument.volume;
 						}
 				}
+				
 				xm.addInstrument(xmInstrument);
 			}
 		}
@@ -267,11 +273,12 @@ package {
 			xmsample.name = voice.name;
 			xmsample.volume = 0x40;
 			xmsample.bitsPerSample = 16;
-
+			
 			// consider voice.preferableNote
 			var c5:int = 60;
 			
 			xmsample.data = _playSiONNoteTo16BitDeltaSamples(c5, voice, 16, driver);
+			trace(xmsample);
 			return xmsample;
 		}
 
