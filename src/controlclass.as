@@ -14,8 +14,6 @@
 	import flash.filesystem.*;
   import flash.net.FileFilter;
   import flash.system.Capabilities;
-  import flash.external.ExternalInterface;
-  import mx.utils.Base64Encoder;
 		
 	public class controlclass extends Sprite{
 		public var SCALE_NORMAL:int = 0;
@@ -919,7 +917,6 @@
 		}
 		
 		public function newsong():void {
-			currenttab = 0;
 			bpm = 120; boxcount = 16; barcount = 4; doublesize = false;
 			effectvalue = 0; effecttype = 0; updateeffects();
 			_driver.bpm = bpm;
@@ -928,10 +925,6 @@
 			changekey(0); changescale(0);
 			arrange.bar[0].channel[0] = 0;
 			numboxes = 1; currentbox = 0;
-			// default instrument: grand piano
-			instrument[0] = new instrumentclass();
-			instrument[0].voice = _presets["midi.piano1"];
-			instrument[0].updatefilter();
 			numinstrument = 1;
 			instrumentmanagerview = 0;
 			patternmanagerview = 0;
@@ -1123,37 +1116,25 @@
 			}
 		}
 		
-		CONFIG::desktop {
 		public function fileHasExtension(file:File, extension:String):Boolean {     
 			if (!file.extension || file.extension.toLowerCase() != extension) {         
 				return false;     
 			}                 
 			return true; 
 		}
-		}
 		
-		CONFIG::desktop {
 		public function addExtensionToFile(file:File, extension:String):void {     
 			file.url += "." + extension; 
 		}
-		}
 		
 		public function saveceol():void {
-			CONFIG::desktop {
 			file = File.desktopDirectory.resolvePath("*.ceol");
       file.addEventListener(Event.SELECT, onsaveceol);
 			file.browseForSave("Save .ceol File");
 			
 			fixmouseclicks = true;
-			}
-		}
-
-		public function getCeolString():String {
-			makefilestring();
-			return filestring;
 		}
 		
-		CONFIG::desktop {
 		private function onsaveceol(e:Event):void {    
 			file = e.currentTarget as File;
 			
@@ -1171,20 +1152,16 @@
 			fixmouseclicks = true;
 			showmessage("SONG SAVED");
 		}
-		}
 		
 		public function loadceol():void {
-			CONFIG::desktop {
 			file = File.desktopDirectory.resolvePath("");
       file.addEventListener(Event.SELECT, onloadceol);
 			file.browseForOpen("Load .ceol File", [ceolFilter]);
 			
 			fixmouseclicks = true;
-			}
 		}
-
+		
 		public function invokeceol(t:String):void { 
-			CONFIG::desktop {
 			file = new File();
 			file.nativePath = t;
 			
@@ -1207,28 +1184,10 @@
 			looptime = 0;
 			_driver.play(null, false);
 
-			loadfilestring(filestring);
-
 			fixmouseclicks = true;
 			showmessage("SONG LOADED");
-			}
-		}
-
-		public function invokeCeolWeb(ceolStr:String):void {
-			currenttab = 0;
-			if (ceolStr != "") {
-				filestring = ceolStr;
-				loadfilestring(filestring);
-				showmessage("SONG LOADED");
-			} else {
-				newsong();
-			}
-			// BPM doesn't always get set right unless calling _driver.play again
-			_driver.play(null, false);
-			fixmouseclicks = true;
 		}
 		
-		CONFIG::desktop {
 		private function onloadceol(e:Event):void {  
 			file = e.currentTarget as File;
 			
@@ -1237,16 +1196,8 @@
 			filestring = stream.readUTFBytes(stream.bytesAvailable);
 			stream.close();
 			
-			loadfilestring(filestring);
-
-			fixmouseclicks = true;
-			showmessage("SONG LOADED");
-		}
-		}
-
-		private function loadfilestring(s:String):void {
 			filestream = new Array();
-			filestream = s.split(",");
+			filestream = filestring.split(",");
 			
 			numinstrument = 1;
 			numboxes = 0;
@@ -1286,39 +1237,33 @@
 			}
 		}
 		
-		CONFIG::desktop {
-      public function exportxm():void {
-        stopmusic();
-        
-        file = File.desktopDirectory.resolvePath("*.xm");
-        file.addEventListener(Event.SELECT, onexportxm);
-        file.browseForSave("Export .XM module file");
-        
-        fixmouseclicks = true;
-      }
+		public function exportxm():void {
+			stopmusic();
+			
+			file = File.desktopDirectory.resolvePath("*.xm");
+			file.addEventListener(Event.SELECT, onexportxm);
+			file.browseForSave("Export .XM module file");
+			
+			fixmouseclicks = true;
 		}
-		
-		CONFIG::desktop {
-      private function onexportxm(e:Event):void {
-        file = e.currentTarget as File;
-        
-        if (!fileHasExtension(file, "xm")) {
-          addExtensionToFile(file, "xm");
-        }
-        
-        var xm:TrackerModuleXM = new TrackerModuleXM();
-        xm.loadFromLiveBoscaCeoilModel(this, file.name);
-        
-        stream = new FileStream();
-        stream.open(file, FileMode.WRITE);
-        xm.writeToStream(stream);
-        stream.close();
-        
-        fixmouseclicks = true;
-        showmessage("SONG EXPORTED AS XM");
-      }
+		private function onexportxm(e:Event):void {
+			file = e.currentTarget as File;
+			
+			if (!fileHasExtension(file, "xm")) {
+				addExtensionToFile(file, "xm");
+			}
+			
+			var xm:TrackerModuleXM = new TrackerModuleXM();
+			xm.loadFromLiveBoscaCeoilModel(this, file.name);
+			
+			stream = new FileStream();
+			stream.open(file, FileMode.WRITE);
+			xm.writeToStream(stream);
+			stream.close();
+			
+			fixmouseclicks = true;
+			showmessage("SONG EXPORTED AS XM");
 		}
-		
 		public function exportwav():void {
 			currenttab = 1; clicklist = true;
 			arrange.loopstart = 0; arrange.loopend = arrange.lastbar;
@@ -1356,19 +1301,13 @@
 			_data.position = 0;
 			_wav.writeBytes(_data);
 			
-			CONFIG::desktop {
 			file = File.desktopDirectory.resolvePath("*.wav");
       file.addEventListener(Event.SELECT, onsavewav);
 			file.browseForSave("Export .wav File");
 			
 			fixmouseclicks = true;
-			}
-			if (!CONFIG::desktop) {
-				onsavewavWeb();
-			}
 		}
 		
-		CONFIG::desktop {
 		private function onsavewav(e:Event):void {    
 			file = e.currentTarget as File;
 			
@@ -1384,19 +1323,8 @@
 			fixmouseclicks = true;
 			showmessage("SONG EXPORTED AS WAV");
 		}
-		}
-
-		private function onsavewavWeb():void {
-			var b64:Base64Encoder = new Base64Encoder();
-			_wav.position = 0;
-			//_wav.compress();
-			b64.encodeBytes(_wav);
-	    ExternalInterface.call('Bosca._wavRecorded', b64.toString());
-		}
 		
-		CONFIG::desktop {
 		public var file:File, stream:FileStream;
-		}
 		public var filestring:String, fi:int;
 		public var filestream:Array;
 		public var ceolFilter:FileFilter = new FileFilter("Ceol", "*.ceol");
