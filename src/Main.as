@@ -47,6 +47,7 @@ package{
 	import flash.utils.Timer;
 	import flash.events.InvokeEvent;
 	import flash.desktop.NativeApplication;
+	import flash.external.ExternalInterface;
 
 	public class Main extends Sprite{
   	include "keypoll.as";
@@ -55,8 +56,10 @@ package{
   	include "includes/render.as";
 		
 		public function Main():void {
+			CONFIG::desktop {
 			NativeApplication.nativeApplication.setAsDefaultApplication("ceol");
 			NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvokeEvent);
+			}
 			
 			key = new KeyPoll(stage);
 			control = new controlclass();
@@ -71,8 +74,46 @@ package{
 			control.loadscreensettings(gfx);
 			updategraphicsmode(control);
 			
+			if (CONFIG::desktop) {
+				_timer.addEventListener(TimerEvent.TIMER, mainloop);
+				_timer.start();
+			} else {
+				if (ExternalInterface.available) {
+					if (_isContainerReady()) {
+						_startMainLoop();
+					} else {
+						// If the container is not ready, set up a Timer to call the
+						// container at 100ms intervals. Once the container responds that
+						// it's ready, the timer will be stopped.
+						var pageReadyTimer:Timer = new Timer(100);
+						pageReadyTimer.addEventListener(TimerEvent.TIMER, function (e:TimerEvent):void {
+							if (_isContainerReady()) {
+								Timer(e.target).stop();
+								_startMainLoop();
+							}
+						});
+						pageReadyTimer.start();
+					}
+				}
+			}
+		}
+
+		private function _isContainerReady():Boolean {
+			return ExternalInterface.call("Bosca._isReady");
+		}
+
+		private function _startMainLoop():void {
+			_setupContainerCallbacks();
+			control.invokeCeolWeb(ExternalInterface.call("Bosca._getStartupCeol"));
 			_timer.addEventListener(TimerEvent.TIMER, mainloop);
 			_timer.start();
+		}
+
+		private function _setupContainerCallbacks():void {
+			ExternalInterface.addCallback("getCeolString", control.getCeolString);
+			ExternalInterface.addCallback("invokeCeolWeb", control.invokeCeolWeb);
+			ExternalInterface.addCallback("newSong", control.newsong);
+			ExternalInterface.addCallback("exportWav", control.exportwav);
 		}
 			
 		public function _input():void {
@@ -122,6 +163,7 @@ package{
 			control.savescreensettings(gfx);
 		}
 		
+		CONFIG::desktop {
 		public function onInvokeEvent(event:InvokeEvent):void{
 			if (event.arguments.length > 0) {
 				if (control.startup == 0) {
@@ -132,6 +174,7 @@ package{
 					control.invokeceol(event.arguments[0]);
 				}
 			}
+		}
 		}
 		
 		public var gfx:graphicsclass = new graphicsclass();

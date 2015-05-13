@@ -205,6 +205,7 @@
 				if (control.currenttab == control.MENUTAB_FILE) {
 					if(control.my<(gfx.linesize * 7)){
 						//Files
+					if (CONFIG::desktop) {
 						if (control.mx > 300) {
 							if (control.my >= gfx.linesize * 2 && control.my <= gfx.linesize * 3) {
 								control.exportwav();
@@ -223,6 +224,7 @@
 								control.loadceol();
 							}
 						}
+					}
 					}else {
 						if (help.inboxw(control.mx, control.my, 300, (gfx.linesize * 9) - 1, 10, 10)) {
 							control.bpm -= 5;
@@ -656,7 +658,9 @@
 		}
 	}
 	
+	CONFIG::desktop {
 	if (key.isDown(Keyboard.ESCAPE)) {
 		NativeApplication.nativeApplication.exit(0);
+	}
 	}
 }
