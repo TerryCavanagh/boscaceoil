@@ -6,8 +6,13 @@
 	
 	//Tabs
 	j = (gfx.screenwidth-40) / 4;
-	gfx.fillrect(control.currenttab * j, 0, j, gfx.linesize, 5);
-	gfx.print(12, 0, "FILE", control.currenttab==control.MENUTAB_FILE?0:2, false, true);
+	if (control.currenttab == control.MENUTAB_CREDITS) {
+	  gfx.fillrect(0, 0, j, gfx.linesize, 5);
+		gfx.print(12, 0, "CREDITS", control.currenttab == control.MENUTAB_CREDITS?0:2, false, true);
+	}else{
+	  gfx.fillrect(control.currenttab * j, 0, j, gfx.linesize, 5);
+		gfx.print(12, 0, "FILE", control.currenttab == control.MENUTAB_FILE?0:2, false, true);
+	}
 	gfx.print(j+ 2, 0, "ARRANGEMENT", control.currenttab==control.MENUTAB_ARRANGEMENTS?0:2, false, true);
 	gfx.print((j * 2) + 2, 0, "INSTRUMENT", control.currenttab == control.MENUTAB_INSTRUMENTS?0:2, false, true);
 	gfx.print((j * 3) + 2, 0, "ADVANCED", control.currenttab == control.MENUTAB_ADVANCED?0:2, false, true);
@@ -24,7 +29,6 @@
 	
 	switch(control.currenttab) {
 		case control.MENUTAB_FILE:
-			gfx.drawmenu();
 		break;
 		case control.MENUTAB_ARRANGEMENTS:
 			gfx.drawarrangementeditor();

@@ -27,6 +27,49 @@ package {
 			addbutton(x, y, col, 0, text, "", "textlabel");
 		}
 		
+		public static function addrighttextlabel(x:int, y:int, text:String, col:int = 2):void {
+			addbutton(x, y, col, 0, text, "", "righttextlabel");
+		}
+		
+		public static function addrect(x:int, y:int, w:int, h:int, col:int = 1):void {
+			addbutton(x, y, w, h, "", "", "fillrect", col);
+		}
+		
+		public static function addleftarrow(x:int, y:int, action:String):void {
+			addbutton(x, y, 16, 16, "", action, "leftarrow");
+		}
+		
+		public static function addrightarrow(x:int, y:int, action:String):void {
+			addbutton(x, y, 16, 16, "", action, "rightarrow");
+		}
+		
+		public static function addvariable(x:int, y:int, variable:String, col:int = 0):void {
+			addbutton(x, y, col, 0, "", variable, "variable");
+		}
+		
+		public static function addcontrol(x:int, y:int, type:String):void {
+			//For complex multipart things
+			if (type == "changepatternlength") {
+				addrect(220, (gfx.linesize * 7) - 1, 160, gfx.linesize);
+				addrighttextlabel(280, (gfx.linesize * 7) - 1, "PATTERN", 0);
+				
+				addleftarrow(290, (gfx.linesize * 7) - 1 , "barcountdown");
+				addvariable(305, (gfx.linesize * 7) - 1, "barcount");
+				addrightarrow(320, (gfx.linesize * 7) - 1 , "barcountup");
+				
+				addleftarrow(335, (gfx.linesize * 7) - 1 , "boxcountdown");
+				addvariable(345, (gfx.linesize * 7) - 1, "boxcount");
+				addrightarrow(365, (gfx.linesize * 7) - 1 , "boxcountup");
+			}else if (type == "changebpm") {
+				addrect(220, (gfx.linesize * 9) - 1, 160, gfx.linesize);
+				addrighttextlabel(280, (gfx.linesize * 9) - 1, "BPM", 0);
+				
+				addleftarrow(305, (gfx.linesize * 9) - 1 , "bpmdown");
+				addvariable(320, (gfx.linesize * 9) - 1, "bpm");
+				addrightarrow(350, (gfx.linesize * 9) - 1 , "bpmup");
+			}
+		}
+		
 		public static function addbutton(x:int, y:int, w:int, h:int, contents:String, act:String = "", sty:String = "normal", toffset:int = 0):void {
 			if (button.length == 0) init();
 			
@@ -115,6 +158,22 @@ package {
 						gfx.print(tx, ty, button[i].text, 0, false, true);
 					}else if (button[i].style == "textlabel") {
 						gfx.print(button[i].position.x, button[i].position.y, button[i].text, button[i].position.width, false, true);
+					}else if (button[i].style == "righttextlabel") {
+						gfx.rprint(button[i].position.x, button[i].position.y, button[i].text, button[i].position.width, true);
+					}else if (button[i].style == "fillrect") {
+						gfx.fillrect(button[i].position.x, button[i].position.y, button[i].position.width, button[i].position.height, button[i].textoffset);
+					}else if (button[i].style == "leftarrow") {
+						gfx.drawicon(button[i].position.x, button[i].position.y, 3);
+					}else if (button[i].style == "rightarrow") {
+						gfx.drawicon(button[i].position.x, button[i].position.y, 2);
+					}else if (button[i].style == "variable") {
+						if(button[i].action == "barcount"){
+						  gfx.print(button[i].position.x, button[i].position.y, String(control.barcount), button[i].position.width, false, true);
+						}else if(button[i].action == "boxcount"){
+						  gfx.print(button[i].position.x, button[i].position.y, String(control.boxcount), button[i].position.width, false, true);
+						}else if(button[i].action == "bpm"){
+						  gfx.print(button[i].position.x, button[i].position.y, String(control.bpm), button[i].position.width, false, true);
+						}
 					}else if (button[i].style == "logo") {
 						tx = button[i].position.x;
 						ty = button[i].position.y;
@@ -129,12 +188,17 @@ package {
 			}
 		}
 		
-		public static function deleteall(t:String):void {
-			//Deselect any buttons with style t
-			for (var i:int = 0; i < numbuttons; i++) {
-				if (button[i].active) {
-					if (button[i].style == t) {
-						button[i].active = false;
+		public static function deleteall(t:String = ""):void {
+			if (t == "") {
+				for (var i:int = 0; i < numbuttons; i++) button[i].active = false;
+				numbuttons = 0;
+			}else{
+				//Deselect any buttons with style t
+				for (i = 0; i < numbuttons; i++) {
+					if (button[i].active) {
+						if (button[i].style == t) {
+							button[i].active = false;
+						}
 					}
 				}
 			}
@@ -187,43 +251,96 @@ package {
 		
 		public static function changetab(t:int):void {
 			//Delete all buttons when tabs change, and create new ones
-			deleteall("normal");
+			deleteall();
 			
 		  switch(t) {
 				case control.MENUTAB_FILE:
-					addlogo(12, (gfx.linesize * 2) - 3);
-					addtextlabel(165, (gfx.linesize * 4) + 4, control.versionnumber);
+					addlogo(12, (gfx.linesize * 3) - 3);
+					addtextlabel(165, (gfx.linesize * 5) + 4, control.versionnumber);
 					
-					addtextlabel(10, (gfx.linesize * 5) + 5, "SiON softsynth library by Kei Mesuda");
-					addtextlabel(10, (gfx.linesize * 6) + 5, "XM Exporter by Rob Hunter");
-					addtextlabel(10, (gfx.linesize * 7) + 5, "Distributed under FreeBSD licence");
-					//addtextlabel(10, (gfx.linesize * 9)+5, "Created by Terry Cavanagh");
-					addtextlabel(10, (gfx.linesize * 9)+5, "http://www.distractionware.com");
+					addtextlabel(10, (gfx.linesize * 6)+5, "Created by Terry Cavanagh");
+					addtextlabel(10, (gfx.linesize * 7)+5, "http://www.distractionware.com");
+					
+					addbutton(10, (gfx.linesize * 9), 75, 10, "CREDITS", "creditstab", "normal", 7);
 					
 					CONFIG::desktop {
-						
 						addbutton(220, gfx.linesize * 2, 75, 10, "NEW SONG", "newsong");
 						addbutton(305, gfx.linesize * 2, 75, 10, "EXPORT .wav", "exportwav", "normal", -5);
 						//addbutton(305, gfx.linesize * 3, 75, 10, "EXPORT .xm", "exportxm");
 						addbutton(220, (gfx.linesize * 4) + 5, 75, 10, "LOAD .ceol", "loadceol");
 						addbutton(305, (gfx.linesize * 4) + 5, 75, 10, "SAVE .ceol", "saveceol");
 					}
+					
+					addcontrol(220, (gfx.linesize * 7) - 1, "changepatternlength");
+					addcontrol(220, (gfx.linesize * 9) - 1, "changebpm");
+				break;
+			  case control.MENUTAB_CREDITS:
+				  addtextlabel(10, (gfx.linesize * 2), "SiON softsynth library by Kei Mesuda", 0);
+					addrighttextlabel(384 - 10, (gfx.linesize * 2), "Online version by Chris Kim", 0);
+				  addtextlabel(10, (gfx.linesize * 3), "sites.google.com/site/sioncenter/");
+					addrighttextlabel(384 - 10, (gfx.linesize * 3), "dy-dx.com/");
+					
+					addtextlabel(10, (gfx.linesize * 5), "Swing function by Stephen Lavelle",0);
+					addrighttextlabel(384-10, (gfx.linesize * 5), "XM Exporter by Rob Hunter",0);
+					addtextlabel(10, (gfx.linesize * 6), "increpare.com/");
+					addrighttextlabel(384 - 10, (gfx.linesize * 6), "about.me/rjhunter/");
+					
+					addtextlabel(10, (gfx.linesize * 8), "Linux port by Damien L",0);
+					addtextlabel(10, (gfx.linesize * 9), "uncovergame.com/");
+					addrighttextlabel(384-10, (gfx.linesize * 8), "Open Source under FreeBSD licence",0);
+					
+					addbutton(302, (gfx.linesize * 9)+4, 75, 10, "BACK", "filetab", "normal", 16);
 				break;
 			}
 		}
 		
 		public static function dobuttonaction(i:int):void {
-			if (button[i].text == "newsong") {
+			currentbutton = button[i].action;
+			
+			if (currentbutton == "newsong") {
 				control.newsong();
-			}else if (button[i].text == "exportwav") {
+			}else if (currentbutton == "exportwav") {
 				control.exportwav();
-			}else if (button[i].text == "exportxm") {
+			}else if (currentbutton == "exportxm") {
 				control.exportxm();
-			}else if (button[i].text == "loadceol") {
+			}else if (currentbutton == "loadceol") {
 				control.loadceol();
-			}else if (button[i].text == "saveceol") {
+			}else if (currentbutton == "saveceol") {
 				control.saveceol();
+			}else if (currentbutton == "filetab") {
+				control.changetab(control.MENUTAB_FILE);
+			}else if (currentbutton == "arrangementstab") {
+				control.changetab(control.MENUTAB_ARRANGEMENTS);
+			}else if (currentbutton == "instrumentstab") {
+				control.changetab(control.MENUTAB_INSTRUMENTS);
+			}else if (currentbutton == "advancedtab") {
+				control.changetab(control.MENUTAB_ADVANCED);
+			}else if (currentbutton == "creditstab") {
+				control.changetab(control.MENUTAB_CREDITS);
+			}else if (currentbutton == "barcountdown") {
+				control.barcount--;
+				if (control.barcount < 1) control.barcount = 1;
+			}else if (currentbutton == "barcountup") {
+				control.barcount++;
+				if (control.barcount > 32) control.barcount = 32;
+			}else if (currentbutton == "boxcountdown") {
+				control.boxcount--;
+				if (control.boxcount < 1) control.boxcount = 1;
+				control.doublesize = control.boxcount > 16;
+			}else if (currentbutton == "boxcountup") {
+				control.boxcount++;
+				if (control.boxcount > 32) control.boxcount = 32;
+				control.doublesize = control.boxcount > 16;
+			}else if (currentbutton == "bpmdown") {
+				control.bpm -= 5;
+				if (control.bpm < 10) control.bpm = 10;
+				control._driver.bpm = control.bpm;
+			}else if (currentbutton == "bpmup") {
+				control.bpm += 5;
+				if (control.bpm > 220) control.bpm = 220;
+				control._driver.bpm = control.bpm;
 			}
+		
 		}
 		
 		public static var button:Vector.<guibutton> = new Vector.<guibutton>;
@@ -231,5 +348,6 @@ package {
 		public static var maxbuttons:int;
 		
 		public static var tx:int, ty:int;
+		public static var currentbutton:String;
 	}
 }

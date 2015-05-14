@@ -487,24 +487,6 @@
 			}
 		}
 		
-		public static function drawmenu():void {
-			//Button
-			fillrect(220, (linesize * 7)-1, 160, linesize, 1);
-			rprint(280, (linesize * 7) - 1, "PATTERN", 0, true);
-		  drawicon(290, (linesize * 7)-1, 3);
-			print(305, (linesize * 7) - 1, String(control.barcount), 0, false, true);
-			drawicon(320, (linesize * 7) - 1, 2);
-			drawicon(335, (linesize * 7)-1, 3);
-			print(345, (linesize * 7) - 1, String(control.boxcount), 0, false, true);
-			drawicon(365, (linesize * 7)-1, 2);
-			
-			fillrect(220, (linesize * 9)-1, 160, linesize, 1);
-			rprint(280, (linesize * 9) - 1, "BPM", 0, true);
-			drawicon(305, (linesize * 9)-1, 3);
-			print(320, (linesize * 9) - 1, String(control.bpm), 0, false, true);
-			drawicon(350, (linesize * 9)-1, 2);
-		}
-		
 		public static function drawadvancedmenu():void {
 			fillrect(20, (linesize * 3)+2, 160, linesize, 1);
 			rprint(100, (linesize * 3) +2, "SOUND BUFFER ", 0, true);

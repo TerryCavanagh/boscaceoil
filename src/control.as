@@ -57,6 +57,7 @@
 		public static var MENUTAB_ARRANGEMENTS:int = 1;
 		public static var MENUTAB_INSTRUMENTS:int = 2;
 		public static var MENUTAB_ADVANCED:int = 3;
+		public static var MENUTAB_CREDITS:int = 4;
 		
 		public static function init():void {
 			clicklist = false;

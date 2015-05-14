@@ -1,4 +1,4 @@
-BOSCA CEOIL v1.1
+# BOSCA CEOIL v2.0
 
 A simple music making program
 
