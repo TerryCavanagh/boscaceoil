@@ -32,7 +32,7 @@ The compiler needs quite a few options to produce a working Bosca Ceoil
 "movie":
 
 ```
-    amxmlc -swf-version 20 -default-frame-rate 60 -default-size 768 480 -library-path+=libs/sion065.swc -source-path+=src -default-background-color 0x000000 -warnings -strict src/Main.as -o BoscaCeoil.swf
+    amxmlc -swf-version 20 -default-frame-rate 60 -default-size 768 480 -library-path+=libs/sion065.swc -source-path+=src -default-background-color 0x000000 -warnings -strict src/Main.as -o BoscaCeoil.swf -define+=CONFIG::desktop,true -define+=CONFIG::web,false
 ```
 
 This compiles the app into `BoscaCeoil.swf`.

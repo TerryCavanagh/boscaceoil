@@ -14,6 +14,10 @@
 	import flash.filesystem.*;
   import flash.net.FileFilter;
   import flash.system.Capabilities;
+	CONFIG::web {
+		import flash.external.ExternalInterface;
+		import mx.utils.Base64Encoder;
+	}
 		
 	public class controlclass extends Sprite{
 		public var SCALE_NORMAL:int = 0;
@@ -206,9 +210,11 @@
 			_driver.play(null, false);
 			
 			startup = 1;
-			if (invokefile != "null") {
-				invokeceol(invokefile);
-				invokefile = "null";
+			CONFIG::desktop {
+				if (invokefile != "null") {
+					invokeceol(invokefile);
+					invokefile = "null";
+				}
 			}
 		}
 		
@@ -917,6 +923,7 @@
 		}
 		
 		public function newsong():void {
+			currenttab = 0;
 			bpm = 120; boxcount = 16; barcount = 4; doublesize = false;
 			effectvalue = 0; effecttype = 0; updateeffects();
 			_driver.bpm = bpm;
@@ -1116,6 +1123,10 @@
 			}
 		}
 		
+		// File stuff
+
+		CONFIG::desktop {
+
 		public function fileHasExtension(file:File, extension:String):Boolean {     
 			if (!file.extension || file.extension.toLowerCase() != extension) {         
 				return false;     
@@ -1170,18 +1181,7 @@
 			filestring = stream.readUTFBytes(stream.bytesAvailable);
 			stream.close();
 			
-			filestream = new Array();
-			filestream = filestring.split(",");
-			
-			numinstrument = 1;
-			numboxes = 0;
-			arrange.clear();
-			arrange.currentbar = 0; arrange.viewstart = 0;
-			
-			convertfilestring();
-			
-			changemusicbox(0);
-			looptime = 0;
+			loadfilestring(filestring);
 			_driver.play(null, false);
 
 			fixmouseclicks = true;
@@ -1196,9 +1196,84 @@
 			filestring = stream.readUTFBytes(stream.bytesAvailable);
 			stream.close();
 			
-			filestream = new Array();
-			filestream = filestring.split(",");
+			loadfilestring(filestring);
+			_driver.play(null, false);
 			
+			fixmouseclicks = true;
+			showmessage("SONG LOADED");
+		}
+
+		public function exportxm():void {
+			stopmusic();
+			
+			file = File.desktopDirectory.resolvePath("*.xm");
+			file.addEventListener(Event.SELECT, onexportxm);
+			file.browseForSave("Export .XM module file");
+
+			fixmouseclicks = true;
+		}
+
+		private function onexportxm(e:Event):void {
+			file = e.currentTarget as File;
+
+			if (!fileHasExtension(file, "xm")) {
+				addExtensionToFile(file, "xm");
+			}
+
+			var xm:TrackerModuleXM = new TrackerModuleXM();
+			xm.loadFromLiveBoscaCeoilModel(this, file.name);
+
+			stream = new FileStream();
+			stream.open(file, FileMode.WRITE);
+			xm.writeToStream(stream);
+			stream.close();
+
+			fixmouseclicks = true;
+			showmessage("SONG EXPORTED AS XM");
+		}
+
+		private function onsavewav(e:Event):void {
+			file = e.currentTarget as File;
+
+			if (!fileHasExtension(file, "wav")) {
+				addExtensionToFile(file, "wav");
+			}
+
+			stream = new FileStream();
+			stream.open(file, FileMode.WRITE);
+			stream.writeBytes(_wav, 0, _wav.length);
+			stream.close();
+
+			fixmouseclicks = true;
+			showmessage("SONG EXPORTED AS WAV");
+		}
+
+		}
+
+		CONFIG::web {
+			public function invokeCeolWeb(ceolStr:String):void {
+				currenttab = 0;
+				if (ceolStr != "") {
+					filestring = ceolStr;
+					loadfilestring(filestring);
+					showmessage("SONG LOADED");
+				} else {
+					newsong();
+				}
+
+				_driver.play(null, false);
+			}
+
+			public function getCeolString():String {
+				makefilestring();
+				return filestring;
+			}
+		}
+
+		private function loadfilestring(s:String):void {
+			filestream = new Array();
+			filestream = s.split(",");
+
 			numinstrument = 1;
 			numboxes = 0;
 			arrange.clear();
@@ -1208,11 +1283,6 @@
 			
 			changemusicbox(0);
 			looptime = 0;
-			
-			_driver.play(null, false);
-			
-			fixmouseclicks = true;
-			showmessage("SONG LOADED");
 		}
 		
 		public function showmessage(t:String):void {
@@ -1237,33 +1307,6 @@
 			}
 		}
 		
-		public function exportxm():void {
-			stopmusic();
-			
-			file = File.desktopDirectory.resolvePath("*.xm");
-			file.addEventListener(Event.SELECT, onexportxm);
-			file.browseForSave("Export .XM module file");
-			
-			fixmouseclicks = true;
-		}
-		private function onexportxm(e:Event):void {
-			file = e.currentTarget as File;
-			
-			if (!fileHasExtension(file, "xm")) {
-				addExtensionToFile(file, "xm");
-			}
-			
-			var xm:TrackerModuleXM = new TrackerModuleXM();
-			xm.loadFromLiveBoscaCeoilModel(this, file.name);
-			
-			stream = new FileStream();
-			stream.open(file, FileMode.WRITE);
-			xm.writeToStream(stream);
-			stream.close();
-			
-			fixmouseclicks = true;
-			showmessage("SONG EXPORTED AS XM");
-		}
 		public function exportwav():void {
 			currenttab = 1; clicklist = true;
 			arrange.loopstart = 0; arrange.loopend = arrange.lastbar;
@@ -1301,30 +1344,26 @@
 			_data.position = 0;
 			_wav.writeBytes(_data);
 			
-			file = File.desktopDirectory.resolvePath("*.wav");
-      file.addEventListener(Event.SELECT, onsavewav);
-			file.browseForSave("Export .wav File");
-			
-			fixmouseclicks = true;
-		}
-		
-		private function onsavewav(e:Event):void {    
-			file = e.currentTarget as File;
-			
-			if (!fileHasExtension(file, "wav")) {
-				addExtensionToFile(file, "wav");
+			CONFIG::desktop {
+				file = File.desktopDirectory.resolvePath("*.wav");
+				file.addEventListener(Event.SELECT, onsavewav);
+				file.browseForSave("Export .wav File");
+			}
+
+			CONFIG::web {
+				var b64:Base64Encoder = new Base64Encoder();
+				_wav.position = 0;
+				b64.encodeBytes(_wav);
+				ExternalInterface.call('Bosca._wavRecorded', b64.toString());
 			}
 			
-			stream = new FileStream();
-			stream.open(file, FileMode.WRITE);
-			stream.writeBytes(_wav, 0, _wav.length);
-			stream.close();
-			
 			fixmouseclicks = true;
-			showmessage("SONG EXPORTED AS WAV");
 		}
 		
-		public var file:File, stream:FileStream;
+
+		CONFIG::desktop {
+			public var file:File, stream:FileStream;
+		}
 		public var filestring:String, fi:int;
 		public var filestream:Array;
 		public var ceolFilter:FileFilter = new FileFilter("Ceol", "*.ceol");

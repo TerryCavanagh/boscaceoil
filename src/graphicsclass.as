@@ -496,25 +496,28 @@
       print(10, (linesize * 9)+5, "Created by Terry Cavanagh", 2, false, true);
 			
 			//Button
-			fillrect(220, linesize * 2, 75, 10, 12);
-			fillrect(220 -2, (linesize * 2) -2, 75, 10, 1);
-			print(220 + 7, (linesize * 2) - 1, "NEW SONG", 0, false, true);
-			
-			fillrect(305, linesize * 2, 75, 10, 12);
-			fillrect(305 -2, (linesize * 2) -2, 75, 10, 1);
-			print(305 + 2, (linesize * 2) - 1, "EXPORT .wav", 0, false, true);
 
-			fillrect(305, linesize * 3, 75, 10, 12);
-			fillrect(305 -2, (linesize * 3) -2, 75, 10, 1);
-			print(305 + 2, (linesize * 3) - 1, "EXPORT .xm", 0, false, true);
-			
-			fillrect(220, (linesize * 4)+5, 75, 10, 12);
-			fillrect(220 -2, (linesize * 4)+5 -2, 75, 10, 1);
-			print(220 + 7, (linesize * 4)+5 - 1, "LOAD .ceol", 0, false, true);
-			
-			fillrect(305, (linesize * 4)+5, 75, 10, 12);
-			fillrect(305 -2, (linesize * 4)+5 -2, 75, 10, 1);
-			print(305 + 7, (linesize * 4)+5 - 1, "SAVE .ceol", 0, false, true);
+			CONFIG::desktop {
+				fillrect(220, linesize * 2, 75, 10, 12);
+				fillrect(220 -2, (linesize * 2) -2, 75, 10, 1);
+				print(220 + 7, (linesize * 2) - 1, "NEW SONG", 0, false, true);
+
+				fillrect(305, linesize * 2, 75, 10, 12);
+				fillrect(305 -2, (linesize * 2) -2, 75, 10, 1);
+				print(305 + 2, (linesize * 2) - 1, "EXPORT .wav", 0, false, true);
+
+				fillrect(305, linesize * 3, 75, 10, 12);
+				fillrect(305 -2, (linesize * 3) -2, 75, 10, 1);
+				print(305 + 2, (linesize * 3) - 1, "EXPORT .xm", 0, false, true);
+
+				fillrect(220, (linesize * 4)+5, 75, 10, 12);
+				fillrect(220 -2, (linesize * 4)+5 -2, 75, 10, 1);
+				print(220 + 7, (linesize * 4)+5 - 1, "LOAD .ceol", 0, false, true);
+
+				fillrect(305, (linesize * 4)+5, 75, 10, 12);
+				fillrect(305 -2, (linesize * 4)+5 -2, 75, 10, 1);
+				print(305 + 7, (linesize * 4)+5 - 1, "SAVE .ceol", 0, false, true);
+			}
 			
 			fillrect(220, (linesize * 7)-1, 160, linesize, 1);
 			rprint(280, (linesize * 7) - 1, "PATTERN", 0, true);

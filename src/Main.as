@@ -46,7 +46,12 @@ package{
 	import flash.utils.getTimer;
 	import flash.utils.Timer;
 	import flash.events.InvokeEvent;
-	import flash.desktop.NativeApplication;
+	CONFIG::desktop {
+		import flash.desktop.NativeApplication;
+	}
+	CONFIG::web {
+		import flash.external.ExternalInterface;
+	}
 
 	public class Main extends Sprite{
   	include "keypoll.as";
@@ -55,8 +60,10 @@ package{
   	include "includes/render.as";
 		
 		public function Main():void {
-			NativeApplication.nativeApplication.setAsDefaultApplication("ceol");
-			NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvokeEvent);
+			CONFIG::desktop {
+				NativeApplication.nativeApplication.setAsDefaultApplication("ceol");
+				NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvokeEvent);
+			}
 			
 			key = new KeyPoll(stage);
 			control = new controlclass();
@@ -71,8 +78,48 @@ package{
 			control.loadscreensettings(gfx);
 			updategraphicsmode(control);
 			
+			CONFIG::desktop {
+				_startMainLoop();
+			}
+
+			CONFIG::web {
+				if (ExternalInterface.available) {
+					if (ExternalInterface.call("Bosca._isReady")) {
+						_startMainLoopWeb();
+					} else {
+						// If the container is not ready, set up a Timer to call the
+						// container at 100ms intervals. Once the container responds that
+						// it's ready, the timer will be stopped.
+						var containerIsReadyTimer:Timer = new Timer(100);
+						containerIsReadyTimer.addEventListener(TimerEvent.TIMER, function (e:TimerEvent):void {
+							if (ExternalInterface.call("Bosca._isReady")) {
+								Timer(e.target).stop();
+								_startMainLoopWeb();
+							}
+						});
+						containerIsReadyTimer.start();
+					}
+				}
+			}
+		}
+
+		private function _startMainLoop():void {
 			_timer.addEventListener(TimerEvent.TIMER, mainloop);
 			_timer.start();
+		}
+
+		CONFIG::web {
+			private function _startMainLoopWeb():void {
+				// Expose some functions to external JS
+				ExternalInterface.addCallback("getCeolString", control.getCeolString);
+				ExternalInterface.addCallback("invokeCeolWeb", control.invokeCeolWeb);
+				ExternalInterface.addCallback("newSong", control.newsong);
+				ExternalInterface.addCallback("exportWav", control.exportwav);
+
+				control.invokeCeolWeb(ExternalInterface.call("Bosca._getStartupCeol"));
+
+				_startMainLoop();
+			}
 		}
 			
 		public function _input():void {
@@ -122,14 +169,16 @@ package{
 			control.savescreensettings(gfx);
 		}
 		
-		public function onInvokeEvent(event:InvokeEvent):void{
-			if (event.arguments.length > 0) {
-				if (control.startup == 0) {
-					//Loading a song at startup, wait until the sound is initilised
-					control.invokefile = event.arguments[0];
-				}else {
-					//Program is up and running, just load now
-					control.invokeceol(event.arguments[0]);
+		CONFIG::desktop {
+			public function onInvokeEvent(event:InvokeEvent):void{
+				if (event.arguments.length > 0) {
+					if (control.startup == 0) {
+						//Loading a song at startup, wait until the sound is initilised
+						control.invokefile = event.arguments[0];
+					}else {
+						//Program is up and running, just load now
+						control.invokeceol(event.arguments[0]);
+					}
 				}
 			}
 		}

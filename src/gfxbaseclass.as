@@ -1,10 +1,12 @@
 package{
 	import flash.display.*;
 	import flash.geom.*;
-  import flash.events.*;
-  import flash.net.*;
+	import flash.events.*;
+	import flash.net.*;
 	import flash.text.*;
-	import flash.display.NativeWindow;
+	CONFIG::desktop {
+		import flash.display.NativeWindow;
+	}
 	
 	public class gfxbaseclass extends Sprite {
 		//Initialise arrays here
@@ -60,11 +62,19 @@ package{
 			patternwidth = 22 + (zoom * 8);
 		}
 		
-		public function changewindowsize(t:int):void {
-			screenscale = t;
-			if (stage && stage.nativeWindow) {
-				stage.nativeWindow.width = (screenwidth * t) + 18;
-				stage.nativeWindow.height = (screenheight * t) + 45;
+		CONFIG::desktop {
+			public function changewindowsize(t:int):void {
+				screenscale = t;
+				if (stage && stage.nativeWindow) {
+					stage.nativeWindow.width = (screenwidth * t) + 18;
+					stage.nativeWindow.height = (screenheight * t) + 45;
+				}
+			}
+		}
+
+		CONFIG::web {
+			public function changewindowsize(t:int):void {
+				// no-op
 			}
 		}
 
