@@ -5,11 +5,16 @@
 *.pydevproject
 .project
 .metadata
+bat/
+air/
 bin/
 tmp/
+obj/
+AIR_readme.txt
 *.tmp
 *.bak
 *.swp
+*.bat
 *~.nib
 local.properties
 .classpath

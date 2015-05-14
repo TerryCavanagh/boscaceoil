@@ -35,7 +35,10 @@ The compiler needs quite a few options to produce a working Bosca Ceoil
     amxmlc -swf-version 20 -default-frame-rate 60 -default-size 768 480 -library-path+=libs/sion065.swc -source-path+=src -default-background-color 0x000000 -warnings -strict src/Main.as -o BoscaCeoil.swf -define+=CONFIG::desktop,true -define+=CONFIG::web,false
 ```
 
-This compiles the app into `BoscaCeoil.swf`.
+All the NativeApplication, File, etc. stuff from the Air API needs to be wrapped in CONFIG::desktop { ... } blocks so they don't get compiled into the web version, or else it breaks.
+
+Desktop builds will now have to be compiled with the -define+=CONFIG::desktop,true -define+=CONFIG::web,false flags.
+Likewise, web builds will have to be compiled with -define+=CONFIG::desktop,false -define+=CONFIG::web,true.
 
 
 ### Running

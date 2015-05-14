@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?> 
-<application xmlns="http://ns.adobe.com/air/application/3.7">
+<application xmlns="http://ns.adobe.com/air/application/17.0">
 	
 	<id>BoscaCeoil</id> 
-	<versionNumber>1.1</versionNumber> 
+	<versionNumber>1.5</versionNumber> 
 	<filename>BoscaCeoil</filename> 
 	
 	<name>Bosca Ceoil</name> 
