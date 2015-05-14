@@ -205,23 +205,29 @@
 				if (control.currenttab == control.MENUTAB_FILE) {
 					if(control.my<(gfx.linesize * 7)){
 						//Files
-						if (control.mx > 300) {
-							if (control.my >= gfx.linesize * 2 && control.my <= gfx.linesize * 3) {
-								control.exportwav();
+						CONFIG::desktop {
+							if (control.mx > 300) {
+								if (control.my >= gfx.linesize * 2 && control.my <= gfx.linesize * 3) {
+									control.exportwav();
+								}
+								if (control.my >= gfx.linesize * 3 && control.my <= gfx.linesize * 4) {
+									control.exportxm();
+								}
+								if (control.my >= gfx.linesize * 4 && control.my <= gfx.linesize * 5) {
+									control.saveceol();
+								}
+							}else if (control.mx > 210) {
+								if (control.my >= gfx.linesize * 2 && control.my <= gfx.linesize * 3) {
+									control.newsong();
+								}
+								if (control.my >= gfx.linesize * 4 && control.my <= gfx.linesize * 5) {
+									control.loadceol();
+								}
 							}
-							if (control.my >= gfx.linesize * 3 && control.my <= gfx.linesize * 4) {
-								control.exportxm();
-							}
-							if (control.my >= gfx.linesize * 4 && control.my <= gfx.linesize * 5) {
-								control.saveceol();
-							}
-						}else if (control.mx > 210) {
-							if (control.my >= gfx.linesize * 2 && control.my <= gfx.linesize * 3) {
-								control.newsong();
-							}
-							if (control.my >= gfx.linesize * 4 && control.my <= gfx.linesize * 5) {
-								control.loadceol();
-							}
+						}
+						CONFIG::web {
+							// must no-op here or else compiler complains about empty block
+							null;
 						}
 					}else {
 						if (help.inboxw(control.mx, control.my, 300, (gfx.linesize * 9) - 1, 10, 10)) {
@@ -656,7 +662,9 @@
 		}
 	}
 	
-	if (key.isDown(Keyboard.ESCAPE)) {
-		NativeApplication.nativeApplication.exit(0);
+	CONFIG::desktop {
+		if (key.isDown(Keyboard.ESCAPE)) {
+			NativeApplication.nativeApplication.exit(0);
+		}
 	}
 }
