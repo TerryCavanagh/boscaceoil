@@ -19,7 +19,17 @@ package {
 			maxbuttons = 250;
 		}
 		
-		public static function addbutton(x:int, y:int, w:int, h:int, contents:String, act:String = "", sty:String = "normal"):void {
+		public static function addlogo(x:int, y:int):void {
+			addbutton(x, y, 0, 0, "BOSCA CEOIL", "", "logo");
+		}
+		
+		public static function addtextlabel(x:int, y:int, text:String, col:int = 2):void {
+			addbutton(x, y, col, 0, text, "", "textlabel");
+		}
+		
+		public static function addbutton(x:int, y:int, w:int, h:int, contents:String, act:String = "", sty:String = "normal", toffset:int = 0):void {
+			if (button.length == 0) init();
+			
 			var i:int, z:int;
 			if(numbuttons == 0) {
 				//If there are no active buttons, Z=0;
@@ -38,6 +48,7 @@ package {
 			}
 			//trace("addbutton(", x, y, w, h, contents, act, sty, ")", numbuttons);
 			button[z].init(x, y, w, h, contents, act, sty);
+			button[z].textoffset = toffset;
 			numbuttons++;
 		}
 		
@@ -99,9 +110,20 @@ package {
 							gfx.fillrect(button[i].position.x - 2, button[i].position.y - 2, button[i].position.width, button[i].position.height, 1);
 						}
 						
-						tx = button[i].position.x + 7;
+						tx = button[i].position.x + 7 + button[i].textoffset;
 						ty = button[i].position.y - 1;
 						gfx.print(tx, ty, button[i].text, 0, false, true);
+					}else if (button[i].style == "textlabel") {
+						gfx.print(button[i].position.x, button[i].position.y, button[i].text, button[i].position.width, false, true);
+					}else if (button[i].style == "logo") {
+						tx = button[i].position.x;
+						ty = button[i].position.y;
+						gfx.bigprint(tx, ty, "BOSCA CEOIL", 0, 0, 0, false, 3);
+						if (control.looptime % control.barcount==1) {
+							gfx.drawimage(0, tx - 2 + (Math.random() * 4), ty - 4 + (Math.random() * 4));
+						}else{
+							gfx.drawimage(0, tx, ty + 2);
+						}
 					}
 				}
 			}
@@ -169,16 +191,39 @@ package {
 			
 		  switch(t) {
 				case control.MENUTAB_FILE:
+					addlogo(12, (gfx.linesize * 2) - 3);
+					addtextlabel(165, (gfx.linesize * 4) + 4, control.versionnumber);
+					
+					addtextlabel(10, (gfx.linesize * 5) + 5, "SiON softsynth library by Kei Mesuda");
+					addtextlabel(10, (gfx.linesize * 6) + 5, "XM Exporter by Rob Hunter");
+					addtextlabel(10, (gfx.linesize * 7) + 5, "Distributed under FreeBSD licence");
+					//addtextlabel(10, (gfx.linesize * 9)+5, "Created by Terry Cavanagh");
+					addtextlabel(10, (gfx.linesize * 9)+5, "http://www.distractionware.com");
+					
 					CONFIG::desktop {
-						guiclass.addbutton(220, gfx.linesize * 2, 75, 10, "NEW SONG");
-						guiclass.addbutton(305, gfx.linesize * 2, 75, 10, "EXPORT .wav");
+						
+						addbutton(220, gfx.linesize * 2, 75, 10, "NEW SONG", "newsong");
+						addbutton(305, gfx.linesize * 2, 75, 10, "EXPORT .wav", "exportwav", "normal", -5);
+						//addbutton(305, gfx.linesize * 3, 75, 10, "EXPORT .xm", "exportxm");
+						addbutton(220, (gfx.linesize * 4) + 5, 75, 10, "LOAD .ceol", "loadceol");
+						addbutton(305, (gfx.linesize * 4) + 5, 75, 10, "SAVE .ceol", "saveceol");
 					}
 				break;
 			}
 		}
 		
 		public static function dobuttonaction(i:int):void {
-			//fill this in
+			if (button[i].text == "newsong") {
+				control.newsong();
+			}else if (button[i].text == "exportwav") {
+				control.exportwav();
+			}else if (button[i].text == "exportxm") {
+				control.exportxm();
+			}else if (button[i].text == "loadceol") {
+				control.loadceol();
+			}else if (button[i].text == "saveceol") {
+				control.saveceol();
+			}
 		}
 		
 		public static var button:Vector.<guibutton> = new Vector.<guibutton>;

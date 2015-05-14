@@ -488,35 +488,7 @@
 		}
 		
 		public static function drawmenu():void {
-			bigprint(12, (linesize * 2) + 2 - 5, "BOSCA CEOIL", 0, 0, 0, false, 3);
-			if (control.looptime % control.barcount==1) {
-				drawimage(0, 10 + (Math.random() * 4), (linesize * 2) - 7 + (Math.random() * 4));
-			}else{
-			  drawimage(0, 12, (linesize * 2) - 1);
-			}
-			print(165, (linesize * 4) + 4, "v2.0", 2, false, true);
-			
-			print(10, (linesize * 5) + 5, "SiON softsynth library by Kei Mesuda", 2, false, true);
-			print(10, (linesize * 6) + 5, "XM Exporter by Rob Hunter", 2, false, true);
-			print(10, (linesize * 7) + 5, "Distributed under FreeBSD licence", 2, false, true);
-			
-      print(10, (linesize * 9)+5, "Created by Terry Cavanagh", 2, false, true);
-			
 			//Button
-			CONFIG::desktop {
-				fillrect(305, linesize * 3, 75, 10, 12);
-				fillrect(305 -2, (linesize * 3) -2, 75, 10, 1);
-				print(305 + 2, (linesize * 3) - 1, "EXPORT .xm", 0, false, true);
-				
-				fillrect(220, (linesize * 4)+5, 75, 10, 12);
-				fillrect(220 -2, (linesize * 4)+5 -2, 75, 10, 1);
-				print(220 + 7, (linesize * 4) + 5 - 1, "LOAD .ceol", 0, false, true);
-				
-				fillrect(305, (linesize * 4)+5, 75, 10, 12);
-				fillrect(305 -2, (linesize * 4)+5 -2, 75, 10, 1);
-				print(305 + 7, (linesize * 4)+5 - 1, "SAVE .ceol", 0, false, true);
-			}
-			
 			fillrect(220, (linesize * 7)-1, 160, linesize, 1);
 			rprint(280, (linesize * 7) - 1, "PATTERN", 0, true);
 		  drawicon(290, (linesize * 7)-1, 3);

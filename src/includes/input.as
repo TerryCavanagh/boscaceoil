@@ -205,61 +205,34 @@
 				}
 			}else if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 10) {				
 				if (control.currenttab == control.MENUTAB_FILE) {
-					if(control.my<(gfx.linesize * 7)){
-						//Files
-						CONFIG::desktop {
-							if (control.mx > 300) {
-								if (control.my >= gfx.linesize * 2 && control.my <= gfx.linesize * 3) {
-									control.exportwav();
-								}
-								if (control.my >= gfx.linesize * 3 && control.my <= gfx.linesize * 4) {
-									control.exportxm();
-								}
-								if (control.my >= gfx.linesize * 4 && control.my <= gfx.linesize * 5) {
-									control.saveceol();
-								}
-							}else if (control.mx > 210) {
-								if (control.my >= gfx.linesize * 2 && control.my <= gfx.linesize * 3) {
-									control.newsong();
-								}
-								if (control.my >= gfx.linesize * 4 && control.my <= gfx.linesize * 5) {
-									control.loadceol();
-								}
-							}
-						}
-						CONFIG::web {
-							// must no-op here or else compiler complains about empty block
-							null;
-						}
-					}else {
-						if (help.inboxw(control.mx, control.my, 300, (gfx.linesize * 9) - 1, 10, 10)) {
-							control.bpm -= 5;
-							if (control.bpm < 10) control.bpm = 10;
-							control._driver.bpm = control.bpm;
-						}
-						if (help.inboxw(control.mx, control.my, 350, (gfx.linesize * 9) - 1, 10, 10)) {
-							control.bpm += 5;
-							if (control.bpm > 220) control.bpm = 220;
-							control._driver.bpm = control.bpm;
-						}
-						if (help.inboxw(control.mx, control.my, 290, (gfx.linesize * 7) - 1, 10, 10)) {
-							control.barcount--;
-							if (control.barcount < 1) control.barcount = 1;
-						}
-						if (help.inboxw(control.mx, control.my, 320, (gfx.linesize * 7) - 1, 10, 10)) {
-							control.barcount++;
-							if (control.barcount > 32) control.barcount = 32;
-						}
-						if (help.inboxw(control.mx, control.my, 335, (gfx.linesize * 7) - 1, 10, 10)) {
-							control.boxcount--;
-							if (control.boxcount < 1) control.boxcount = 1;
-							control.doublesize = control.boxcount > 16;
-						}
-						if (help.inboxw(control.mx, control.my, 365, (gfx.linesize * 7) - 1, 10, 10)) {
-							control.boxcount++;
-							if (control.boxcount > 32) control.boxcount = 32;
-							control.doublesize = control.boxcount > 16;
-						}
+					if (help.inboxw(control.mx, control.my, 300, (gfx.linesize * 9) - 1, 10, 10)) {
+						control.bpm -= 5;
+						if (control.bpm < 10) control.bpm = 10;
+						control._driver.bpm = control.bpm;
+					}
+					if (help.inboxw(control.mx, control.my, 350, (gfx.linesize * 9) - 1, 10, 10)) {
+						control.bpm += 5;
+						if (control.bpm > 220) control.bpm = 220;
+						control._driver.bpm = control.bpm;
+					}
+					
+					if (help.inboxw(control.mx, control.my, 290, (gfx.linesize * 7) - 1, 10, 10)) {
+						control.barcount--;
+						if (control.barcount < 1) control.barcount = 1;
+					}
+					if (help.inboxw(control.mx, control.my, 320, (gfx.linesize * 7) - 1, 10, 10)) {
+						control.barcount++;
+						if (control.barcount > 32) control.barcount = 32;
+					}
+					if (help.inboxw(control.mx, control.my, 335, (gfx.linesize * 7) - 1, 10, 10)) {
+						control.boxcount--;
+						if (control.boxcount < 1) control.boxcount = 1;
+						control.doublesize = control.boxcount > 16;
+					}
+					if (help.inboxw(control.mx, control.my, 365, (gfx.linesize * 7) - 1, 10, 10)) {
+						control.boxcount++;
+						if (control.boxcount > 32) control.boxcount = 32;
+						control.doublesize = control.boxcount > 16;
 					}
 				}else if (control.currenttab == control.MENUTAB_ARRANGEMENTS) {
 					//Arrangements

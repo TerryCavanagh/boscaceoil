@@ -1,4 +1,5 @@
 package {
+	import flash.desktop.InteractiveIcon;
 	import flash.geom.*;
  
 	public class guibutton {
@@ -12,7 +13,7 @@ package {
 		
 		public function init(x:int, y:int, w:int, h:int, contents:String, act:String = "", sty:String = "normal"):void {
 			position.setTo(x, y, w, h);
-			text = contents.toUpperCase();
+			text = contents;
 			if (act == "") {
 				action = contents;
 			}else{
@@ -23,6 +24,7 @@ package {
 			selected = false;
 			visable = true;
 			active = true;
+			textoffset = 0;
 		}
 		
 		public var position:Rectangle;
@@ -34,5 +36,7 @@ package {
 		public var mouseover:Boolean;
 		public var selected:Boolean;
 		public var active:Boolean;
+		
+		public var textoffset:int;
 	}
 }

@@ -60,20 +60,24 @@ package{
   	include "includes/render.as";
 		
 		public function Main():void {
+			control.versionnumber = "v2.0"; // Version number displayed beside logo
+			control.version = 3;            // Version number used by file
+			
 			CONFIG::desktop {
 				NativeApplication.nativeApplication.setAsDefaultApplication("ceol");
 				NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvokeEvent);
 			}
 			
 			key = new KeyPoll(stage);
-			guiclass.init();
 			control.init();
 			gfx.init(stage);
+			control.changetab(control.MENUTAB_FILE);
+			
 			var tempbmp:Bitmap;
 			tempbmp = new im_icons();	gfx.buffer = tempbmp.bitmapData;	gfx.makeiconarray();
-			
 			tempbmp = new im_logo();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			gfx.buffer = new BitmapData(384, 240, false, 0x000000);
+			
 			control.voicelist.fixlengths();
 			stage.fullScreenSourceRect = new Rectangle(0, 0, 768, 480);
 			addChild(gfx.screen);
@@ -118,9 +122,9 @@ package{
 				ExternalInterface.addCallback("invokeCeolWeb", control.invokeCeolWeb);
 				ExternalInterface.addCallback("newSong", control.newsong);
 				ExternalInterface.addCallback("exportWav", control.exportwav);
-
+				
 				control.invokeCeolWeb(ExternalInterface.call("Bosca._getStartupCeol"));
-
+				
 				_startMainLoop();
 			}
 		}

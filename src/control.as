@@ -59,12 +59,10 @@
 		public static var MENUTAB_ADVANCED:int = 3;
 		
 		public static function init():void {
-			version = 3;
 			clicklist = false;
 			
 			test = false; teststring = "TEST = True";
 			patternmanagerview = 0;
-			changetab(MENUTAB_FILE);
 			dragaction = 0;
 			trashbutton = 0;
 			bpm = 120;
@@ -1466,5 +1464,7 @@
 		public static var effecttype:int;
 		public static var effectvalue:int;
 		public static var effectname:Vector.<String> = new Vector.<String>;
+		
+		public static var versionnumber:String;
 	}
 }
