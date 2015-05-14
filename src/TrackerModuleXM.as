@@ -19,51 +19,51 @@ package {
 		
 		public var xm:XMSong;
 
-		public function loadFromLiveBoscaCeoilModel(bosca:controlclass, desiredSongName:String):void {
+		public function loadFromLiveBoscaCeoilModel(desiredSongName:String):void {
 			var boscaInstrument:instrumentclass;
 			
 			xm = new XMSong;
 			
 			xm.songname = desiredSongName;
-			xm.defaultBPM = bosca.bpm;
-			xm.defaultTempo = int(bosca.bpm / 20);
+			xm.defaultBPM = control.bpm;
+			xm.defaultTempo = int(control.bpm / 20);
 			xm.numChannels = 8; // bosca has a hard-coded limit
-			xm.numInstruments = bosca.numinstrument;
+			xm.numInstruments = control.numinstrument;
 			
-			var notesByEachInstrumentNumber:Vector.<Vector.<int>> = _notesUsedByEachInstrumentAcrossEntireSong(bosca);
+			var notesByEachInstrumentNumber:Vector.<Vector.<int>> = _notesUsedByEachInstrumentAcrossEntireSong();
 			
 			// map notes to other notes (mostly for drums)
 			var perInstrumentBoscaNoteToXMNoteMap:Vector.<Vector.<uint>> = new Vector.<Vector.<uint>>;
-			for (i = 0; i < bosca.numinstrument; i++) {
-				boscaInstrument = bosca.instrument[i];
+			for (i = 0; i < control.numinstrument; i++) {
+				boscaInstrument = control.instrument[i];
 				var boscaNoteToXMNoteMapForThisInstrument:Vector.<uint> = _boscaNoteToXMNoteMapForInstrument(boscaInstrument, notesByEachInstrumentNumber[i]);
 				perInstrumentBoscaNoteToXMNoteMap[i] = boscaNoteToXMNoteMapForThisInstrument;
 			}
 			
 			// pattern arrangement
-			for (var i:uint = 0; i < bosca.arrange.lastbar; i++) {
-				var xmpat:XMPattern = xmPatternFromBoscaBar(bosca, i, perInstrumentBoscaNoteToXMNoteMap);
+			for (var i:uint = 0; i < control.arrange.lastbar; i++) {
+				var xmpat:XMPattern = xmPatternFromBoscaBar(i, perInstrumentBoscaNoteToXMNoteMap);
 				xm.patterns.push(xmpat);
 				xm.patternOrderTable[i] = i;
 				xm.numPatterns++;
 				xm.songLength++;
 			}
 			
-			for (i = 0; i < bosca.numinstrument; i++) {
-				boscaInstrument = bosca.instrument[i];
+			for (i = 0; i < control.numinstrument; i++) {
+				boscaInstrument = control.instrument[i];
 				var xmInstrument:XMInstrument = new XMInstrument();
 				var notesUsed:Vector.<int> = notesByEachInstrumentNumber[i];
 				xmInstrument.name = boscaInstrument.name;
 				xmInstrument.volume = int(boscaInstrument.volume / 4);
 				switch (boscaInstrument.type) {
 					case 0:
-				    xmInstrument.addSample(_boscaInstrumentToXMSample(boscaInstrument, bosca._driver));
+				    xmInstrument.addSample(_boscaInstrumentToXMSample(boscaInstrument, control._driver));
 						break;
 					default:
 						// XXX: bosca ceoil drumkits are converted lossily to a single XM
 						// instrument, but they could be converted to several instruments.
 				    var drumkitNumber:uint = boscaInstrument.type - 1;
-				    xmInstrument.addSamples(_boscaDrumkitToXMSamples(bosca.drumkit[drumkitNumber], notesUsed, perInstrumentBoscaNoteToXMNoteMap[i], bosca._driver));
+				    xmInstrument.addSamples(_boscaDrumkitToXMSamples(control.drumkit[drumkitNumber], notesUsed, perInstrumentBoscaNoteToXMNoteMap[i], control._driver));
 				   	for (var s:uint = 0; s < notesUsed.length; s++) {
 							var sionNote:int = notesUsed[s];
 							var key:uint = perInstrumentBoscaNoteToXMNoteMap[i][sionNote] - 1; // 0th key is note 1
@@ -83,19 +83,19 @@ package {
 			xm.writeToStream(stream);
 		}
 
-		public function _notesUsedByEachInstrumentAcrossEntireSong(bosca:controlclass):Vector.<Vector.<int>> {
+		public function _notesUsedByEachInstrumentAcrossEntireSong():Vector.<Vector.<int>> {
 			var seenNotePerInstrument:Array = [];
 			var i:uint;
 			var n:int;
 
 			// start with a clear 2d array
-			for (i = 0; i < bosca.numinstrument; i++) {
+			for (i = 0; i < control.numinstrument; i++) {
 				seenNotePerInstrument[i] = [];
 			}
 
 			// build a 2d sparse boolean array of notes used
-			for (i = 0; i < bosca.numboxes; i++) {
-				var box:musicphraseclass = bosca.musicbox[i];
+			for (i = 0; i < control.numboxes; i++) {
+				var box:musicphraseclass = control.musicbox[i];
 				var instrumentNum:int = box.instr;
 
 				for (n = 0; n < box.numnotes; n++) {
@@ -119,9 +119,9 @@ package {
 			return notesUsedByEachInstrument;
 		}
 
-		protected function xmPatternFromBoscaBar(bosca:controlclass, barNum:uint, instrumentNoteMap:Vector.<Vector.<uint>>):XMPattern {
+		protected function xmPatternFromBoscaBar(barNum:uint, instrumentNoteMap:Vector.<Vector.<uint>>):XMPattern {
 			var numtracks:uint = 8;
-			var numrows:uint = bosca.boxcount;
+			var numrows:uint = control.boxcount;
 			var pattern:XMPattern = new XMPattern(numrows);
 			var rows:Vector.<XMPatternLine> = pattern.rows;
 		// 	var lineAllNotesOff = [];
@@ -140,9 +140,9 @@ package {
 			}
 			// ----------
 			for (var i:uint = 0; i < numtracks; i++) {
-				var whichbox:int = bosca.arrange.bar[barNum].channel[i];
+				var whichbox:int = control.arrange.bar[barNum].channel[i];
 				if (whichbox < 0) { continue; }
-				var box:musicphraseclass = bosca.musicbox[whichbox];
+				var box:musicphraseclass = control.musicbox[whichbox];
 
 				var notes:Vector.<Rectangle> = box.notes;
 				for (var j:uint = 0; j < box.numnotes; j++) {

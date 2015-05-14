@@ -19,9 +19,9 @@ package {
 			selection = -1;
 		}
 		
-		public function init(gfx:graphicsclass, xp:int, yp:int):void {
+		public function init(xp:int, yp:int):void {
 			x = xp; y = yp; active = true;
-			getwidth(gfx);
+			getwidth();
 			h = numitems * gfx.linesize;
 		}
 		
@@ -29,7 +29,7 @@ package {
 			active = false;
 		}
 		
-		public function getwidth(gfx:graphicsclass):void {
+		public function getwidth():void {
 			w = 0;
 			var temp:int;
 			for (var i:int = 0; i < numitems; i++) {

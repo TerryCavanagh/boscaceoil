@@ -19,52 +19,52 @@
 		import mx.utils.Base64Encoder;
 	}
 		
-	public class controlclass extends Sprite{
-		public var SCALE_NORMAL:int = 0;
-		public var SCALE_MAJOR:int = 1;
-		public var SCALE_MINOR:int = 2;
-		public var SCALE_BLUES:int = 3;
-		public var SCALE_HARMONIC_MINOR:int = 4;
-		public var SCALE_PENTATONIC_MAJOR:int = 5;
-		public var SCALE_PENTATONIC_MINOR:int = 6;
-		public var SCALE_PENTATONIC_BLUES:int = 7;
-		public var SCALE_PENTATONIC_NEUTRAL:int = 8;
-		public var SCALE_ROMANIAN_FOLK:int = 9;
-		public var SCALE_SPANISH_GYPSY:int = 10;
-		public var SCALE_ARABIC_MAGAM:int = 11;
-		public var SCALE_CHINESE:int = 12;
-		public var SCALE_HUNGARIAN:int = 13;
-		public var CHORD_MAJOR:int = 14;
-		public var CHORD_MINOR:int = 15;
-		public var CHORD_5TH:int = 16;
-		public var CHORD_DOM_7TH:int = 17;
-		public var CHORD_MAJOR_7TH:int = 18;
-		public var CHORD_MINOR_7TH:int = 19;
-		public var CHORD_MINOR_MAJOR_7TH:int = 20;
-		public var CHORD_SUS4:int = 21;
-		public var CHORD_SUS2:int = 22;
+	public class control extends Sprite{
+		public static var SCALE_NORMAL:int = 0;
+		public static var SCALE_MAJOR:int = 1;
+		public static var SCALE_MINOR:int = 2;
+		public static var SCALE_BLUES:int = 3;
+		public static var SCALE_HARMONIC_MINOR:int = 4;
+		public static var SCALE_PENTATONIC_MAJOR:int = 5;
+		public static var SCALE_PENTATONIC_MINOR:int = 6;
+		public static var SCALE_PENTATONIC_BLUES:int = 7;
+		public static var SCALE_PENTATONIC_NEUTRAL:int = 8;
+		public static var SCALE_ROMANIAN_FOLK:int = 9;
+		public static var SCALE_SPANISH_GYPSY:int = 10;
+		public static var SCALE_ARABIC_MAGAM:int = 11;
+		public static var SCALE_CHINESE:int = 12;
+		public static var SCALE_HUNGARIAN:int = 13;
+		public static var CHORD_MAJOR:int = 14;
+		public static var CHORD_MINOR:int = 15;
+		public static var CHORD_5TH:int = 16;
+		public static var CHORD_DOM_7TH:int = 17;
+		public static var CHORD_MAJOR_7TH:int = 18;
+		public static var CHORD_MINOR_7TH:int = 19;
+		public static var CHORD_MINOR_MAJOR_7TH:int = 20;
+		public static var CHORD_SUS4:int = 21;
+		public static var CHORD_SUS2:int = 22;
 		
-		public var LIST_KEY:int = 0;
-		public var LIST_SCALE:int = 1;
-		public var LIST_INSTRUMENT:int = 2;
-		public var LIST_CATEGORY:int = 3;
-		public var LIST_SELECTINSTRUMENT:int = 4;
-		public var LIST_BUFFERSIZE:int = 5;
-		public var LIST_SCREENSIZE:int = 6;
-		public var LIST_EFFECTS:int = 7;
+		public static var LIST_KEY:int = 0;
+		public static var LIST_SCALE:int = 1;
+		public static var LIST_INSTRUMENT:int = 2;
+		public static var LIST_CATEGORY:int = 3;
+		public static var LIST_SELECTINSTRUMENT:int = 4;
+		public static var LIST_BUFFERSIZE:int = 5;
+		public static var LIST_SCREENSIZE:int = 6;
+		public static var LIST_EFFECTS:int = 7;
 		
-		public var MENUTAB_FILE:int = 0;
-		public var MENUTAB_ARRANGEMENTS:int = 1;
-		public var MENUTAB_INSTRUMENTS:int = 2;
-		public var MENUTAB_ADVANCED:int = 3;
+		public static var MENUTAB_FILE:int = 0;
+		public static var MENUTAB_ARRANGEMENTS:int = 1;
+		public static var MENUTAB_INSTRUMENTS:int = 2;
+		public static var MENUTAB_ADVANCED:int = 3;
 		
-		public function controlclass():void {
+		public static function init():void {
 			version = 3;
 			clicklist = false;
 			
 			test = false; teststring = "TEST = True";
 			patternmanagerview = 0;
-			currenttab = MENUTAB_FILE;
+			changetab(MENUTAB_FILE);
 			dragaction = 0;
 			trashbutton = 0;
 			bpm = 120;
@@ -218,12 +218,12 @@
 			}
 		}
 		
-		public function notecut():void {
+		public static function notecut():void {
 			//This is broken, try to fix later
 			//for each (var trk:SiMMLTrack in _driver.sequencer.tracks) trk.keyOff();
 		}
 			
-		public function updateeffects():void {
+		public static function updateeffects():void {
 			//So, I can't see to figure out WHY only one effect at a time seems to work.
 			//If anyone else can, please, by all means update this code!
 			
@@ -257,7 +257,7 @@
 			effectname.push("HIGH PASS");  */
 		}
 		
-		public function _onTimerInterruption():void {
+		public static function _onTimerInterruption():void {
 			if(musicplaying){
 				if (looptime >= boxcount) {
 					looptime-= boxcount;
@@ -323,7 +323,7 @@
 			}
 		}
 		
-	  private function SetSwing():void{  
+	  private static function SetSwing():void{  
       if (_driver == null) return;
       
       //swing goes from -10 to 10
@@ -348,7 +348,7 @@
 			}
     }
 		
-		public function loadscreensettings(gfx:graphicsclass):void {
+		public static function loadscreensettings():void {
 			programsettings = SharedObject.getLocal("boscaceoil_settings");		
 			
 			if (programsettings.data.fullscreen == 0) {
@@ -363,7 +363,7 @@
 			programsettings.close();
 		}
 		
-		public function savescreensettings(gfx:graphicsclass):void {
+		public static function savescreensettings():void {
 			programsettings = SharedObject.getLocal("boscaceoil_settings");		
 			
 			if (!fullscreen){
@@ -378,7 +378,7 @@
 			programsettings.close();
 		}
 		
-		public function setbuffersize(t:int):void {
+		public static function setbuffersize(t:int):void {
 			if (t == 0) buffersize = 2048;
 			if (t == 1) buffersize = 4096;
 			if (t == 2) buffersize = 8192;
@@ -389,7 +389,7 @@
 			programsettings.close();
 		}
 		
-		public function adddrumkitnote(t:int, name:String, voice:String, note:int = 60):void {
+		public static function adddrumkitnote(t:int, name:String, voice:String, note:int = 60):void {
 			if (t == 2 && note == 60) note = 16;
 			drumkit[t].voicelist.push(_presets[voice]);
       drumkit[t].voicename.push(name);
@@ -397,7 +397,7 @@
 			drumkit[t].size++;
 		}
 		
-		public function createdrumkit(t:int):void {
+		public static function createdrumkit(t:int):void {
 			//Create Drumkit t at index
 			switch(t) {
 				case 0:
@@ -522,7 +522,7 @@
 			}
 		}
 		
-		public function changekey(t:int):void {
+		public static function changekey(t:int):void {
 			var keyshift:int = t - key;
 			for (i = 0; i < musicbox[currentbox].numnotes; i++) {
 				musicbox[currentbox].notes[i].x += keyshift;
@@ -533,7 +533,7 @@
 			updatepianoroll();
 		}
 		
-		public function changescale(t:int):void {
+		public static function changescale(t:int):void {
 			for (i = 0; i < musicbox[currentbox].numnotes; i++) {
 				musicbox[currentbox].notes[i].x = invertpianoroll[musicbox[currentbox].notes[i].x];
 			}
@@ -553,7 +553,7 @@
 			musicbox[currentbox].setnotespan();
 		}
 		
-		public function changemusicbox(t:int):void {
+		public static function changemusicbox(t:int):void {
 			currentbox = t;
 			key = musicbox[t].key;
 			setscale(musicbox[t].scale);			
@@ -571,7 +571,7 @@
 			}
 		}
 		
-		public function _setscale(t1:int = -1, t2:int = -1, t3:int = -1, t4:int = -1, t5:int = -1, t6:int = -1,
+		public static function _setscale(t1:int = -1, t2:int = -1, t3:int = -1, t4:int = -1, t5:int = -1, t6:int = -1,
 		                          t7:int = -1, t8:int = -1, t9:int = -1, t10:int = -1, t11:int = -1, t12:int = -1):void {
 		  if (t1 == -1) {
 				scalesize = 0;
@@ -620,7 +620,7 @@
 			}
 		}
 		
-		public function setscale(t:int):void {
+		public static function setscale(t:int):void {
 			currentscale = t;
 			switch(t) {
 				case SCALE_MAJOR: _setscale(2, 2, 1, 2, 2, 2, 1); break;
@@ -649,7 +649,7 @@
 			}
 		}
 		
-		public function updatepianoroll():void {
+		public static function updatepianoroll():void {
 			//Set piano roll based on currently loaded scale
 			var scaleiter:int = -1, pianorolliter:int = 0, lastnote:int = 0;
 			
@@ -674,14 +674,14 @@
 			}
 		}
 		
-		public function addmusicbox():void {
+		public static function addmusicbox():void {
 			musicbox[numboxes].clear();
 			musicbox[numboxes].instr = currentinstrument;
 			musicbox[numboxes].palette = instrument[currentinstrument].palette;
 			numboxes++;
 		}
 		
-		public function copymusicbox(a:int, b:int):void {
+		public static function copymusicbox(a:int, b:int):void {
 		  musicbox[a].numnotes = musicbox[b].numnotes;
 			
 		  for (j = 0; j < musicbox[a].numnotes; j++){
@@ -710,7 +710,7 @@
 		  musicbox[a].isplayed = musicbox[b].isplayed;
 		}
 		
-		public function deletemusicbox(t:int):void {
+		public static function deletemusicbox(t:int):void {
 			if (currentbox == t) currentbox--;
 			for (i = t; i < numboxes; i++) {
 				copymusicbox(i, i + 1);
@@ -729,12 +729,12 @@
 		}
 		
 		
-		public function seekposition(t:int):void {
+		public static function seekposition(t:int):void {
 			//Make this smoother someday maybe
 		  barposition = t;
 		}
 		
-		public function filllist(t:int):void {
+		public static function filllist(t:int):void {
 			list.type = t;
 			switch(t) {
 				case LIST_KEY:
@@ -823,7 +823,7 @@
 			}
 		}
 		
-		public function setinstrumenttoindex(t:int):void {
+		public static function setinstrumenttoindex(t:int):void {
 			voicelist.index = instrument[t].index;
 			if (help.Left(voicelist.voice[voicelist.index], 7) == "drumkit") {
 			  instrument[t].type = int(help.Right(voicelist.voice[voicelist.index]));
@@ -840,7 +840,7 @@
 			instrument[t].palette = voicelist.palette[voicelist.index];
 		}
 		
-		public function changeinstrumentvoice(t:String):void {
+		public static function changeinstrumentvoice(t:String):void {
 			instrument[currentinstrument].name = t;
 			voicelist.index = voicelist.getvoice(t);
 			if (help.Left(voicelist.voice[voicelist.index], 7) == "drumkit") {
@@ -869,7 +869,7 @@
 			}
 		}
 		
-		public function makefilestring():void {
+		public static function makefilestring():void {
 			filestring = "";
 			filestring += String(version) + ",";
 			filestring += String(swing)+",";
@@ -922,8 +922,8 @@
 			}
 		}
 		
-		public function newsong():void {
-			currenttab = MENUTAB_FILE;
+		public static function newsong():void {
+			changetab(MENUTAB_FILE);
 			bpm = 120; boxcount = 16; barcount = 4; doublesize = false;
 			effectvalue = 0; effecttype = 0; updateeffects();
 			_driver.bpm = bpm;
@@ -938,12 +938,12 @@
 			showmessage("NEW SONG CREATED");
 		}
 		
-		public function readfilestream():int {
+		public static function readfilestream():int {
 			fi++;
 			return filestream[fi-1];
 		}
 		
-		public function convertfilestring():void {
+		public static function convertfilestring():void {
 			fi = 0;
 			version = readfilestream();
 			if (version == 3) {
@@ -1009,7 +1009,7 @@
 			}
 		}
 		
-		public function legacy_convertfilestring(t:int):void {
+		public static function legacy_convertfilestring(t:int):void {
 			switch(t) {
 				case 2: //Before effects and 32 note patterns
 					swing = readfilestream();
@@ -1127,18 +1127,18 @@
 
 		CONFIG::desktop {
 
-		public function fileHasExtension(file:File, extension:String):Boolean {     
+		public static function fileHasExtension(file:File, extension:String):Boolean {     
 			if (!file.extension || file.extension.toLowerCase() != extension) {         
 				return false;     
 			}                 
 			return true; 
 		}
 		
-		public function addExtensionToFile(file:File, extension:String):void {     
+		public static function addExtensionToFile(file:File, extension:String):void {     
 			file.url += "." + extension; 
 		}
 		
-		public function saveceol():void {
+		public static function saveceol():void {
 			file = File.desktopDirectory.resolvePath("*.ceol");
       file.addEventListener(Event.SELECT, onsaveceol);
 			file.browseForSave("Save .ceol File");
@@ -1146,7 +1146,7 @@
 			fixmouseclicks = true;
 		}
 		
-		private function onsaveceol(e:Event):void {    
+		private static function onsaveceol(e:Event):void {    
 			file = e.currentTarget as File;
 			
 			if (!fileHasExtension(file, "ceol")) {
@@ -1164,7 +1164,7 @@
 			showmessage("SONG SAVED");
 		}
 		
-		public function loadceol():void {
+		public static function loadceol():void {
 			file = File.desktopDirectory.resolvePath("");
       file.addEventListener(Event.SELECT, onloadceol);
 			file.browseForOpen("Load .ceol File", [ceolFilter]);
@@ -1172,7 +1172,7 @@
 			fixmouseclicks = true;
 		}
 		
-		public function invokeceol(t:String):void { 
+		public static function invokeceol(t:String):void { 
 			file = new File();
 			file.nativePath = t;
 			
@@ -1188,7 +1188,7 @@
 			showmessage("SONG LOADED");
 		}
 		
-		private function onloadceol(e:Event):void {  
+		private static function onloadceol(e:Event):void {  
 			file = e.currentTarget as File;
 			
 			stream = new FileStream();
@@ -1203,7 +1203,7 @@
 			showmessage("SONG LOADED");
 		}
 
-		public function exportxm():void {
+		public static function exportxm():void {
 			stopmusic();
 			
 			file = File.desktopDirectory.resolvePath("*.xm");
@@ -1213,7 +1213,7 @@
 			fixmouseclicks = true;
 		}
 
-		private function onexportxm(e:Event):void {
+		private static function onexportxm(e:Event):void {
 			file = e.currentTarget as File;
 
 			if (!fileHasExtension(file, "xm")) {
@@ -1221,7 +1221,7 @@
 			}
 
 			var xm:TrackerModuleXM = new TrackerModuleXM();
-			xm.loadFromLiveBoscaCeoilModel(this, file.name);
+			xm.loadFromLiveBoscaCeoilModel(file.name);
 
 			stream = new FileStream();
 			stream.open(file, FileMode.WRITE);
@@ -1232,7 +1232,7 @@
 			showmessage("SONG EXPORTED AS XM");
 		}
 
-		private function onsavewav(e:Event):void {
+		private static function onsavewav(e:Event):void {
 			file = e.currentTarget as File;
 
 			if (!fileHasExtension(file, "wav")) {
@@ -1251,8 +1251,8 @@
 		}
 
 		CONFIG::web {
-			public function invokeCeolWeb(ceolStr:String):void {
-				currenttab = MENUTAB_FILE;
+			public static function invokeCeolWeb(ceolStr:String):void {
+				changetab(MENUTAB_FILE);
 				if (ceolStr != "") {
 					filestring = ceolStr;
 					loadfilestring(filestring);
@@ -1264,13 +1264,13 @@
 				_driver.play(null, false);
 			}
 
-			public function getCeolString():String {
+			public static function getCeolString():String {
 				makefilestring();
 				return filestring;
 			}
 		}
 
-		private function loadfilestring(s:String):void {
+		private static function loadfilestring(s:String):void {
 			filestream = new Array();
 			filestream = s.split(",");
 
@@ -1285,12 +1285,12 @@
 			looptime = 0;
 		}
 		
-		public function showmessage(t:String):void {
+		public static function showmessage(t:String):void {
 			message = t;
 			messagedelay = 90;
 		}
 		
-		public function onStream(e : SiONEvent) : void{
+		public static function onStream(e : SiONEvent) : void{
 			e.streamBuffer.position = 0;
 			while(e.streamBuffer.bytesAvailable > 0){
 				var d : int = e.streamBuffer.readFloat() * 32767;
@@ -1298,7 +1298,7 @@
 			}
 		}
 		
-		public function stopmusic():void {
+		public static function stopmusic():void {
 			if (musicplaying) {
 				musicplaying = !musicplaying;
 				looptime = 0;
@@ -1307,8 +1307,8 @@
 			}
 		}
 		
-		public function exportwav():void {
-			currenttab = MENUTAB_ARRANGEMENTS; clicklist = true;
+		public static function exportwav():void {
+			changetab(MENUTAB_ARRANGEMENTS); clicklist = true;
 			arrange.loopstart = 0; arrange.loopend = arrange.lastbar;
 			musicplaying = true;
 			looptime = 0;	arrange.currentbar = arrange.loopstart;
@@ -1322,7 +1322,7 @@
 			nowexporting = true;
 		}
 		
-		public function savewav():void {
+		public static function savewav():void {
 			nowexporting = false; followmode = false;
 			
 			_wav = new ByteArray();
@@ -1360,107 +1360,111 @@
 			fixmouseclicks = true;
 		}
 		
-
-		CONFIG::desktop {
-			public var file:File, stream:FileStream;
+		public static function changetab(newtab:int):void {
+			currenttab = newtab;
+			guiclass.changetab(newtab);
 		}
-		public var filestring:String, fi:int;
-		public var filestream:Array;
-		public var ceolFilter:FileFilter = new FileFilter("Ceol", "*.ceol");
 		
-		public var i:int, j:int, k:int;
+		CONFIG::desktop {
+			public static var file:File, stream:FileStream;
+		}
+		public static var filestring:String, fi:int;
+		public static var filestream:Array;
+		public static var ceolFilter:FileFilter = new FileFilter("Ceol", "*.ceol");
 		
-		public var fullscreen:Boolean;
+		public static var i:int, j:int, k:int;
 		
-		public var fullscreentoggleheld:Boolean = false;
+		public static var fullscreen:Boolean;
 		
-		public var press_up:Boolean, press_down:Boolean, press_left:Boolean, press_right:Boolean, press_space:Boolean, press_enter:Boolean;
-		public var keypriority:int = 0;
-		public var keyheld:Boolean = false;;
-		public var clicklist:Boolean;
-		public var copykeyheld:Boolean = false;
+		public static var fullscreentoggleheld:Boolean = false;
 		
-		public var keydelay:int, keyboardpressed:int = 0;
-		public var fixmouseclicks:Boolean = false;
+		public static var press_up:Boolean, press_down:Boolean, press_left:Boolean, press_right:Boolean, press_space:Boolean, press_enter:Boolean;
+		public static var keypriority:int = 0;
+		public static var keyheld:Boolean = false;;
+		public static var clicklist:Boolean;
+		public static var copykeyheld:Boolean = false;
 		
-		public var mx:int, my:int;
-		public var test:Boolean, teststring:String;
+		public static var keydelay:int, keyboardpressed:int = 0;
+		public static var fixmouseclicks:Boolean = false;
 		
-		public var _driver:SiONDriver;
-		public var _presets:SiONPresetVoice;
-		public var voicelist:voicelistclass;
+		public static var mx:int, my:int;
+		public static var test:Boolean, teststring:String;
 		
-		public var instrument:Vector.<instrumentclass> = new Vector.<instrumentclass>;
-		public var numinstrument:int;
-		public var instrumentmanagerview:int;
+		public static var _driver:SiONDriver;
+		public static var _presets:SiONPresetVoice;
+		public static var voicelist:voicelistclass;
 		
-		public var musicbox:Vector.<musicphraseclass> = new Vector.<musicphraseclass>;
-		public var numboxes:int;
-		public var looptime:int;
-		public var currentbox:int;
-		public var currentnote:int;
-		public var currentinstrument:int;
-		public var boxsize:int, boxcount:int;
-		public var barsize:int, barcount:int;
-		public var notelength:int;
-		public var doublesize:Boolean;
+		public static var instrument:Vector.<instrumentclass> = new Vector.<instrumentclass>;
+		public static var numinstrument:int;
+		public static var instrumentmanagerview:int;
 		
-		public var barposition:Number = 0;
-		public var drawnoteposition:int, drawnotelength:int;
+		public static var musicbox:Vector.<musicphraseclass> = new Vector.<musicphraseclass>;
+		public static var numboxes:int;
+		public static var looptime:int;
+		public static var currentbox:int;
+		public static var currentnote:int;
+		public static var currentinstrument:int;
+		public static var boxsize:int, boxcount:int;
+		public static var barsize:int, barcount:int;
+		public static var notelength:int;
+		public static var doublesize:Boolean;
 		
-		public var cursorx:int, cursory:int;
-		public var arrangecurx:int, arrangecury:int;
-		public var patterncury:int, timelinecurx:int;
-		public var instrumentcury:int;
-		public var notey:int;
+		public static var barposition:Number = 0;
+		public static var drawnoteposition:int, drawnotelength:int;
 		
-		public var notename:Vector.<String> = new Vector.<String>;
-		public var scalename:Vector.<String> = new Vector.<String>;
+		public static var cursorx:int, cursory:int;
+		public static var arrangecurx:int, arrangecury:int;
+		public static var patterncury:int, timelinecurx:int;
+		public static var instrumentcury:int;
+		public static var notey:int;
 		
-		public var currentscale:int = 0;
-		public var scale:Vector.<int> = new Vector.<int>;
-		public var key:int;
-		public var scalesize:int;
+		public static var notename:Vector.<String> = new Vector.<String>;
+		public static var scalename:Vector.<String> = new Vector.<String>;
 		
-		public var pianoroll:Vector.<int> = new Vector.<int>;
-		public var invertpianoroll:Vector.<int> = new Vector.<int>;
-		public var pianorollsize:int;
+		public static var currentscale:int = 0;
+		public static var scale:Vector.<int> = new Vector.<int>;
+		public static var key:int;
+		public static var scalesize:int;
 		
-		public var arrange:arrangementclass = new arrangementclass();
-		public var drumkit:Vector.<drumkitclass> = new Vector.<drumkitclass>;
+		public static var pianoroll:Vector.<int> = new Vector.<int>;
+		public static var invertpianoroll:Vector.<int> = new Vector.<int>;
+		public static var pianorollsize:int;
 		
-		public var currenttab:int;
+		public static var arrange:arrangementclass = new arrangementclass();
+		public static var drumkit:Vector.<drumkitclass> = new Vector.<drumkitclass>;
 		
-		public var dragaction:int, dragx:int, dragy:int, dragpattern:int;
-		public var patternmanagerview:int;
+		public static var currenttab:int;
 		
-		public var trashbutton:int;
+		public static var dragaction:int, dragx:int, dragy:int, dragpattern:int;
+		public static var patternmanagerview:int;
 		
-		public var list:listclass = new listclass;
+		public static var trashbutton:int;
 		
-		public var musicplaying:Boolean = true;
-		public var nowexporting:Boolean = false;
-		public var followmode:Boolean = false;
-		public var bpm:int;
-		public var version:int;
-		public var swing:int;
-		public var swingoff:int;
+		public static var list:listclass = new listclass;
 		
-		public var doubleclickcheck:int;
+		public static var musicplaying:Boolean = true;
+		public static var nowexporting:Boolean = false;
+		public static var followmode:Boolean = false;
+		public static var bpm:int;
+		public static var version:int;
+		public static var swing:int;
+		public static var swingoff:int;
 		
-		public var programsettings:SharedObject;
-		public var buffersize:int, currentbuffersize:int;
+		public static var doubleclickcheck:int;
 		
-		private var _data:ByteArray;
-		private var _wav:ByteArray;
+		public static var programsettings:SharedObject;
+		public static var buffersize:int, currentbuffersize:int;
 		
-		public var message:String;
-		public var messagedelay:int = 0;
-		public var startup:int = 0, invokefile:String = "null";
+		private static var _data:ByteArray;
+		private static var _wav:ByteArray;
+		
+		public static var message:String;
+		public static var messagedelay:int = 0;
+		public static var startup:int = 0, invokefile:String = "null";
 		
 		//Global effects
-		public var effecttype:int;
-		public var effectvalue:int;
-		public var effectname:Vector.<String> = new Vector.<String>;
+		public static var effecttype:int;
+		public static var effectvalue:int;
+		public static var effectname:Vector.<String> = new Vector.<String>;
 	}
 }

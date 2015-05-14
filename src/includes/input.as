@@ -1,7 +1,7 @@
-﻿public function input(key:KeyPoll, gfx:graphicsclass, control:controlclass):void {
+﻿public function input(key:KeyPoll):void {
 	var i:int, j:int, k:int;
 	
-	generickeypoll(control);
+	generickeypoll();
 	if (control.fixmouseclicks) {
 		control.fixmouseclicks = false;
 		key.releaseall();
@@ -18,6 +18,8 @@
 			control.clicklist = false;
 		}
 	}
+	
+	guiclass.checkinput(key);
 	
 	if (control.list.active){
 		if(control.mx > control.list.x && control.mx < control.list.x + control.list.w && control.my > control.list.y && control.my < control.list.y + control.list.h) {
@@ -137,12 +139,12 @@
 							control.voicelist.pagenum++;
 							control.list.close();
 							control.filllist(control.LIST_INSTRUMENT);
-							control.list.init(gfx, 235, (gfx.linesize * 3) + 3);
+							control.list.init(235, (gfx.linesize * 3) + 3);
 						}else if (control.list.item[control.list.selection] == "<< First Page") {
 							control.voicelist.pagenum = 0;
 							control.list.close();
 							control.filllist(control.LIST_INSTRUMENT);
-							control.list.init(gfx, 235, (gfx.linesize * 3) + 3);
+							control.list.init(235, (gfx.linesize * 3) + 3);
 						}else{
 							control.changeinstrumentvoice(control.list.item[control.list.selection]);
 							control.list.close();
@@ -176,7 +178,7 @@
 					if (control.list.type == control.LIST_SCREENSIZE) {
 						gfx.changewindowsize(control.list.selection + 1);
 						control.fullscreen = false;
-						control.savescreensettings(gfx);
+						control.savescreensettings();
 						control.list.close();
 					}
 				}else {
@@ -186,20 +188,20 @@
 			}else if (control.my <= gfx.linesize) {
 				//Change tabs
 				if (control.mx < (gfx.screenwidth-40) / 4) {
-					control.currenttab = control.MENUTAB_FILE;
+					control.changetab(control.MENUTAB_FILE);
 				}else if (control.mx < (2*(gfx.screenwidth-40)) / 4) {
-					control.currenttab = control.MENUTAB_ARRANGEMENTS;
+					control.changetab(control.MENUTAB_ARRANGEMENTS);
 				}else if (control.mx < (3*(gfx.screenwidth-40)) / 4) {
-					control.currenttab = control.MENUTAB_INSTRUMENTS;
+					control.changetab(control.MENUTAB_INSTRUMENTS);
 				}else if (control.mx >= gfx.screenwidth - 20) {
 					if (control.fullscreen) {control.fullscreen = false;
 					}else {control.fullscreen = true;}
-					updategraphicsmode(control);
+					updategraphicsmode();
 				}else if (control.mx >= gfx.screenwidth - 40) {
 					control.filllist(control.LIST_SCREENSIZE);
-					control.list.init(gfx, gfx.screenwidth - 40, gfx.linesize - 2);
+					control.list.init(gfx.screenwidth - 40, gfx.linesize - 2);
 				}else{
-					control.currenttab = control.MENUTAB_ADVANCED;
+					control.changetab(control.MENUTAB_ADVANCED);
 				}
 			}else if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 10) {				
 				if (control.currenttab == control.MENUTAB_FILE) {
@@ -358,11 +360,11 @@
 						if (control.my > (gfx.linesize * 2) + 3 && control.my < (gfx.linesize * 3) + 3) {
 							if (control.mx > 140 && control.mx < 230) {
 								control.filllist(control.LIST_CATEGORY);
-								control.list.init(gfx, 145, (gfx.linesize * 3) + 3);
+								control.list.init(145, (gfx.linesize * 3) + 3);
 							}else if (control.mx >= 230) {
 								control.voicelist.makesublist(control.instrument[control.currentinstrument].category);
 								control.filllist(control.LIST_INSTRUMENT);
-								control.list.init(gfx, 235, (gfx.linesize * 3) + 3);
+								control.list.init(235, (gfx.linesize * 3) + 3);
 							}
 						}
 					}
@@ -370,7 +372,7 @@
 					//Buffer size control
 					if (help.inboxw(control.mx, control.my, 120, (gfx.linesize * 3), 70, 10)) {
 						control.filllist(control.LIST_BUFFERSIZE);
-						control.list.init(gfx, 105, (gfx.linesize * 4) - 3);
+						control.list.init(105, (gfx.linesize * 4) - 3);
 					}
 					//Swing controls
 					if (help.inboxw(control.mx, control.my, 100, (gfx.linesize * 6) - 1, 10, 10)) {
@@ -384,7 +386,7 @@
 					//Effects
 					if (help.inboxw(control.mx, control.my, gfx.screenwidth - 150, (gfx.linesize * 3), 25, 10)) {
 						control.filllist(control.LIST_EFFECTS);
-						control.list.init(gfx, gfx.screenwidth - 150, (gfx.linesize * 4) - 3);
+						control.list.init(gfx.screenwidth - 150, (gfx.linesize * 4) - 3);
 					}
 				}
 			}else if (control.my > gfx.screenheight - gfx.linesize) {
@@ -392,16 +394,16 @@
 					if (!control.list.active) {
 						if (control.mx < 150) {
 							control.filllist(control.LIST_SELECTINSTRUMENT);
-							control.list.init(gfx, 10, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
+							control.list.init(10, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
 						}else if (control.mx < 210) {
 							if (control.instrument[control.musicbox[control.currentbox].instr].type == 0) {
 								control.filllist(control.LIST_KEY);
-								control.list.init(gfx, 170, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
+								control.list.init(170, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
 							}
 						}else {
 							if (control.instrument[control.musicbox[control.currentbox].instr].type == 0) {
 								control.filllist(control.LIST_SCALE);
-								control.list.init(gfx, 220, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
+								control.list.init(220, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
 							}
 						}
 					}

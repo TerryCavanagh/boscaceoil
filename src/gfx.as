@@ -3,15 +3,21 @@
 	import flash.geom.*;
   import flash.events.*;
   import flash.net.*;
+	import flash.text.*;
+	CONFIG::desktop {
+		import flash.display.NativeWindow;
+	}
 	
-	public class graphicsclass extends gfxbaseclass {
-		public function init():void {
+	public class gfx extends Sprite {
+		public static function init(_stage:Stage):void {
 			initgfx();
 			initfont();
 			initpal();
+			
+			stage = _stage;
     }
 		
-		public function initpal():void {
+		public static function initpal():void {
 			//Initalise all the program's palettes here
 			pal[0].setto(255, 255, 255);      //Pure White
 			pal[1].setto(64, 64, 64);         //Background
@@ -32,6 +38,8 @@
 			pal[15].setto(255, 0, 0);           //Red
 			pal[16].setto(0, 128, 255);           //Cyan
 			pal[17].setto(0, 0, 128);           //Dark Blue
+			
+			pal[20].setto(80, 80, 80);         //Background mouseover
 			
 			//Blue
 			pal[100].setto(5, 84, 185);       //Bar, Bright
@@ -107,7 +115,7 @@
 			
 		}
 		
-		public function drawpatterneditor(control:controlclass):void {
+		public static function drawpatterneditor():void {
 			//Pattern editor
 			if (control.doublesize) {
 				control.boxsize = (screenwidth - 30) / 32;
@@ -286,7 +294,7 @@
 			}
 		}
 		
-		public function drawlist(control:controlclass):void {
+		public static function drawlist():void {
 			if (control.list.active) {
 				//Draw list
 				fillrect(control.list.x - 2, control.list.y - 2, control.list.w + 4, control.list.h + 4, 12);
@@ -326,7 +334,7 @@
 			}			
 		}
 		
-		public function drawmusicbox(control:controlclass, xp:int, yp:int, t:int, enabled:Boolean=true):void {
+		public static function drawmusicbox(xp:int, yp:int, t:int, enabled:Boolean=true):void {
 			//Draw a little music box containing our notes!
 			if (xp < screenwidth) {
 				temppal = control.musicbox[t].palette;
@@ -381,7 +389,7 @@
 			}
 		}
 		
-		public function drawarrangementeditor(control:controlclass):void {
+		public static function drawarrangementeditor():void {
 			for (i = 0; i < 8; i++) {
 				if(control.arrange.channelon[i]){
 					if (i % 2 == 0) {
@@ -404,7 +412,7 @@
 				for (j = 0; j < 8; j++) {
 					if (k + control.arrange.viewstart > -1) {
 						if (control.arrange.bar[k + control.arrange.viewstart].channel[j] > -1) {
-							drawmusicbox(control, k * patternwidth, linesize + (j * patternheight), control.arrange.bar[k+control.arrange.viewstart].channel[j], control.arrange.channelon[j]);
+							drawmusicbox(k * patternwidth, linesize + (j * patternheight), control.arrange.bar[k+control.arrange.viewstart].channel[j], control.arrange.channelon[j]);
 						}
 					}
 				}
@@ -432,7 +440,7 @@
 			
 		}
 		
-		public function drawtimeline(control:controlclass):void {
+		public static function drawtimeline():void {
 			//From here: TIMELINE
 			fillrect(0, pianorollposition + 4, patterncount * 6, 6, 6);
 			for (i = 0; i < 13; i++) {
@@ -479,7 +487,7 @@
 			}
 		}
 		
-		public function drawmenu(control:controlclass):void {
+		public static function drawmenu():void {
 			bigprint(12, (linesize * 2) + 2 - 5, "BOSCA CEOIL", 0, 0, 0, false, 3);
 			if (control.looptime % control.barcount==1) {
 				drawimage(0, 10 + (Math.random() * 4), (linesize * 2) - 7 + (Math.random() * 4));
@@ -495,24 +503,15 @@
       print(10, (linesize * 9)+5, "Created by Terry Cavanagh", 2, false, true);
 			
 			//Button
-
 			CONFIG::desktop {
-				fillrect(220, linesize * 2, 75, 10, 12);
-				fillrect(220 -2, (linesize * 2) -2, 75, 10, 1);
-				print(220 + 7, (linesize * 2) - 1, "NEW SONG", 0, false, true);
-
-				fillrect(305, linesize * 2, 75, 10, 12);
-				fillrect(305 -2, (linesize * 2) -2, 75, 10, 1);
-				print(305 + 2, (linesize * 2) - 1, "EXPORT .wav", 0, false, true);
-
 				fillrect(305, linesize * 3, 75, 10, 12);
 				fillrect(305 -2, (linesize * 3) -2, 75, 10, 1);
 				print(305 + 2, (linesize * 3) - 1, "EXPORT .xm", 0, false, true);
-
+				
 				fillrect(220, (linesize * 4)+5, 75, 10, 12);
 				fillrect(220 -2, (linesize * 4)+5 -2, 75, 10, 1);
-				print(220 + 7, (linesize * 4)+5 - 1, "LOAD .ceol", 0, false, true);
-
+				print(220 + 7, (linesize * 4) + 5 - 1, "LOAD .ceol", 0, false, true);
+				
 				fillrect(305, (linesize * 4)+5, 75, 10, 12);
 				fillrect(305 -2, (linesize * 4)+5 -2, 75, 10, 1);
 				print(305 + 7, (linesize * 4)+5 - 1, "SAVE .ceol", 0, false, true);
@@ -534,7 +533,7 @@
 			drawicon(350, (linesize * 9)-1, 2);
 		}
 		
-		public function drawadvancedmenu(control:controlclass):void {
+		public static function drawadvancedmenu():void {
 			fillrect(20, (linesize * 3)+2, 160, linesize, 1);
 			rprint(100, (linesize * 3) +2, "SOUND BUFFER ", 0, true);
 			drawicon(125, (linesize * 3) + 2, 0);
@@ -575,7 +574,7 @@
 			fillrect(screenwidth - 120 +j + 1, (linesize * 3) + 2 + 1, 8, 8, 2);
 		}
 		
-		public function drawpatternmanager(control:controlclass):void {
+		public static function drawpatternmanager():void {
 			//From here, PATTERN Manager
 			patterncount = 54;
 			fillrect(patterncount * 6, linesize, screenwidth - (patterncount * 6), pianorollposition, 2);
@@ -601,7 +600,7 @@
 				}else {
 					//Normal
 					if (control.patternmanagerview + k < control.numboxes) {
-				    drawmusicbox(control, (patterncount * 6) + 3, linesize + 2 + (k * patternheight), control.patternmanagerview + k);
+				    drawmusicbox((patterncount * 6) + 3, linesize + 2 + (k * patternheight), control.patternmanagerview + k);
 					}
 				}
 			}
@@ -612,7 +611,7 @@
 			}
 		}
 		
-		public function drawinstrumentlist(control:controlclass):void {
+		public static function drawinstrumentlist():void {
 			fillrect(0, linesize, 140, pianorollposition, 2);
 			
 			//Button
@@ -649,7 +648,7 @@
 			}
 		}
 		
-		public function drawinstrument(control:controlclass):void {
+		public static function drawinstrument():void {
 			fillrect(140, linesize, screenwidth - 140, pianorollposition, 101 + (control.instrument[control.currentinstrument].palette * 10));
 			print(145, linesize + 3, "INSTRUMENT " + String(control.currentinstrument + 1), 0, false, true);
 			
@@ -727,5 +726,358 @@
 				fillrect(143 + i + 1, (linesize * 4) + j + 1, 8, 8, 100 + (control.instrument[control.currentinstrument].palette * 10));
 			}
 		}
+		
+		public static function initgfx():void {
+			//We initialise a few things
+			screenscale = 2;
+			
+			screenwidth = 384; screenheight = 240;
+			screenwidthmid = screenwidth / 2; screenheightmid = screenheight / 2;
+			screenviewwidth = screenwidth; screenviewheight = screenheight;
+			linesize = 10; patternheight = 12; patterncount = 54;
+			setzoomlevel(4);
+			pianorollposition = linesize * 10;
+			
+			fontsize.push(0); fontsize.push(0); fontsize.push(0); fontsize.push(0);		
+			fontsize.push(0); fontsize.push(0); fontsize.push(0); fontsize.push(0);		
+		
+			fontsize[0] = 8;
+			fontsize[1] = 16;
+			fontsize[2] = 24;
+			fontsize[3] = 32;
+			fontsize[4] = 48;
+			
+			icons_rect = new Rectangle(0, 0, 16, 16);
+			trect = new Rectangle; tpoint = new Point();
+			tbuffer = new BitmapData(1, 1, true);
+			ct = new ColorTransform(0, 0, 0, 1, 255, 255, 255, 1); //Set to white
+			tempicon = new BitmapData(16, 16, false, 0x000000);
+			
+			backbuffer = new BitmapData(384, 240, false, 0x000000);
+			screenbuffer = new BitmapData(384, 240, false, 0x000000);
+			
+			for (i = 0; i < 400; i++) {
+				pal.push(new paletteclass());
+			}
+			
+			buttonpress = 0;
+			
+			screen = new Bitmap(screenbuffer);
+			screen.width = screenwidth * 2;
+			screen.height = screenheight * 2; 
+			screen.x = 0;
+			screen.y = 0; 
+		}
+		
+		public static function setzoomlevel(t:int):void {
+			zoom = t;
+			patternwidth = 22 + (zoom * 8);
+		}
+		
+		CONFIG::desktop {
+			public static function changewindowsize(t:int):void {
+				screenscale = t;
+				if (stage && stage.nativeWindow) {
+					stage.nativeWindow.width = (screenwidth * t) + 18;
+					stage.nativeWindow.height = (screenheight * t) + 45;
+				}
+			}
+		}
+
+		CONFIG::web {
+			public static function changewindowsize(t:int):void {
+				// no-op
+			}
+		}
+
+		public static function settrect(x:int, y:int, w:int, h:int):void {
+			trect.x = x;
+			trect.y = y;
+			trect.width = w;
+			trect.height = h;
+		}
+
+		public static function settpoint(x:int, y:int):void {
+			tpoint.x = x;
+			tpoint.y = y;
+		}
+		
+		public static function addimage():void {
+			var t:BitmapData = new BitmapData(buffer.width, buffer.height, true, 0x000000);
+			t.copyPixels(buffer, new Rectangle(0,0,buffer.width, buffer.height), tl);
+			images.push(t);
+		}
+		
+		public static function drawimage(t:int, xp:int, yp:int):void {
+			backbuffer.copyPixels(images[t], new Rectangle(0,0,images[t].width, images[t].height), new Point(xp, yp));
+		}
+		
+		public static function makeiconarray():void {
+			for (var i:int = 0; i < 20; i++) {
+				var t:BitmapData = new BitmapData(16, 16, true, 0x000000);
+				var temprect:Rectangle = new Rectangle(i * 16, 0, 16, 16);	
+				t.copyPixels(buffer, temprect, tl);
+				icons.push(t);
+			}
+		}	
+		
+		// Draw Primatives
+		public static function drawline(x1:int, y1:int, x2:int, y2:int, col:int):void {
+			if (x1 > x2) {
+				drawline(x2, y1, x1, y2, col);
+			}else if (y1 > y2) {
+				drawline(x1, y2, x2, y1, col);
+			}else {
+				tempshape.graphics.clear();
+				tempshape.graphics.lineStyle(1, RGB(pal[col].r, pal[col].g, pal[col].b));
+				tempshape.graphics.lineTo(x2 - x1, y2 - y1);
+				
+				shapematrix.translate(x1, y1);
+				backbuffer.draw(tempshape, shapematrix);
+				shapematrix.translate(-x1, -y1);
+			}
+		}
+
+		public static function drawbox(x1:int, y1:int, w1:int, h1:int, col:int):void {
+			settrect(x1, y1, w1, 1); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
+			settrect(x1, y1 + h1 - 1, w1, 1); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
+			settrect(x1, y1, 1, h1); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
+			settrect(x1 + w1 - 1, y1, 1, h1); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
+		}
+		
+		public static function cls():void {
+			fillrect(0, 0, 384, 240, 1);
+		}
+		
+		public static function fillrect(x1:int, y1:int, w1:int, h1:int, t:int):void {
+			settrect(x1, y1, w1, h1);
+			backbuffer.fillRect(trect, RGB(pal[t].r, pal[t].g, pal[t].b));
+		}
+		
+		public static function drawbuffericon(x:int, y:int, t:int):void {
+			buffer.copyPixels(icons[t], icons_rect, new Point(x, y));
+		}
+
+		public static function drawicon(x:int, y:int, t:int):void {
+			backbuffer.copyPixels(icons[t], icons_rect, new Point(x, y));
+		}
+		
+		//Text Functions
+		public static function initfont():void {			
+		  tf_1.embedFonts = true;
+			tf_1.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed",fontsize[0],0,true);
+			tf_1.width = screenwidth; tf_1.height = 48;
+			tf_1.antiAliasType = AntiAliasType.NORMAL;
+			
+		  tf_2.embedFonts = true;
+			tf_2.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed",fontsize[1],0,true);
+			tf_2.width = screenwidth; tf_2.height = 100;
+			tf_2.antiAliasType = AntiAliasType.NORMAL;
+			
+		  tf_3.embedFonts = true;
+			tf_3.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed",fontsize[2],0,true);
+			tf_3.width = screenwidth; tf_3.height = 100;
+			tf_3.antiAliasType = AntiAliasType.NORMAL;
+			
+		  tf_4.embedFonts = true;
+			tf_4.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed",fontsize[3],0,true);
+			tf_4.width = screenwidth; tf_4.height = 100;
+			tf_4.antiAliasType = AntiAliasType.NORMAL;
+			
+		  tf_5.embedFonts = true;
+			tf_5.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed",fontsize[4],0,true);
+			tf_5.width = screenwidth; tf_5.height = 100;
+			tf_5.antiAliasType = AntiAliasType.NORMAL;
+		}
+
+		public static function rprint(x:int, y:int, t:String, col:int, shadow:Boolean = false):void {
+			x = x - len(t);
+			print(x, y, t, col, false, shadow);
+		}
+
+		public static function print(x:int, y:int, t:String, col:int, cen:Boolean = false, shadow:Boolean=false):void {
+			y -= 3;
+			
+			tf_1.textColor = RGB(pal[col].r, pal[col].g, pal[col].b);
+			tf_1.text = t;
+			if (cen) x = screenwidthmid - (tf_1.textWidth / 2) + x;
+			
+			if (shadow) {
+				shapematrix.translate(x+1, y+1);
+				tf_1.textColor = RGB(0, 0, 0);
+				backbuffer.draw(tf_1, shapematrix);
+				
+				shapematrix.translate(-x-1, -y-1);
+			}
+			
+			shapematrix.translate(x, y);
+			tf_1.textColor = RGB(pal[col].r, pal[col].g, pal[col].b);
+			backbuffer.draw(tf_1, shapematrix);
+			
+			shapematrix.translate(-x, -y);
+		}
+		
+		public static function len(t:String, sz:int = 1):int {
+			if(sz==1){
+				tf_1.text = t;
+				return tf_1.textWidth;
+			}else if (sz == 2) {
+				tf_2.text = t;
+				return tf_2.textWidth;
+			}else if (sz == 3) {
+				tf_3.text = t;
+				return tf_3.textWidth;
+			}else if (sz == 4) {
+				tf_4.text = t;
+				return tf_4.textWidth;
+			}else if (sz == 5) {
+				tf_5.text = t;
+				return tf_5.textWidth;
+			}
+			
+			tf_1.text = t;
+			return tf_1.textWidth;
+		}
+		public static function hig(t:String, sz:int = 1):int {
+			if(sz==1){
+				tf_1.text = t;
+				return tf_1.textHeight;
+			}else if (sz == 2) {
+				tf_2.text = t;
+				return tf_2.textHeight;
+			}else if (sz == 3) {
+				tf_3.text = t;
+				return tf_3.textHeight;
+			}else if (sz == 4) {
+				tf_4.text = t;
+				return tf_4.textHeight;
+			}else if (sz == 5) {
+				tf_5.text = t;
+				return tf_5.textHeight;
+			}
+			
+			tf_1.text = t;
+			return tf_1.textHeight;
+		}
+
+		public static function rbigprint(x:int, y:int, t:String, r:int, g:int, b:int, cen:Boolean = false, sc:Number = 2):void {
+			x = x - len(t, sc);
+			bigprint(x, y, t, r, g, b, cen, sc);
+		}
+
+		public static function bigprint(x:int, y:int, t:String, r:int, g:int, b:int, cen:Boolean = false, sc:Number = 2):void {
+			if (r < 0) r = 0; if (g < 0) g = 0; if (b < 0) b = 0;
+			if (r > 255) r = 255; if (g > 255) g = 255; if (b > 255) b = 255;
+			
+			y -= 3;
+			
+			if (sc == 2) {
+				tf_2.text = t;
+				if (cen) x = screenwidthmid - (tf_2.textWidth / 2);
+				
+				shapematrix.translate(x, y);
+				tf_2.textColor = RGB(r, g, b);
+				backbuffer.draw(tf_2, shapematrix);
+				
+				shapematrix.translate(-x, -y);
+			}else if (sc == 3) {
+				tf_3.text = t;
+				if (cen) x = screenwidthmid - (tf_3.textWidth / 2);
+				
+				shapematrix.translate(x, y);
+				tf_3.textColor = RGB(r, g, b);
+				backbuffer.draw(tf_3, shapematrix);
+				
+				shapematrix.translate(-x, -y);
+			}else if (sc == 4) {
+				tf_4.text = t;
+				if (cen) x = screenwidthmid - (tf_4.textWidth / 2);
+				
+				shapematrix.translate(x, y);
+				tf_4.textColor = RGB(r, g, b);
+				backbuffer.draw(tf_4, shapematrix);
+				
+				shapematrix.translate(-x, -y);
+			}else if (sc == 5) {
+				tf_5.textColor = RGB(r, g, b);
+				tf_5.text = t;
+				if (cen) x = screenwidthmid - (tf_5.textWidth / 2);
+				
+				shapematrix.translate(x, y);
+				backbuffer.draw(tf_5, shapematrix);
+				shapematrix.translate(-x, -y);
+			}
+		}
+		
+		public static function RGB(red:Number,green:Number,blue:Number):Number{
+			return (blue | (green << 8) | (red << 16))
+		}
+		
+		//Render functions
+		public static function normalrender():void {
+			backbuffer.unlock();
+			
+			screenbuffer.lock();
+			screenbuffer.copyPixels(backbuffer, backbuffer.rect, tl, null, null, false);
+			screenbuffer.unlock();
+			
+			backbuffer.lock();
+		}
+
+		public static function render():void {
+			if (control.test) {
+				backbuffer.fillRect(new Rectangle(0, 0, screenwidth, 10), 0x000000);
+				print(5, 0, control.teststring, 2, false);
+			}
+			
+			normalrender();
+		}
+		  
+		public static var icons:Vector.<BitmapData> = new Vector.<BitmapData>;
+		public static var ct:ColorTransform;
+	  public static var icons_rect:Rectangle;
+	  public static var tl:Point = new Point(0, 0);
+		public static var images:Array = new Array();
+		public static var trect:Rectangle, tpoint:Point, tbuffer:BitmapData;
+		public static var i:int, j:int, k:int, l:int, mbi:int, mbj:int;
+		
+		public static var screenwidth:int, screenheight:int;
+		public static var screenwidthmid:int, screenheightmid:int;
+		public static var screenviewwidth:int, screenviewheight:int;
+		public static var screenscale:int;
+		public static var linesize:int, patternheight:int, patternwidth:int, patterncount:int;
+		public static var pianorollposition:int;
+		
+		public static var temp:int, temp2:int, temp3:int;
+		public static var alphamult:uint;
+		public static var stemp:String;
+		public static var buffer:BitmapData;
+		public static var temppal:int;
+		
+		public static var zoom:int, zoomoffset:Number;
+		
+		public static var tempicon:BitmapData;
+		//Actual backgrounds
+		public static var backbuffer:BitmapData;
+		public static var screenbuffer:BitmapData;
+		public static var screen:Bitmap;
+		//Tempshape
+		public static var tempshape:Shape = new Shape();
+		public static var shapematrix:Matrix = new Matrix();
+		
+		[Embed(source = "graphics/font.swf", symbol = "FFF Aquarius Bold Condensed")]
+		public static var ttffont:Class;
+		public static var tf_1:TextField = new TextField();
+		public static var tf_2:TextField = new TextField();
+		public static var tf_3:TextField = new TextField();
+		public static var tf_4:TextField = new TextField();
+		public static var tf_5:TextField = new TextField();
+		public static var fontsize:Vector.<int> = new Vector.<int>;
+		
+		public static var pal:Vector.<paletteclass> = new Vector.<paletteclass>;
+		
+		public static var buttonpress:int;
+		
+		public static var stage:Stage;
 	}
 }

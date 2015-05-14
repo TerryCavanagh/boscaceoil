@@ -1,4 +1,4 @@
-﻿public function render(key:KeyPoll, gfx:graphicsclass, control:controlclass):void {
+﻿public function render(key:KeyPoll):void {
 	var i:int, j:int, k:int;
 	
 	//Background
@@ -24,19 +24,19 @@
 	
 	switch(control.currenttab) {
 		case control.MENUTAB_FILE:
-			gfx.drawmenu(control);
+			gfx.drawmenu();
 		break;
 		case control.MENUTAB_ARRANGEMENTS:
-			gfx.drawarrangementeditor(control);
-			gfx.drawtimeline(control);
-			gfx.drawpatternmanager(control);
+			gfx.drawarrangementeditor();
+			gfx.drawtimeline();
+			gfx.drawpatternmanager();
 		break;
 	  case control.MENUTAB_INSTRUMENTS:
-		  gfx.drawinstrumentlist(control);
-			gfx.drawinstrument(control);
+		  gfx.drawinstrumentlist();
+			gfx.drawinstrument();
 		break;
 		case control.MENUTAB_ADVANCED:
-			gfx.drawadvancedmenu(control);
+			gfx.drawadvancedmenu();
 		break;
 	}
 	
@@ -58,7 +58,7 @@
 		  gfx.print(0, 170, "NOW EXPORTING AS WAV, PLEASE WAIT", 0, true, true);
 		}
 	}else if(control.currentbox>-1){
-	  gfx.drawpatterneditor(control);
+	  gfx.drawpatterneditor();
 	}else {
 		gfx.fillrect(0, gfx.pianorollposition + gfx.linesize, gfx.screenwidth, gfx.linesize * 13, 14);
 	}
@@ -70,14 +70,16 @@
 	}
 	
 	//Draw pop up lists over all that
-	gfx.drawlist(control);
+	gfx.drawlist();
 	
 	//Draw mouse dragging stuff over everything
 	if (control.dragaction == 1 || control.dragaction == 2) {
 		if (Math.abs(control.mx - control.dragx) > 4 || Math.abs(control.my - control.dragy) > 4) {
-			gfx.drawmusicbox(control, control.mx, control.my, control.dragpattern);
+			gfx.drawmusicbox(control.mx, control.my, control.dragpattern);
 		}
 	}
 	
-	gfx.render(control);
+	guiclass.drawbuttons();
+	
+	gfx.render();
 }

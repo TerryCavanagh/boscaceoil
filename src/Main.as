@@ -66,24 +66,25 @@ package{
 			}
 			
 			key = new KeyPoll(stage);
-			control = new controlclass();
-			gfx.init();
+			guiclass.init();
+			control.init();
+			gfx.init(stage);
 			var tempbmp:Bitmap;
 			tempbmp = new im_icons();	gfx.buffer = tempbmp.bitmapData;	gfx.makeiconarray();
 			
 			tempbmp = new im_logo();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			gfx.buffer = new BitmapData(384, 240, false, 0x000000);
-			control.voicelist.fixlengths(gfx);
+			control.voicelist.fixlengths();
 			stage.fullScreenSourceRect = new Rectangle(0, 0, 768, 480);
-			addChild(gfx);
+			addChild(gfx.screen);
 			
-			control.loadscreensettings(gfx);
-			updategraphicsmode(control);
+			control.loadscreensettings();
+			updategraphicsmode();
 			
 			CONFIG::desktop {
 				_startMainLoop();
 			}
-
+			
 			CONFIG::web {
 				if (ExternalInterface.available) {
 					if (ExternalInterface.call("Bosca._isReady")) {
@@ -128,17 +129,17 @@ package{
 			control.mx = (mouseX / 2);
 			control.my = (mouseY / 2);
 				
-			input(key, gfx, control);
+			input(key);
 		}
 		
     public function _logic():void {
-			logic(key, gfx, control);
+			logic(key);
 			help.updateglow();
 		}
 		
 		public function _render():void {
 			gfx.backbuffer.lock();
-			render(key, gfx, control);			
+			render(key);			
 		}
 		
 		public function mainloop(e:TimerEvent):void {
@@ -161,14 +162,14 @@ package{
 			}
 		}
 		
-		public function updategraphicsmode(control:controlclass):void {
+		public function updategraphicsmode():void {
 		 	if (control.fullscreen) {
 				stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 			}else {
 				stage.displayState = StageDisplayState.NORMAL;
 			}
 			
-			control.savescreensettings(gfx);
+			control.savescreensettings();
 		}
 		
 		CONFIG::desktop {
@@ -185,8 +186,6 @@ package{
 			}
 		}
 		
-		public var gfx:graphicsclass = new graphicsclass();
-		public var control:controlclass;
 		public var key:KeyPoll;
 		
 		// Timer information (a shout out to ChevyRay for the implementation)

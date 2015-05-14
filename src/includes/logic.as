@@ -1,4 +1,4 @@
-﻿public function logic(key:KeyPoll, gfx:graphicsclass, control:controlclass):void {
+﻿public function logic(key:KeyPoll):void {
 	var i:int, j:int, k:int;
 	
 	if (control.messagedelay > 0) control.messagedelay--;

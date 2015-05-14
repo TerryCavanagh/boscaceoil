@@ -396,7 +396,7 @@ package {
 			create("DRUMKIT", "Midi Drumkit", "drumkit.3", 20);
 		}
 		
-		public function fixlengths(gfx:graphicsclass):void {
+		public function fixlengths():void {
 			//Fix the lengths of the names
 			for (var i:int = 0; i < listsize; i++) {
 				while (gfx.len(name[i]) > 95) {
