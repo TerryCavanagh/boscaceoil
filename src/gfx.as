@@ -488,32 +488,6 @@
 		}
 		
 		public static function drawadvancedmenu():void {
-			fillrect(20, (linesize * 3)+2, 160, linesize, 1);
-			rprint(100, (linesize * 3) +2, "SOUND BUFFER ", 0, true);
-			drawicon(125, (linesize * 3) + 2, 0);
-			print(140, (linesize * 3) +2, String(control.buffersize), 0, false, true);
-			
-			if (control.buffersize != control.currentbuffersize) {
-			  if (help.slowsine >= 32) {
-				  print(24, (linesize * 4) + 7, "REQUIRES RESTART", 0);
-				}else {
-				  print(24, (linesize * 4) + 7, "REQUIRES RESTART", 15);
-				}
-			}
-			
-			fillrect(20, (linesize * 6) + 2, 160, linesize, 1);
-      rprint(80, (linesize * 6) + 2, "SWING", 0, true);
-      drawicon(105, (linesize * 6) + 2, 3);
-			if(control.swing==-10){
-        print(120, (linesize * 6) + 2, String(control.swing), 0, false, true);
-			}else if (control.swing < 0 || control.swing == 10 ) {
-				print(125, (linesize * 6) + 2, String(control.swing), 0, false, true);
-			}else{
-				print(130, (linesize * 6) + 2, String(control.swing), 0, false, true);
-			}
-      drawicon(150, (linesize * 6) + 2, 2);
-			print(24, (linesize * 7) + 7, "Swing function by @increpare", 2);
-			
 			//Switches for global controls!
 			fillrect(screenwidth - 120, (linesize * 3)+2, 110, 10, 6);
       drawicon(screenwidth - 135, (linesize * 3) + 2, 0);
@@ -521,7 +495,7 @@
 				
 			j = 0;
 			fillrect(screenwidth - 120 +j, (linesize * 3) + 2, 10, 10, 6);
-			fillrect(screenwidth - 120 +j+ 1, (linesize * 3) + 2 + 1, 8, 8, 5);		
+			fillrect(screenwidth - 120 +j+ 1, (linesize * 3) + 2 + 1, 8, 8, 5);
 				
 			j = int((control.effectvalue));
 			fillrect(screenwidth - 120 +j, (linesize * 3) + 2, 10, 10, 1);

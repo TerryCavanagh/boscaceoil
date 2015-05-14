@@ -43,6 +43,10 @@ package {
 			addbutton(x, y, 16, 16, "", action, "rightarrow");
 		}
 		
+		public static function adddownarrow(x:int, y:int, action:String):void {
+			addbutton(x, y, 16, 16, "", action, "downarrow");
+		}
+		
 		public static function addvariable(x:int, y:int, variable:String, col:int = 0):void {
 			addbutton(x, y, col, 0, "", variable, "variable");
 		}
@@ -50,23 +54,37 @@ package {
 		public static function addcontrol(x:int, y:int, type:String):void {
 			//For complex multipart things
 			if (type == "changepatternlength") {
-				addrect(220, (gfx.linesize * 7) - 1, 160, gfx.linesize);
-				addrighttextlabel(280, (gfx.linesize * 7) - 1, "PATTERN", 0);
+				addrect(x, y, 160, gfx.linesize);
+				addrighttextlabel(x + 60, y, "PATTERN", 0);
 				
-				addleftarrow(290, (gfx.linesize * 7) - 1 , "barcountdown");
-				addvariable(305, (gfx.linesize * 7) - 1, "barcount");
-				addrightarrow(320, (gfx.linesize * 7) - 1 , "barcountup");
+				addleftarrow(x + 70, y , "barcountdown");
+				addvariable(x + 85, y, "barcount");
+				addrightarrow(x + 100, y, "barcountup");
 				
-				addleftarrow(335, (gfx.linesize * 7) - 1 , "boxcountdown");
-				addvariable(345, (gfx.linesize * 7) - 1, "boxcount");
-				addrightarrow(365, (gfx.linesize * 7) - 1 , "boxcountup");
+				addleftarrow(x + 115, y, "boxcountdown");
+				addvariable(x + 125, y, "boxcount");
+				addrightarrow(x + 145, y, "boxcountup");
 			}else if (type == "changebpm") {
-				addrect(220, (gfx.linesize * 9) - 1, 160, gfx.linesize);
-				addrighttextlabel(280, (gfx.linesize * 9) - 1, "BPM", 0);
+				addrect(x, y, 160, gfx.linesize);
+				addrighttextlabel(x + 60, y, "BPM", 0);
 				
-				addleftarrow(305, (gfx.linesize * 9) - 1 , "bpmdown");
-				addvariable(320, (gfx.linesize * 9) - 1, "bpm");
-				addrightarrow(350, (gfx.linesize * 9) - 1 , "bpmup");
+				addleftarrow(x + 85, y, "bpmdown");
+				addvariable(x + 100, y, "bpm");
+				addrightarrow(x + 130, y, "bpmup");
+			}else if (type == "changesoundbuffer") {
+				addrect(x, y, 160, gfx.linesize);
+				addrighttextlabel(x + 80, y, "SOUND BUFFER ", 0);
+				
+				adddownarrow(x + 105, y, "bufferlist");
+				addvariable(x + 120, y, "buffersize");
+				addvariable(x + 4, y + gfx.linesize + 5, "buffersizealert");
+			}else if (type == "swingcontrol") {
+				addrect(x, y, 160, gfx.linesize);
+				addrighttextlabel(x + 60, y, "SWING", 0);
+				
+				addleftarrow(x + 85, y, "swingdown");
+				addvariable(x + 100, y, "swing");
+				addrightarrow(x + 130, y, "swingup");
 			}
 		}
 		
@@ -124,10 +142,13 @@ package {
 						button[i].mouseover = false;
 					}
 					
-					if (key.click) {
-						if (button[i].mouseover) {
-							dobuttonaction(i);
-						  //button[i].selected = true;
+					if (button[i].action != "" && !control.list.active) {
+						if (key.click) {
+							if (button[i].mouseover) {
+								dobuttonaction(i);
+								key.click = false;
+								//button[i].selected = true;
+							}
 						}
 					}
 				}
@@ -166,6 +187,10 @@ package {
 						gfx.drawicon(button[i].position.x, button[i].position.y, 3);
 					}else if (button[i].style == "rightarrow") {
 						gfx.drawicon(button[i].position.x, button[i].position.y, 2);
+					}else if (button[i].style == "uparrow") {
+						gfx.drawicon(button[i].position.x, button[i].position.y, 1);
+					}else if (button[i].style == "downarrow") {
+						gfx.drawicon(button[i].position.x, button[i].position.y, 0);
 					}else if (button[i].style == "variable") {
 						if(button[i].action == "barcount"){
 						  gfx.print(button[i].position.x, button[i].position.y, String(control.barcount), button[i].position.width, false, true);
@@ -173,6 +198,24 @@ package {
 						  gfx.print(button[i].position.x, button[i].position.y, String(control.boxcount), button[i].position.width, false, true);
 						}else if(button[i].action == "bpm"){
 						  gfx.print(button[i].position.x, button[i].position.y, String(control.bpm), button[i].position.width, false, true);
+						}else if(button[i].action == "buffersize"){
+						  gfx.print(button[i].position.x, button[i].position.y, String(control.buffersize), button[i].position.width, false, true);
+						}else if (button[i].action == "buffersizealert") {
+							if (control.buffersize != control.currentbuffersize) {
+								if (help.slowsine >= 32) {
+									gfx.print(button[i].position.x, button[i].position.y, "REQUIRES RESTART", 0);
+								}else {
+									gfx.print(button[i].position.x, button[i].position.y, "REQUIRES RESTART", 15);
+								}
+							}
+						}else if (button[i].action == "swing") {
+							if(control.swing==-10){
+								gfx.print(button[i].position.x, button[i].position.y, String(control.swing), 0, false, true);
+							}else if (control.swing < 0 || control.swing == 10 ) {
+								gfx.print(button[i].position.x + 5, button[i].position.y, String(control.swing), 0, false, true);
+							}else{
+								gfx.print(button[i].position.x + 10, button[i].position.y, String(control.swing), 0, false, true);
+							}
 						}
 					}else if (button[i].style == "logo") {
 						tx = button[i].position.x;
@@ -265,7 +308,7 @@ package {
 					
 					CONFIG::desktop {
 						addbutton(220, gfx.linesize * 2, 75, 10, "NEW SONG", "newsong");
-						addbutton(305, gfx.linesize * 2, 75, 10, "EXPORT .wav", "exportwav", "normal", -5);
+						addbutton(305, gfx.linesize * 2, 75, 10, "EXPORT", "exportlist", "normal", 10);
 						//addbutton(305, gfx.linesize * 3, 75, 10, "EXPORT .xm", "exportxm");
 						addbutton(220, (gfx.linesize * 4) + 5, 75, 10, "LOAD .ceol", "loadceol");
 						addbutton(305, (gfx.linesize * 4) + 5, 75, 10, "SAVE .ceol", "saveceol");
@@ -291,18 +334,22 @@ package {
 					
 					addbutton(302, (gfx.linesize * 9)+4, 75, 10, "BACK", "filetab", "normal", 16);
 				break;
+			  case control.MENUTAB_ADVANCED:
+				  addcontrol(20, (gfx.linesize * 3) + 2, "changesoundbuffer");
+					addcontrol(20, (gfx.linesize * 6) + 2, "swingcontrol");
+				break;
 			}
 		}
 		
 		public static function dobuttonaction(i:int):void {
 			currentbutton = button[i].action;
+			//trace("doing action... TEXT:" + button[i].text + ", ACTION:" + button[i].action + ", STYLE:" + button[i].style);
 			
 			if (currentbutton == "newsong") {
 				control.newsong();
-			}else if (currentbutton == "exportwav") {
-				control.exportwav();
-			}else if (currentbutton == "exportxm") {
-				control.exportxm();
+			}else if (currentbutton == "exportlist") {
+				control.filllist(control.LIST_EXPORTS);
+				control.list.init(gfx.screenwidth - 100, (gfx.linesize * 3) - 1);
 			}else if (currentbutton == "loadceol") {
 				control.loadceol();
 			}else if (currentbutton == "saveceol") {
@@ -339,8 +386,16 @@ package {
 				control.bpm += 5;
 				if (control.bpm > 220) control.bpm = 220;
 				control._driver.bpm = control.bpm;
+			}else if (currentbutton == "bufferlist") {
+				control.filllist(control.LIST_BUFFERSIZE);
+				control.list.init(105, (gfx.linesize * 4) - 3);
+			}else if (currentbutton == "swingup") {
+				control.swing ++;
+				if (control.swing > 10) control.swing = 10;
+			}else if (currentbutton == "swingdown") {
+				control.swing --;
+				if (control.swing < -10) control.swing = -10;
 			}
-		
 		}
 		
 		public static var button:Vector.<guibutton> = new Vector.<guibutton>;

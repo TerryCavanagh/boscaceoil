@@ -181,6 +181,15 @@
 						control.savescreensettings();
 						control.list.close();
 					}
+					
+					if (control.list.type == control.LIST_EXPORTS) {
+						if (control.list.selection) {
+							control.exportwav();
+						}else {
+							control.exportxm();
+						}
+						control.list.close();
+					}
 				}else {
 					control.list.close();
 				}
@@ -312,20 +321,6 @@
 						}
 					}
 				}else if (control.currenttab == control.MENUTAB_ADVANCED) {					
-					//Buffer size control
-					if (help.inboxw(control.mx, control.my, 120, (gfx.linesize * 3), 70, 10)) {
-						control.filllist(control.LIST_BUFFERSIZE);
-						control.list.init(105, (gfx.linesize * 4) - 3);
-					}
-					//Swing controls
-					if (help.inboxw(control.mx, control.my, 100, (gfx.linesize * 6) - 1, 10, 10)) {
-						control.swing --;
-						if (control.swing < -10) control.swing = -10;
-					}
-					if (help.inboxw(control.mx, control.my, 150, (gfx.linesize * 6) - 1, 10, 10)) {
-						control.swing ++;
-						if (control.swing > 10) control.swing = 10;
-					} 
 					//Effects
 					if (help.inboxw(control.mx, control.my, gfx.screenwidth - 150, (gfx.linesize * 3), 25, 10)) {
 						control.filllist(control.LIST_EFFECTS);

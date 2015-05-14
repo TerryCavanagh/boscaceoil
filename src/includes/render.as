@@ -67,6 +67,8 @@
 		gfx.fillrect(0, gfx.pianorollposition + gfx.linesize, gfx.screenwidth, gfx.linesize * 13, 14);
 	}
 	
+	guiclass.drawbuttons();
+	
 	if (control.messagedelay > 0) {
 		i = control.messagedelay > 10?10:control.messagedelay;
 		gfx.fillrect(0, gfx.screenheight - i, gfx.screenwidth, 10, 16);
@@ -82,8 +84,6 @@
 			gfx.drawmusicbox(control.mx, control.my, control.dragpattern);
 		}
 	}
-	
-	guiclass.drawbuttons();
 	
 	gfx.render();
 }

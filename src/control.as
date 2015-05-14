@@ -52,6 +52,7 @@
 		public static var LIST_BUFFERSIZE:int = 5;
 		public static var LIST_SCREENSIZE:int = 6;
 		public static var LIST_EFFECTS:int = 7;
+		public static var LIST_EXPORTS:int = 8;
 		
 		public static var MENUTAB_FILE:int = 0;
 		public static var MENUTAB_ARRANGEMENTS:int = 1;
@@ -819,6 +820,11 @@
 					}
 					list.numitems = 7;
 				break;
+				case LIST_EXPORTS:
+					list.item[0] = "EXPORT .wav";
+					list.item[1] = "EXPORT .xm (wip)";
+					list.numitems = 2;
+				break;
 			}
 		}
 		
@@ -1208,7 +1214,7 @@
 			file = File.desktopDirectory.resolvePath("*.xm");
 			file.addEventListener(Event.SELECT, onexportxm);
 			file.browseForSave("Export .XM module file");
-
+			
 			fixmouseclicks = true;
 		}
 
@@ -1348,7 +1354,7 @@
 				file.addEventListener(Event.SELECT, onsavewav);
 				file.browseForSave("Export .wav File");
 			}
-
+			
 			CONFIG::web {
 				var b64:Base64Encoder = new Base64Encoder();
 				_wav.position = 0;
