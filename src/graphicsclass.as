@@ -482,12 +482,11 @@
 		public function drawmenu(control:controlclass):void {
 			bigprint(12, (linesize * 2) + 2 - 5, "BOSCA CEOIL", 0, 0, 0, false, 3);
 			if (control.looptime % control.barcount==1) {
-				bigprint(10-2+(Math.random()*4), linesize*2-5-6+(Math.random()*4), "BOSCA CEOIL", 255 - (help.glow*4), 255 - help.glow, 64 + (help.glow*2), false, 3);
+				drawimage(0, 10 + (Math.random() * 4), (linesize * 2) - 7 + (Math.random() * 4));
 			}else{
-			  bigprint(10, linesize * 2 - 5, "BOSCA CEOIL", 255 - (help.glow * 4), 255 - help.glow, 64 + (help.glow * 2), false, 3);
+			  drawimage(0, 12, (linesize * 2) - 1);
 			}
-			print(165, (linesize * 4)+4, "v1.2", 2, false, true);
-			
+			print(165, (linesize * 4) + 4, "v2.0", 2, false, true);
 			
 			print(10, (linesize * 5) + 5, "SiON softsynth library by Kei Mesuda", 2, false, true);
 			print(10, (linesize * 6) + 5, "XM Exporter by Rob Hunter", 2, false, true);

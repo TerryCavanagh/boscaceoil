@@ -1,3 +1,9 @@
+Version 2.0
+---------
+ 
+ * Major update!
+ 
+
 Version 1.1 (1st September 2013)
 ---------
 

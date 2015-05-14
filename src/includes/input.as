@@ -42,7 +42,7 @@
 		}
 		
 		if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 10) {
-			if (control.currenttab == 1) {
+			if (control.currenttab == control.MENUTAB_ARRANGEMENTS) {
 				//Priority: Timeline, Pattern manager, arrangements
 				if (control.mx > (gfx.patterncount * 6)) {
 					//Pattern Manager
@@ -61,7 +61,7 @@
 					control.arrangecury = (control.arrangecury - (control.arrangecury % gfx.patternheight)) / gfx.patternheight;
 					if (control.arrangecury > 7) control.arrangecury = 7;
 				}
-			}else if (control.currenttab == 2) {
+			}else if (control.currenttab == control.MENUTAB_INSTRUMENTS) {
 				if (control.mx < 140) {
 					control.instrumentcury = control.my - gfx.linesize;
 					control.instrumentcury = (control.instrumentcury - (control.instrumentcury % gfx.patternheight)) / gfx.patternheight;
@@ -186,11 +186,11 @@
 			}else if (control.my <= gfx.linesize) {
 				//Change tabs
 				if (control.mx < (gfx.screenwidth-40) / 4) {
-					control.currenttab = 0;
+					control.currenttab = control.MENUTAB_FILE;
 				}else if (control.mx < (2*(gfx.screenwidth-40)) / 4) {
-					control.currenttab = 1;
+					control.currenttab = control.MENUTAB_ARRANGEMENTS;
 				}else if (control.mx < (3*(gfx.screenwidth-40)) / 4) {
-					control.currenttab = 2;
+					control.currenttab = control.MENUTAB_INSTRUMENTS;
 				}else if (control.mx >= gfx.screenwidth - 20) {
 					if (control.fullscreen) {control.fullscreen = false;
 					}else {control.fullscreen = true;}
@@ -199,7 +199,7 @@
 					control.filllist(control.LIST_SCREENSIZE);
 					control.list.init(gfx, gfx.screenwidth - 40, gfx.linesize - 2);
 				}else{
-					control.currenttab = 3;
+					control.currenttab = control.MENUTAB_ADVANCED;
 				}
 			}else if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 10) {				
 				if (control.currenttab == control.MENUTAB_FILE) {
@@ -423,7 +423,7 @@
 		}
 		
 		if (key.press && !control.clicklist) {
-			if (control.currenttab == 3) {
+			if (control.currenttab == control.MENUTAB_ADVANCED) {
 				if (control.mx >= gfx.screenwidth - 125 && control.my >= (gfx.linesize * 3) + 2 && control.my <= (gfx.linesize * 3) + 12 ) {
 					i = control.mx - (gfx.screenwidth - 115);
 					if (i < 0) i = 0; if(i>100) i=100;
@@ -431,7 +431,7 @@
 					control.effectvalue = i;
 					control.updateeffects();
 				}
-			}else if (control.currenttab == 2) {
+			}else if (control.currenttab == control.MENUTAB_INSTRUMENTS) {
 				if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 10) {				
 					if (control.mx >= 140 && control.my > 35 && control.mx < gfx.screenwidth - 25) {
 						i = control.mx - 140; j = control.my - 40;
@@ -487,9 +487,9 @@
 		
 		if (key.rightpress) {
 			if (control.my > gfx.linesize && control.my < gfx.pianorollposition+gfx.linesize) {
-				if (control.currenttab == 0) {
+				if (control.currenttab == control.MENUTAB_FILE) {
 					//Files
-				}else if (control.currenttab == 1) {
+				}else if (control.currenttab == control.MENUTAB_ARRANGEMENTS) {
 					//Arrangements
 					//Timeline
 					if(key.rightclick){
@@ -510,7 +510,7 @@
 							control.arrange.removepattern(control.arrangecurx + control.arrange.viewstart, control.arrangecury);
 						}
 					}
-				}else if (control.currenttab == 2) {
+				}else if (control.currenttab == control.MENUTAB_INSTRUMENTS) {
 					//Instruments
 				}
 			}
@@ -518,9 +518,9 @@
 		
 		if (key.middleclick) {
 			if (control.my > gfx.linesize && control.my < gfx.pianorollposition + gfx.linesize) {
-				if (control.currenttab == 0) {
+				if (control.currenttab == control.MENUTAB_FILE) {
 					//Files
-				}else if (control.currenttab == 1) {
+				}else if (control.currenttab == control.MENUTAB_ARRANGEMENTS) {
 					//Arrangements
 					//Timeline
 					if (control.timelinecurx > -1) {
@@ -548,7 +548,7 @@
 							control.dragx = control.mx; control.dragy = control.my;
 						}
 					}
-				}else if (control.currenttab == 2) {
+				}else if (control.currenttab == control.MENUTAB_INSTRUMENTS) {
 					//Instruments
 				}
 			}

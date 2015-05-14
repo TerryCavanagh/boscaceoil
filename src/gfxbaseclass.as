@@ -90,8 +90,18 @@ package{
 			tpoint.y = y;
 		}
 		
+		public function addimage():void {
+			var t:BitmapData = new BitmapData(buffer.width, buffer.height, true, 0x000000);
+			t.copyPixels(buffer, new Rectangle(0,0,buffer.width, buffer.height), tl);
+			images.push(t);
+		}
+		
+		public function drawimage(t:int, xp:int, yp:int):void {
+			backbuffer.copyPixels(images[t], new Rectangle(0,0,images[t].width, images[t].height), new Point(xp, yp));
+		}
+		
 		public function makeiconarray():void {
-			for (var i:int = 0; i < 6; i++) {
+			for (var i:int = 0; i < 20; i++) {
 				var t:BitmapData = new BitmapData(16, 16, true, 0x000000);
 				var temprect:Rectangle = new Rectangle(i * 16, 0, 16, 16);	
 				t.copyPixels(buffer, temprect, tl);
@@ -315,6 +325,7 @@ package{
 		public var ct:ColorTransform;
 	  public var icons_rect:Rectangle;
 	  public var tl:Point = new Point(0, 0);
+		public var images:Array = new Array();
 		public var trect:Rectangle, tpoint:Point, tbuffer:BitmapData;
 		public var i:int, j:int, k:int, l:int, mbi:int, mbj:int;
 		

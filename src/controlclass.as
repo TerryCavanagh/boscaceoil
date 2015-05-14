@@ -64,7 +64,7 @@
 			
 			test = false; teststring = "TEST = True";
 			patternmanagerview = 0;
-			currenttab = 0;
+			currenttab = MENUTAB_FILE;
 			dragaction = 0;
 			trashbutton = 0;
 			bpm = 120;
@@ -923,7 +923,7 @@
 		}
 		
 		public function newsong():void {
-			currenttab = 0;
+			currenttab = MENUTAB_FILE;
 			bpm = 120; boxcount = 16; barcount = 4; doublesize = false;
 			effectvalue = 0; effecttype = 0; updateeffects();
 			_driver.bpm = bpm;
@@ -1252,7 +1252,7 @@
 
 		CONFIG::web {
 			public function invokeCeolWeb(ceolStr:String):void {
-				currenttab = 0;
+				currenttab = MENUTAB_FILE;
 				if (ceolStr != "") {
 					filestring = ceolStr;
 					loadfilestring(filestring);
@@ -1308,7 +1308,7 @@
 		}
 		
 		public function exportwav():void {
-			currenttab = 1; clicklist = true;
+			currenttab = MENUTAB_ARRANGEMENTS; clicklist = true;
 			arrange.loopstart = 0; arrange.loopend = arrange.lastbar;
 			musicplaying = true;
 			looptime = 0;	arrange.currentbar = arrange.loopstart;

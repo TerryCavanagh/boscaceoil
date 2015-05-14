@@ -70,6 +70,8 @@ package{
 			gfx.init();
 			var tempbmp:Bitmap;
 			tempbmp = new im_icons();	gfx.buffer = tempbmp.bitmapData;	gfx.makeiconarray();
+			
+			tempbmp = new im_logo();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			gfx.buffer = new BitmapData(384, 240, false, 0x000000);
 			control.voicelist.fixlengths(gfx);
 			stage.fullScreenSourceRect = new Rectangle(0, 0, 768, 480);
@@ -198,5 +200,6 @@ package{
 		
 		//Embedded resources:		
 		[Embed(source = 'graphics/icons.png')]	private var im_icons:Class;
+		[Embed(source = 'graphics/logo.png')]	private var im_logo:Class;
 	}
 }
