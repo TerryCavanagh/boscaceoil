@@ -75,7 +75,13 @@ package{
 			
 			var tempbmp:Bitmap;
 			tempbmp = new im_icons();	gfx.buffer = tempbmp.bitmapData;	gfx.makeiconarray();
-			tempbmp = new im_logo();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
+			tempbmp = new im_logo0();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
+			tempbmp = new im_logo1();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
+			tempbmp = new im_logo2();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
+			tempbmp = new im_logo3();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
+			tempbmp = new im_logo4();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
+			tempbmp = new im_logo5();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
+			tempbmp = new im_logo6();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			gfx.buffer = new BitmapData(384, 240, false, 0x000000);
 			
 			control.voicelist.fixlengths();
@@ -203,6 +209,12 @@ package{
 		
 		//Embedded resources:		
 		[Embed(source = 'graphics/icons.png')]	private var im_icons:Class;
-		[Embed(source = 'graphics/logo.png')]	private var im_logo:Class;
+		[Embed(source = 'graphics/logo_blue.png')]	private var im_logo0:Class;
+		[Embed(source = 'graphics/logo_purple.png')]	private var im_logo1:Class;
+		[Embed(source = 'graphics/logo_red.png')]	private var im_logo2:Class;
+		[Embed(source = 'graphics/logo_orange.png')]	private var im_logo3:Class;
+		[Embed(source = 'graphics/logo_green.png')]	private var im_logo4:Class;
+		[Embed(source = 'graphics/logo_cyan.png')]	private var im_logo5:Class;
+		[Embed(source = 'graphics/logo_gray.png')]	private var im_logo6:Class;
 	}
 }

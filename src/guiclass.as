@@ -221,10 +221,16 @@ package {
 						tx = button[i].position.x;
 						ty = button[i].position.y;
 						gfx.bigprint(tx, ty, "BOSCA CEOIL", 0, 0, 0, false, 3);
+						if(control.currentbox!=-1){
+						  timage = control.musicbox[control.currentbox].palette;
+							if (timage > 6) timage = 6;
+						}else {
+							timage = 6;
+						}
 						if (control.looptime % control.barcount==1) {
-							gfx.drawimage(0, tx - 2 + (Math.random() * 4), ty - 4 + (Math.random() * 4));
+							gfx.drawimage(timage, tx - 2 + (Math.random() * 4), ty - 4 + (Math.random() * 4));
 						}else{
-							gfx.drawimage(0, tx, ty + 2);
+							gfx.drawimage(timage, tx, ty + 2);
 						}
 					}
 				}
@@ -402,7 +408,7 @@ package {
 		public static var numbuttons:int;
 		public static var maxbuttons:int;
 		
-		public static var tx:int, ty:int;
+		public static var tx:int, ty:int, timage:int;
 		public static var currentbutton:String;
 	}
 }
