@@ -406,13 +406,14 @@ package {
 			
 		  switch(t) {
 				case control.MENUTAB_FILE:
-					addlogo(12, (gfx.linesize * 3) - 6);
-					addtextlabel(165, (gfx.linesize * 5) + 4, control.versionnumber);
+					addlogo(12, (gfx.linesize * 2));
+					addtextlabel(165, (gfx.linesize * 5), control.versionnumber);
 					
-					addtextlabel(10, (gfx.linesize * 6)+5, "Created by Terry Cavanagh");
-					addtextlabel(10, (gfx.linesize * 7)+5, "http://www.distractionware.com");
+					addtextlabel(10, (gfx.linesize * 6)+1, "Created by Terry Cavanagh");
+					addtextlabel(10, (gfx.linesize * 7)+1, "http://www.distractionware.com");
 					
-					addbutton(10, (gfx.linesize * 9), 75, "CREDITS", "creditstab");
+					addbutton(10, (gfx.linesize * 9)-3, 60, "CREDITS", "creditstab");
+					addbutton(77, (gfx.linesize * 9)-3, 60, "HELP", "helptab");
 					
 					CONFIG::desktop {
 						addbutton(220, gfx.linesize * 2, 75, "NEW SONG", "newsong");
@@ -424,9 +425,10 @@ package {
 					addcontrol(220, (gfx.linesize * 7) - 1, "changepatternlength");
 					addcontrol(220, (gfx.linesize * 9) - 1, "changebpm");
 					
-					addplayarrow(150, (gfx.linesize * 9), "play");
-					addpausebutton(165, (gfx.linesize * 9), "pause");
-					addstopbutton(180, (gfx.linesize * 9), "stop");
+				  addrect(145, (gfx.linesize * 9)-3, 50, 13);
+					addplayarrow(150, (gfx.linesize * 9)-1, "play");
+					addpausebutton(165, (gfx.linesize * 9)-1, "pause");
+					addstopbutton(180, (gfx.linesize * 9)-1, "stop");
 				break;
 			  case control.MENUTAB_CREDITS:
 				  addtextlabel(10, (gfx.linesize * 2), "SiON softsynth library by Kei Mesuda", 0);
@@ -443,6 +445,10 @@ package {
 					addtextlabel(10, (gfx.linesize * 9), "uncovergame.com/");
 					addrighttextlabel(384-10, (gfx.linesize * 8), "Open Source under FreeBSD licence",0);
 					
+					addbutton(302, (gfx.linesize * 9)+4, 75, "BACK", "filetab");
+				break;
+			  case control.MENUTAB_HELP:
+				  addtextlabel(10, (gfx.linesize * 2), "To do: Help system", 0);
 					addbutton(302, (gfx.linesize * 9)+4, 75, "BACK", "filetab");
 				break;
 			  case control.MENUTAB_ARRANGEMENTS:
@@ -499,12 +505,22 @@ package {
 					control.stopmusic();
 				}
 			}else if (currentbutton == "exportlist") {
-				control.filllist(control.LIST_EXPORTS);
-				control.list.init(gfx.screenwidth - 100, (gfx.linesize * 3) - 1);
+				CONFIG::desktop {
+					control.filllist(control.LIST_EXPORTS);
+					control.list.init(gfx.screenwidth - 100, (gfx.linesize * 3) - 1);
+				}
+				
+				CONFIG::web {
+				  control.exportwav();
+				}
 			}else if (currentbutton == "loadceol") {
-				control.loadceol();
+				CONFIG::desktop {
+					control.loadceol();
+				}
 			}else if (currentbutton == "saveceol") {
-				control.saveceol();
+				CONFIG::desktop {
+				  control.saveceol();
+				}
 			}else if (currentbutton == "filetab") {
 				control.changetab(control.MENUTAB_FILE);
 			}else if (currentbutton == "arrangementstab") {
@@ -515,6 +531,8 @@ package {
 				control.changetab(control.MENUTAB_ADVANCED);
 			}else if (currentbutton == "creditstab") {
 				control.changetab(control.MENUTAB_CREDITS);
+			}else if (currentbutton == "helptab") {
+				control.changetab(control.MENUTAB_HELP);
 			}else if (currentbutton == "barcountdown") {
 				control.barcount--;
 				if (control.barcount < 1) control.barcount = 1;

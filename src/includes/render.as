@@ -5,8 +5,16 @@
 	gfx.fillrect(0, 0, gfx.screenwidth, gfx.screenheight, 1);
 	
 	//Tabs
-	j = (gfx.screenwidth-40) / 4;
-	if (control.currenttab == control.MENUTAB_CREDITS) {
+	CONFIG::desktop {
+	  j = (gfx.screenwidth - 40) / 4;
+	}
+	CONFIG::web {
+	  j = (gfx.screenwidth) / 4;
+	}
+	if (control.currenttab == control.MENUTAB_HELP) {
+	  gfx.fillrect(0, 0, j, gfx.linesize, 5);
+		gfx.print(12, 0, "HELP", control.currenttab == control.MENUTAB_HELP?0:2, false, true);
+	}else if (control.currenttab == control.MENUTAB_CREDITS) {
 	  gfx.fillrect(0, 0, j, gfx.linesize, 5);
 		gfx.print(12, 0, "CREDITS", control.currenttab == control.MENUTAB_CREDITS?0:2, false, true);
 	}else{
@@ -17,13 +25,15 @@
 	gfx.print((j * 2) + 2, 0, "INSTRUMENT", control.currenttab == control.MENUTAB_INSTRUMENTS?0:2, false, true);
 	gfx.print((j * 3) + 2, 0, "ADVANCED", control.currenttab == control.MENUTAB_ADVANCED?0:2, false, true);
 	gfx.fillrect((j * 4), 0, 21, 10, 4);
-	if (control.fullscreen) {
-		gfx.print((j * 4) + 6, 0, "F", 2, false, true);
-	}else{
-	  gfx.print((j * 4) + 2, 0, "x" + String(gfx.screenscale), 2, false, true);
+	CONFIG::desktop {
+		if (control.fullscreen) {
+			gfx.print((j * 4) + 6, 0, "F", 2, false, true);
+		}else{
+			gfx.print((j * 4) + 2, 0, "x" + String(gfx.screenscale), 2, false, true);
+		}
+		gfx.fillrect((j * 4) + 20, 0, 21, 10, 3);
+		gfx.drawicon((j * 4) + 26, 1, control.fullscreen?5:4);
 	}
-	gfx.fillrect((j * 4) + 20, 0, 21, 10, 3);
-	gfx.drawicon((j * 4) + 26, 1, control.fullscreen?5:4);
 	
 	gfx.fillrect(0, gfx.linesize, gfx.screenwidth, gfx.linesize * 10, 5);
 	

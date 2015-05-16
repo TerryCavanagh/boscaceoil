@@ -183,10 +183,12 @@
 					}
 					
 					if (control.list.type == control.LIST_EXPORTS) {
-						if (control.list.selection) {
+						if (control.list.selection == 0) {
 							control.exportwav();
 						}else {
-							control.exportxm();
+					    CONFIG::desktop {
+							  control.exportxm();
+							}
 						}
 						control.list.close();
 					}
@@ -196,21 +198,35 @@
 				control.clicklist = true;
 			}else if (control.my <= gfx.linesize) {
 				//Change tabs
-				if (control.mx < (gfx.screenwidth-40) / 4) {
-					control.changetab(control.MENUTAB_FILE);
-				}else if (control.mx < (2*(gfx.screenwidth-40)) / 4) {
-					control.changetab(control.MENUTAB_ARRANGEMENTS);
-				}else if (control.mx < (3*(gfx.screenwidth-40)) / 4) {
-					control.changetab(control.MENUTAB_INSTRUMENTS);
-				}else if (control.mx >= gfx.screenwidth - 20) {
-					if (control.fullscreen) {control.fullscreen = false;
-					}else {control.fullscreen = true;}
-					updategraphicsmode();
-				}else if (control.mx >= gfx.screenwidth - 40) {
-					control.filllist(control.LIST_SCREENSIZE);
-					control.list.init(gfx.screenwidth - 40, gfx.linesize - 2);
-				}else{
-					control.changetab(control.MENUTAB_ADVANCED);
+	      CONFIG::desktop {
+					if (control.mx < (gfx.screenwidth-40) / 4) {
+						control.changetab(control.MENUTAB_FILE);
+					}else if (control.mx < (2*(gfx.screenwidth-40)) / 4) {
+						control.changetab(control.MENUTAB_ARRANGEMENTS);
+					}else if (control.mx < (3*(gfx.screenwidth-40)) / 4) {
+						control.changetab(control.MENUTAB_INSTRUMENTS);
+					}else if (control.mx >= gfx.screenwidth - 20) {
+						if (control.fullscreen) {control.fullscreen = false;
+						}else {control.fullscreen = true;}
+						updategraphicsmode();
+					}else if (control.mx >= gfx.screenwidth - 40) {
+						control.filllist(control.LIST_SCREENSIZE);
+						control.list.init(gfx.screenwidth - 40, gfx.linesize - 2);
+					}else{
+						control.changetab(control.MENUTAB_ADVANCED);
+					}
+				}
+				
+				CONFIG::web {
+					if (control.mx < (gfx.screenwidth) / 4) {
+						control.changetab(control.MENUTAB_FILE);
+					}else if (control.mx < (2 * (gfx.screenwidth)) / 4) {
+						control.changetab(control.MENUTAB_ARRANGEMENTS);
+					}else if (control.mx < (3 * (gfx.screenwidth)) / 4) {
+						control.changetab(control.MENUTAB_INSTRUMENTS);
+					}else{
+						control.changetab(control.MENUTAB_ADVANCED);
+					}
 				}
 			}else if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 10) {				
 				if (control.currenttab == control.MENUTAB_ARRANGEMENTS) {
