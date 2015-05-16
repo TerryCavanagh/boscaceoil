@@ -28,8 +28,6 @@
 	gfx.fillrect(0, gfx.linesize, gfx.screenwidth, gfx.linesize * 10, 5);
 	
 	switch(control.currenttab) {
-		case control.MENUTAB_FILE:
-		break;
 		case control.MENUTAB_ARRANGEMENTS:
 			gfx.drawarrangementeditor();
 			gfx.drawtimeline();
@@ -38,9 +36,6 @@
 	  case control.MENUTAB_INSTRUMENTS:
 		  gfx.drawinstrumentlist();
 			gfx.drawinstrument();
-		break;
-		case control.MENUTAB_ADVANCED:
-			gfx.drawadvancedmenu();
 		break;
 	}
 	

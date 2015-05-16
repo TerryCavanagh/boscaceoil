@@ -19,42 +19,70 @@ package {
 			maxbuttons = 250;
 		}
 		
+		public static function addbutton(x:int, y:int, w:int, text:String, action:String, textoffset:int = 0):void {
+			addguipart(x, y, w, 13, text, action, "normal", textoffset);
+		}
+		
 		public static function addlogo(x:int, y:int):void {
-			addbutton(x, y, 0, 0, "BOSCA CEOIL", "", "logo");
+			addguipart(x, y, gfx.images[0].width, gfx.images[0].height, "BOSCA CEOIL", "logo", "logo");
 		}
 		
 		public static function addtextlabel(x:int, y:int, text:String, col:int = 2):void {
-			addbutton(x, y, col, 0, text, "", "textlabel");
+			addguipart(x, y, col, 0, text, "", "textlabel");
 		}
 		
 		public static function addrighttextlabel(x:int, y:int, text:String, col:int = 2):void {
-			addbutton(x, y, col, 0, text, "", "righttextlabel");
+			addguipart(x, y, col, 0, text, "", "righttextlabel");
 		}
 		
 		public static function addrect(x:int, y:int, w:int, h:int, col:int = 1):void {
-			addbutton(x, y, w, h, "", "", "fillrect", col);
+			addguipart(x, y, w, h, "", "", "fillrect", col);
 		}
 		
 		public static function addleftarrow(x:int, y:int, action:String):void {
-			addbutton(x, y, 16, 16, "", action, "leftarrow");
+			addguipart(x, y, 16, 16, "", action, "leftarrow");
 		}
 		
 		public static function addrightarrow(x:int, y:int, action:String):void {
-			addbutton(x, y, 16, 16, "", action, "rightarrow");
+			addguipart(x, y, 16, 16, "", action, "rightarrow");
+		}
+		
+		public static function addplayarrow(x:int, y:int, action:String):void {
+			addguipart(x, y, 16, 16, "", action, "playarrow");
+		}
+		
+		public static function addpausebutton(x:int, y:int, action:String):void {
+			addguipart(x, y, 16, 16, "", action, "pause");
+		}
+		
+		public static function addstopbutton(x:int, y:int, action:String):void {
+			addguipart(x, y, 16, 16, "", action, "stop");
+		}
+		
+		public static function addplusbutton(x:int, y:int, action:String):void {
+			addguipart(x, y, 16, 16, "", action, "plus");
+		}
+		
+		public static function addminusbutton(x:int, y:int, action:String):void {
+			addguipart(x, y, 16, 16, "", action, "minus");
 		}
 		
 		public static function adddownarrow(x:int, y:int, action:String):void {
-			addbutton(x, y, 16, 16, "", action, "downarrow");
+			addguipart(x, y, 16, 16, "", action, "downarrow");
 		}
 		
 		public static function addvariable(x:int, y:int, variable:String, col:int = 0):void {
-			addbutton(x, y, col, 0, "", variable, "variable");
+			addguipart(x, y, col, 0, "", variable, "variable");
+		}
+		
+		public static function addhorizontalslider(x:int, y:int, w:int, variable:String):void {
+			addguipart(x, y, w, 0, "", variable, "horizontalslider");
 		}
 		
 		public static function addcontrol(x:int, y:int, type:String):void {
 			//For complex multipart things
 			if (type == "changepatternlength") {
-				addrect(x, y, 160, gfx.linesize);
+				addrect(x, y-2, 160, 13);
 				addrighttextlabel(x + 60, y, "PATTERN", 0);
 				
 				addleftarrow(x + 70, y , "barcountdown");
@@ -65,30 +93,35 @@ package {
 				addvariable(x + 125, y, "boxcount");
 				addrightarrow(x + 145, y, "boxcountup");
 			}else if (type == "changebpm") {
-				addrect(x, y, 160, gfx.linesize);
+				addrect(x, y - 2, 160, gfx.linesize+3);
 				addrighttextlabel(x + 60, y, "BPM", 0);
 				
 				addleftarrow(x + 85, y, "bpmdown");
 				addvariable(x + 100, y, "bpm");
 				addrightarrow(x + 130, y, "bpmup");
 			}else if (type == "changesoundbuffer") {
-				addrect(x, y, 160, gfx.linesize);
+				addrect(x, y - 2, 160, gfx.linesize+3);
 				addrighttextlabel(x + 80, y, "SOUND BUFFER ", 0);
 				
 				adddownarrow(x + 105, y, "bufferlist");
 				addvariable(x + 120, y, "buffersize");
 				addvariable(x + 4, y + gfx.linesize + 5, "buffersizealert");
 			}else if (type == "swingcontrol") {
-				addrect(x, y, 160, gfx.linesize);
+				addrect(x, y - 2, 160, gfx.linesize + 3);
 				addrighttextlabel(x + 60, y, "SWING", 0);
 				
 				addleftarrow(x + 85, y, "swingdown");
 				addvariable(x + 100, y, "swing");
 				addrightarrow(x + 130, y, "swingup");
+			}else if (type == "globaleffects") {
+				addrect(x, y - 2, 110, gfx.linesize + 3, 6);
+				adddownarrow(x - 15, y, "effectslist");
+				addvariable(x - 20, y, "currenteffect");
+				addhorizontalslider(x, y - 2, 100, "currenteffect");
 			}
 		}
 		
-		public static function addbutton(x:int, y:int, w:int, h:int, contents:String, act:String = "", sty:String = "normal", toffset:int = 0):void {
+		public static function addguipart(x:int, y:int, w:int, h:int, contents:String, act:String = "", sty:String = "normal", toffset:int = 0):void {
 			if (button.length == 0) init();
 			
 			var i:int, z:int;
@@ -107,9 +140,12 @@ package {
 					z = numbuttons;
 				}
 			}
-			//trace("addbutton(", x, y, w, h, contents, act, sty, ")", numbuttons);
+			//trace("addguipart(", x, y, w, h, contents, act, sty, ")", numbuttons);
 			button[z].init(x, y, w, h, contents, act, sty);
 			button[z].textoffset = toffset;
+			if (sty == "horizontalslider") {
+				button[z].moveable = true;
+			}
 			numbuttons++;
 		}
 		
@@ -143,11 +179,16 @@ package {
 					}
 					
 					if (button[i].action != "" && !control.list.active) {
+						if (key.press && !control.clicklist) {
+							if (button[i].moveable) {
+								dobuttonmoveaction(i);
+							}
+						}
+						
 						if (key.click) {
 							if (button[i].mouseover) {
 								dobuttonaction(i);
 								key.click = false;
-								//button[i].selected = true;
 							}
 						}
 					}
@@ -167,15 +208,26 @@ package {
 				if (button[i].active && button[i].visable) {
 					if (button[i].style == "normal") {
 						gfx.fillrect(button[i].position.x, button[i].position.y, button[i].position.width, button[i].position.height, 12);
-						
+						if (button[i].pressed > 0) {
+							button[i].pressed--;
+							if (button[i].pressed < 2) {
+								timage = 1;
+							}else{
+								timage = 0;
+							}
+						}else{
+							timage = 2;
+						}
 						if (button[i].mouseover) {
-							gfx.fillrect(button[i].position.x - 2, button[i].position.y - 2, button[i].position.width, button[i].position.height, 20);
+							gfx.fillrect(button[i].position.x - timage, button[i].position.y - timage, button[i].position.width, button[i].position.height, 20);
 						}else {
-							gfx.fillrect(button[i].position.x - 2, button[i].position.y - 2, button[i].position.width, button[i].position.height, 1);
+							gfx.fillrect(button[i].position.x - timage, button[i].position.y - timage, button[i].position.width, button[i].position.height, 1);
 						}
 						
-						tx = button[i].position.x + 7 + button[i].textoffset;
-						ty = button[i].position.y - 1;
+						//tx = button[i].position.x + 7 - timage + button[i].textoffset;
+						tx = button[i].position.x + (button[i].position.width / 2) - (gfx.len(button[i].text) / 2) + button[i].textoffset - timage;
+						ty = button[i].position.y + 2 - timage;
+						
 						gfx.print(tx, ty, button[i].text, 0, false, true);
 					}else if (button[i].style == "textlabel") {
 						gfx.print(button[i].position.x, button[i].position.y, button[i].text, button[i].position.width, false, true);
@@ -187,10 +239,48 @@ package {
 						gfx.drawicon(button[i].position.x, button[i].position.y, 3);
 					}else if (button[i].style == "rightarrow") {
 						gfx.drawicon(button[i].position.x, button[i].position.y, 2);
+					}else if (button[i].style == "playarrow") {
+						if (button[i].pressed > 0) {	
+							gfx.drawicon(button[i].position.x, button[i].position.y + 1, 2);
+							button[i].pressed--;
+						}else{
+							gfx.drawicon(button[i].position.x, button[i].position.y, 2);
+						}
+					}else if (button[i].style == "stop") {
+						if (button[i].pressed > 0) {	
+							gfx.drawicon(button[i].position.x, button[i].position.y + 1, 6);
+							button[i].pressed--;
+						}else{
+							gfx.drawicon(button[i].position.x, button[i].position.y, 6);
+						}
+					}else if (button[i].style == "pause") {
+						if (button[i].pressed > 0) {	
+							gfx.drawicon(button[i].position.x, button[i].position.y + 1, 7);
+							button[i].pressed--;
+						}else{
+							gfx.drawicon(button[i].position.x, button[i].position.y, 7);
+						}
+					}else if (button[i].style == "plus") {
+						gfx.drawicon(button[i].position.x, button[i].position.y, 8);
+					}else if (button[i].style == "minus") {
+						gfx.drawicon(button[i].position.x, button[i].position.y, 9);
 					}else if (button[i].style == "uparrow") {
 						gfx.drawicon(button[i].position.x, button[i].position.y, 1);
 					}else if (button[i].style == "downarrow") {
 						gfx.drawicon(button[i].position.x, button[i].position.y, 0);
+					}else if (button[i].style == "horizontalslider") {
+						if (button[i].action == "currenteffect") {
+							gfx.fillrect(button[i].position.x, button[i].position.y, 10, 13, 6);
+							gfx.fillrect(button[i].position.x + 1, button[i].position.y + 1, 8, 11, 5);
+							
+							tx = int((control.effectvalue));
+							gfx.fillrect(button[i].position.x +tx, button[i].position.y, 10, 13, 4);
+							gfx.fillrect(button[i].position.x +tx + 1, button[i].position.y + 1, 8, 11, 2);
+							
+							gfx.fillrect(button[i].position.x +tx + 2, button[i].position.y + 4, 6, 1, 4);
+							gfx.fillrect(button[i].position.x +tx + 2, button[i].position.y + 6, 6, 1, 4);
+							gfx.fillrect(button[i].position.x +tx + 2, button[i].position.y + 8, 6, 1, 4);
+						}
 					}else if (button[i].style == "variable") {
 						if(button[i].action == "barcount"){
 						  gfx.print(button[i].position.x, button[i].position.y, String(control.barcount), button[i].position.width, false, true);
@@ -216,21 +306,33 @@ package {
 							}else{
 								gfx.print(button[i].position.x + 10, button[i].position.y, String(control.swing), 0, false, true);
 							}
+						}else if (button[i].action == "currenteffect") {
+							gfx.rprint(button[i].position.x, button[i].position.y, control.effectname[control.effecttype], button[i].position.width, true);
 						}
 					}else if (button[i].style == "logo") {
 						tx = button[i].position.x;
 						ty = button[i].position.y;
-						gfx.bigprint(tx, ty, "BOSCA CEOIL", 0, 0, 0, false, 3);
 						if(control.currentbox!=-1){
 						  timage = control.musicbox[control.currentbox].palette;
 							if (timage > 6) timage = 6;
 						}else {
 							timage = 6;
 						}
-						if (control.looptime % control.barcount==1) {
-							gfx.drawimage(timage, tx - 2 + (Math.random() * 4), ty - 4 + (Math.random() * 4));
+						
+						if (button[i].pressed > 0) {
+							gfx.drawimage(7, tx + 3, ty + 1);
+							gfx.drawimage(timage, tx, ty - 4);
+							if (control.looptime % control.barcount == 1) {
+								button[i].pressed--;
+							}
 						}else{
-							gfx.drawimage(timage, tx, ty + 2);
+							if (control.looptime % control.barcount == 1) {
+								gfx.drawimage(7, tx+3, ty + 5 - 4);
+								gfx.drawimage(timage, tx, ty + 2 - 4);
+							}else {
+								gfx.drawimage(7, tx+3, ty + 5);
+								gfx.drawimage(timage, tx, ty + 2);
+							}
 						}
 					}
 				}
@@ -304,24 +406,27 @@ package {
 			
 		  switch(t) {
 				case control.MENUTAB_FILE:
-					addlogo(12, (gfx.linesize * 3) - 3);
+					addlogo(12, (gfx.linesize * 3) - 6);
 					addtextlabel(165, (gfx.linesize * 5) + 4, control.versionnumber);
 					
 					addtextlabel(10, (gfx.linesize * 6)+5, "Created by Terry Cavanagh");
 					addtextlabel(10, (gfx.linesize * 7)+5, "http://www.distractionware.com");
 					
-					addbutton(10, (gfx.linesize * 9), 75, 10, "CREDITS", "creditstab", "normal", 7);
+					addbutton(10, (gfx.linesize * 9), 75, "CREDITS", "creditstab");
 					
 					CONFIG::desktop {
-						addbutton(220, gfx.linesize * 2, 75, 10, "NEW SONG", "newsong");
-						addbutton(305, gfx.linesize * 2, 75, 10, "EXPORT", "exportlist", "normal", 10);
-						//addbutton(305, gfx.linesize * 3, 75, 10, "EXPORT .xm", "exportxm");
-						addbutton(220, (gfx.linesize * 4) + 5, 75, 10, "LOAD .ceol", "loadceol");
-						addbutton(305, (gfx.linesize * 4) + 5, 75, 10, "SAVE .ceol", "saveceol");
+						addbutton(220, gfx.linesize * 2, 75, "NEW SONG", "newsong");
+						addbutton(305, gfx.linesize * 2, 75, "EXPORT", "exportlist");
+						addbutton(220, (gfx.linesize * 4) + 5, 75, "LOAD .ceol", "loadceol");
+						addbutton(305, (gfx.linesize * 4) + 5, 75, "SAVE .ceol", "saveceol");
 					}
 					
 					addcontrol(220, (gfx.linesize * 7) - 1, "changepatternlength");
 					addcontrol(220, (gfx.linesize * 9) - 1, "changebpm");
+					
+					addplayarrow(150, (gfx.linesize * 9), "play");
+					addpausebutton(165, (gfx.linesize * 9), "pause");
+					addstopbutton(180, (gfx.linesize * 9), "stop");
 				break;
 			  case control.MENUTAB_CREDITS:
 				  addtextlabel(10, (gfx.linesize * 2), "SiON softsynth library by Kei Mesuda", 0);
@@ -338,21 +443,61 @@ package {
 					addtextlabel(10, (gfx.linesize * 9), "uncovergame.com/");
 					addrighttextlabel(384-10, (gfx.linesize * 8), "Open Source under FreeBSD licence",0);
 					
-					addbutton(302, (gfx.linesize * 9)+4, 75, 10, "BACK", "filetab", "normal", 16);
+					addbutton(302, (gfx.linesize * 9)+4, 75, "BACK", "filetab");
+				break;
+			  case control.MENUTAB_ARRANGEMENTS:
+				  addbutton((gfx.patterncount * 6) + 5, gfx.linesize + gfx.pianorollposition - 14, gfx.screenwidth - (gfx.patterncount * 6) - 8, "ADD NEW", "addnewpattern");
+			  break;
+			  case control.MENUTAB_INSTRUMENTS:
+				  addbutton(5, gfx.linesize + gfx.pianorollposition - 14, 132, "ADD NEW INSTRUMENT", "addnewinstrument");
 				break;
 			  case control.MENUTAB_ADVANCED:
 				  addcontrol(20, (gfx.linesize * 3) + 2, "changesoundbuffer");
 					addcontrol(20, (gfx.linesize * 6) + 2, "swingcontrol");
+					addcontrol(gfx.screenwidth - 120,  (gfx.linesize * 3)+2, "globaleffects");
 				break;
+			}
+		}
+		
+		
+		public static function dobuttonmoveaction(i:int):void {
+			currentbutton = button[i].action;
+			
+			if (currentbutton == "currenteffect") {
+				if (control.mx >= button[i].position.x - 5 && control.my < button[i].position.x + button[i].position.width && control.my >= button[i].position.y -4&& control.my <= button[i].position.y + (gfx.linesize) + 3  + 4) {
+					var barposition:int = control.mx - (button[i].position.x + 5);
+					if (barposition < 0) barposition = 0; 
+					if (barposition > button[i].position.width) barposition = button[i].position.width;
+					
+					control.effectvalue = barposition;
+					control.updateeffects();
+				}
 			}
 		}
 		
 		public static function dobuttonaction(i:int):void {
 			currentbutton = button[i].action;
-			//trace("doing action... TEXT:" + button[i].text + ", ACTION:" + button[i].action + ", STYLE:" + button[i].style);
+			button[i].press();
 			
 			if (currentbutton == "newsong") {
 				control.newsong();
+			  button[i].press();
+			}else if (currentbutton == "logo") {
+				if (!control.musicplaying) {
+					button[i].pressed = 0;
+				}
+			}else if (currentbutton == "play") {
+			  if (!control.musicplaying) {
+					control.startmusic();
+				}
+			}else if (currentbutton == "pause") {
+			  if (control.musicplaying) {
+					control.pausemusic();
+				}
+			}else if (currentbutton == "stop") {
+			  if (control.musicplaying) {
+					control.stopmusic();
+				}
 			}else if (currentbutton == "exportlist") {
 				control.filllist(control.LIST_EXPORTS);
 				control.list.init(gfx.screenwidth - 100, (gfx.linesize * 3) - 1);
@@ -401,6 +546,19 @@ package {
 			}else if (currentbutton == "swingdown") {
 				control.swing --;
 				if (control.swing < -10) control.swing = -10;
+			}else if (currentbutton == "effectslist") {
+				control.filllist(control.LIST_EFFECTS);
+				control.list.init(gfx.screenwidth - 150, (gfx.linesize * 4) - 3);
+			}else if (currentbutton == "addnewinstrument") {
+				if (control.numinstrument < 16) {
+					control.numinstrument++;
+					control.instrumentmanagerview = control.numinstrument - 6;
+					if (control.instrumentmanagerview < 0) control.instrumentmanagerview = 0;
+				}
+			}else if (currentbutton == "addnewpattern") {
+				control.addmusicbox();
+				control.patternmanagerview = control.numboxes - 6;
+				if (control.patternmanagerview < 0) control.patternmanagerview = 0;
 			}
 		}
 		

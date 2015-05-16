@@ -42,8 +42,8 @@
 			pal[20].setto(65, 82, 87);        //Background mouseover
 			
 			//Blue
-			pal[100].setto(26, 75, 251);       //Bar, Bright
-			pal[101].setto(25, 56, 159);       //Bar, Dark
+			pal[100].setto(59, 39, 238);       //Bar, Bright
+			pal[101].setto(43, 33, 151);       //Bar, Dark
 			pal[102].setto(10, 14, 62);       //Guideline
 			pal[103].setto(5, 7, 31);         //Dark guideline
 			pal[104].setto(255,185,95);      //Note, dark part
@@ -53,8 +53,8 @@
 			//Purple
 			pal[110].setto(156, 11, 240);      //Bar, Bright
 			pal[111].setto(91, 5, 143);      //Bar, Dark
-			pal[112].setto(62, 10, 50);       //Guideline
-			pal[113].setto(31, 5, 25);       //Dark guideline
+			pal[112].setto(10, 14, 62);       //Guideline
+			pal[113].setto(5, 7, 31);         //Dark guideline
 			pal[114].setto(255,185,95);      //Note, dark part
 			pal[115].setto(255,255,192);      //Note, bright part
 			pal[116].setto(224,185,255);     //Octave change
@@ -479,35 +479,10 @@
 			}
 		}
 		
-		public static function drawadvancedmenu():void {
-			//Switches for global controls!
-			fillrect(screenwidth - 120, (linesize * 3)+2, 110, 10, 6);
-      drawicon(screenwidth - 135, (linesize * 3) + 2, 0);
-      rprint(screenwidth - 140, (linesize * 3) + 2, control.effectname[control.effecttype], 0, true);
-				
-			j = 0;
-			fillrect(screenwidth - 120 +j, (linesize * 3) + 2, 10, 10, 6);
-			fillrect(screenwidth - 120 +j+ 1, (linesize * 3) + 2 + 1, 8, 8, 5);
-				
-			j = int((control.effectvalue));
-			fillrect(screenwidth - 120 +j, (linesize * 3) + 2, 10, 10, 1);
-			fillrect(screenwidth - 120 +j + 1, (linesize * 3) + 2 + 1, 8, 8, 2);
-		}
-		
 		public static function drawpatternmanager():void {
 			//From here, PATTERN Manager
 			patterncount = 54;
 			fillrect(patterncount * 6, linesize, screenwidth - (patterncount * 6), pianorollposition, 2);
-			
-			//Button
-			fillrect((patterncount * 6) + 5, linesize + pianorollposition - 14 + 4, screenwidth - (patterncount * 6) - 8, 10, 12);
-			if (buttonpress > 0) {
-				fillrect((patterncount * 6) + 5, linesize + pianorollposition - 14+4, screenwidth - (patterncount * 6) - 8, 10, 1);
-				print((patterncount * 6) + 9, linesize + pianorollposition - 14 + 4, "ADD NEW", 0, false, true);
-			}else {
-				fillrect((patterncount * 6) + 5-2, linesize + pianorollposition - 14+2, screenwidth - (patterncount * 6) - 8, 10, 1);
-				print((patterncount * 6) + 7, linesize + pianorollposition - 14 + 2, "ADD NEW", 0, false, true);
-			}
 			
 			//List
 			for (k = 0; k < 7; k++) {
@@ -533,16 +508,6 @@
 		
 		public static function drawinstrumentlist():void {
 			fillrect(0, linesize, 140, pianorollposition, 2);
-			
-			//Button
-			fillrect(5, linesize + pianorollposition - 14 + 4, 140 - 8, 10, 12);
-			if (buttonpress > 0) {
-				fillrect(5, linesize + pianorollposition - 14+4, 140 - 8, 10, 1);
-				print(9+8, linesize + pianorollposition - 14 + 4, "ADD NEW INSTRUMENT", 0, false, true);
-			}else {
-				fillrect(5-2, linesize + pianorollposition - 14+2, 140 - 8, 10, 1);
-				print(7+8, linesize + pianorollposition - 14 + 2, "ADD NEW INSTRUMENT", 0, false, true);
-			}
 			
 			//List
 			for (k = 0; k < 7; k++) {
@@ -957,7 +922,7 @@
 		public static var ct:ColorTransform;
 	  public static var icons_rect:Rectangle;
 	  public static var tl:Point = new Point(0, 0);
-		public static var images:Array = new Array();
+		public static var images:Vector.<BitmapData> = new Vector.<BitmapData>;
 		public static var trect:Rectangle, tpoint:Point, tbuffer:BitmapData;
 		public static var i:int, j:int, k:int, l:int, mbi:int, mbj:int;
 		

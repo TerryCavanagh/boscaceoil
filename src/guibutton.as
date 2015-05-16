@@ -18,9 +18,15 @@ package {
 			style = sty;
 			
 			selected = false;
+			moveable = false;
 			visable = true;
 			active = true;
 			textoffset = 0;
+			pressed = 0;
+		}
+		
+		public function press():void {
+			pressed = 6;
 		}
 		
 		public var position:Rectangle;
@@ -32,7 +38,9 @@ package {
 		public var mouseover:Boolean;
 		public var selected:Boolean;
 		public var active:Boolean;
+		public var moveable:Boolean;
 		
+		public var pressed:int;
 		public var textoffset:int;
 	}
 }

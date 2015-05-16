@@ -1303,12 +1303,25 @@
 			}
 		}
 		
+		public static function pausemusic():void {
+			if (musicplaying) {
+				musicplaying = !musicplaying;
+				if (!musicplaying) notecut();
+			}
+		}
+		
 		public static function stopmusic():void {
 			if (musicplaying) {
 				musicplaying = !musicplaying;
 				looptime = 0;
 				arrange.currentbar = arrange.loopstart;
 				if (!musicplaying) notecut();
+			}
+		}
+		
+		public static function startmusic():void {
+			if (!musicplaying) {
+				musicplaying = !musicplaying;
 			}
 		}
 		

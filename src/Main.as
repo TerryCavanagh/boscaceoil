@@ -71,7 +71,6 @@ package{
 			key = new KeyPoll(stage);
 			control.init();
 			gfx.init(stage);
-			control.changetab(control.MENUTAB_FILE);
 			
 			var tempbmp:Bitmap;
 			tempbmp = new im_icons();	gfx.buffer = tempbmp.bitmapData;	gfx.makeiconarray();
@@ -82,7 +81,10 @@ package{
 			tempbmp = new im_logo4();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			tempbmp = new im_logo5();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			tempbmp = new im_logo6();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
+			tempbmp = new im_logo7();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			gfx.buffer = new BitmapData(384, 240, false, 0x000000);
+			
+			control.changetab(control.MENUTAB_FILE);
 			
 			control.voicelist.fixlengths();
 			stage.fullScreenSourceRect = new Rectangle(0, 0, 768, 480);
@@ -216,5 +218,6 @@ package{
 		[Embed(source = 'graphics/logo_green.png')]	private var im_logo4:Class;
 		[Embed(source = 'graphics/logo_cyan.png')]	private var im_logo5:Class;
 		[Embed(source = 'graphics/logo_gray.png')]	private var im_logo6:Class;
+		[Embed(source = 'graphics/logo_shadow.png')]	private var im_logo7:Class;
 	}
 }

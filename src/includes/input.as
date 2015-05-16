@@ -50,7 +50,7 @@
 					//Pattern Manager
 					control.patterncury = control.my - gfx.linesize - 2;
 					control.patterncury = (control.patterncury - (control.patterncury % gfx.patternheight)) / gfx.patternheight;
-					if (control.patterncury > 7) control.patterncury = 7;
+					if (control.patterncury > 6) control.patterncury = -1;
 				}else if (control.my >= gfx.pianorollposition + 4 || control.dragaction == 3) {
 					//Timeline
 					control.timelinecurx = control.mx;
@@ -67,7 +67,7 @@
 				if (control.mx < 140) {
 					control.instrumentcury = control.my - gfx.linesize;
 					control.instrumentcury = (control.instrumentcury - (control.instrumentcury % gfx.patternheight)) / gfx.patternheight;
-					if (control.instrumentcury > 7) control.instrumentcury = 7;
+					if (control.instrumentcury > 6) control.instrumentcury = -1;
 				}
 			}
 		}
@@ -240,13 +240,6 @@
 							control.patternmanagerview--;
 						}else if (control.patterncury == 6 && control.patterncury + control.patternmanagerview < control.numboxes) {
 							control.patternmanagerview++;
-						}else if (control.patterncury == 7) {
-							//Add a new one!
-							gfx.buttonpress = 16;
-							control.addmusicbox();
-							control.patternmanagerview = control.numboxes - 6;
-							if (control.patternmanagerview < 0) control.patternmanagerview = 0;
-							
 						}else {
 							j = control.patternmanagerview + control.patterncury;
 							if (j > -1 && j<control.numboxes) {
@@ -296,12 +289,7 @@
 							control.instrumentmanagerview++;
 						}else if (control.instrumentcury == 7) {
 							//Add a new one!
-							gfx.buttonpress = 16;
-							if (control.numinstrument < 16) {
-								control.numinstrument++;
-								control.instrumentmanagerview = control.numinstrument - 6;
-								if (control.instrumentmanagerview < 0) control.instrumentmanagerview = 0;
-							}
+							
 						}else {
 							j = control.instrumentcury + control.instrumentmanagerview;
 							if (j < control.numinstrument) {
@@ -319,12 +307,6 @@
 								control.list.init(235, (gfx.linesize * 3) + 3);
 							}
 						}
-					}
-				}else if (control.currenttab == control.MENUTAB_ADVANCED) {					
-					//Effects
-					if (help.inboxw(control.mx, control.my, gfx.screenwidth - 150, (gfx.linesize * 3), 25, 10)) {
-						control.filllist(control.LIST_EFFECTS);
-						control.list.init(gfx.screenwidth - 150, (gfx.linesize * 4) - 3);
 					}
 				}
 			}else if (control.my > gfx.screenheight - gfx.linesize) {
@@ -363,15 +345,7 @@
 		}
 		
 		if (key.press && !control.clicklist) {
-			if (control.currenttab == control.MENUTAB_ADVANCED) {
-				if (control.mx >= gfx.screenwidth - 125 && control.my >= (gfx.linesize * 3) + 2 && control.my <= (gfx.linesize * 3) + 12 ) {
-					i = control.mx - (gfx.screenwidth - 115);
-					if (i < 0) i = 0; if(i>100) i=100;
-					
-					control.effectvalue = i;
-					control.updateeffects();
-				}
-			}else if (control.currenttab == control.MENUTAB_INSTRUMENTS) {
+			if (control.currenttab == control.MENUTAB_INSTRUMENTS) {
 				if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 10) {				
 					if (control.mx >= 140 && control.my > 35 && control.mx < gfx.screenwidth - 25) {
 						i = control.mx - 140; j = control.my - 40;
@@ -597,7 +571,11 @@
 	
 	if (!control.keyheld) {
 		if (control.press_space || control.press_enter) {
-			control.stopmusic();
+			if (!control.musicplaying) {
+				control.startmusic();
+			}else {
+			  control.stopmusic();	
+			}
 			control.keyheld = true;
 		}
 	}
