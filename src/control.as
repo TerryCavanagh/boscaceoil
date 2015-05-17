@@ -570,6 +570,8 @@
 			}else {
 				musicbox[t].start = 0;
 			}
+			
+			guiclass.changetab(currenttab);
 		}
 		
 		public static function _setscale(t1:int = -1, t2:int = -1, t3:int = -1, t4:int = -1, t5:int = -1, t6:int = -1,
@@ -844,6 +846,12 @@
 			instrument[t].name = voicelist.name[voicelist.index];
 			instrument[t].category = voicelist.category[voicelist.index];
 			instrument[t].palette = voicelist.palette[voicelist.index];
+		}
+		
+		public static function nextinstrument():void {
+			//Change to the next instrument in a category
+			voicelist.index = voicelist.getnext(voicelist.getvoice(instrument[currentinstrument].name));
+			changeinstrumentvoice(voicelist.name[voicelist.index]);
 		}
 		
 		public static function changeinstrumentvoice(t:String):void {

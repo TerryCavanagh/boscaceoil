@@ -57,6 +57,13 @@ package {
 			}
 		}
 		
+		public function transpose(amount:int):void {
+			for (var i:int = 0; i < numnotes; i++) {
+				notes[i].x = notes[i].x + amount;
+				if (notes[i].x < 0) notes[i].x = 0;
+				if (notes[i].x > 107) notes[i].x = 107;
+			}
+		}
 		
 		public function addnote(noteindex:int, note:int, time:int):void {
 			if (numnotes < 128) {

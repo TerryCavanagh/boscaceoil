@@ -70,6 +70,9 @@ package{
 			
 			key = new KeyPoll(stage);
 			control.init();
+			
+			//Working towards resolution independence!
+			gfx.xres = 384; gfx.yres = 280;
 			gfx.init(stage);
 			
 			var tempbmp:Bitmap;
@@ -82,12 +85,12 @@ package{
 			tempbmp = new im_logo5();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			tempbmp = new im_logo6();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			tempbmp = new im_logo7();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
-			gfx.buffer = new BitmapData(384, 240, false, 0x000000);
+			gfx.buffer = new BitmapData(gfx.xres, gfx.yres, false, 0x000000);
 			
 			control.changetab(control.MENUTAB_FILE);
 			
 			control.voicelist.fixlengths();
-			stage.fullScreenSourceRect = new Rectangle(0, 0, 768, 480);
+			stage.fullScreenSourceRect = new Rectangle(0, 0, gfx.xres * 2, gfx.yres * 2);
 			addChild(gfx.screen);
 			
 			control.loadscreensettings();

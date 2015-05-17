@@ -7,7 +7,7 @@
     <movie path="bin\BoscaCeoil.swf" />
     <movie fps="60" />
     <movie width="768" />
-    <movie height="480" />
+    <movie height="560" />
     <movie version="17" />
     <movie minorVersion="0" />
     <movie platform="AIR" />

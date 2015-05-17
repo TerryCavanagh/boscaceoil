@@ -447,6 +447,14 @@ package {
 			return 0;
 		}
 		
+		public function getnext(current:int):int {
+			//Given current instrument, get the next instrument in this category
+			for (var i:int = current + 1; i < listsize; i++) {
+			  if (category[i] == category[current]) return i;	
+			}
+			return getfirst(category[current]);
+		}
+		
 		public var category:Vector.<String> = new Vector.<String>;
 		public var name:Vector.<String> = new Vector.<String>;
 		public var voice:Vector.<String> = new Vector.<String>;

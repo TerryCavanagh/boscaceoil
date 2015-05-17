@@ -28,7 +28,7 @@
 		}
 	}else {
 		if (control.mx > 20 && control.mx < gfx.screenwidth - 12) {
-			if (control.my > gfx.pianorollposition + gfx.linesize && control.my < gfx.pianorollposition + (gfx.linesize * 13)) {
+			if (control.my > gfx.pianorollposition + gfx.linesize && control.my < gfx.pianorollposition + (gfx.linesize * (gfx.patterneditorheight + 1))) {
 				control.cursorx = (control.mx - 20);
 				control.cursorx = (control.cursorx - (control.cursorx % control.boxsize)) / control.boxsize;
 				control.cursory = (control.my - gfx.linesize - gfx.pianorollposition);
@@ -37,7 +37,7 @@
 				if (control.cursorx >= control.boxcount) control.cursorx = control.boxcount - 1;
 			}
 		}else if (control.mx <= 20) {
-			if (control.my > gfx.pianorollposition + gfx.linesize && control.my < gfx.pianorollposition + (gfx.linesize * 13)) {
+			if (control.my > gfx.pianorollposition + gfx.linesize && control.my < gfx.pianorollposition + (gfx.linesize * (gfx.patterneditorheight + 1))) {
 				control.notey = (control.my - gfx.linesize - gfx.pianorollposition);
 				control.notey = (control.notey - (control.notey % gfx.linesize)) / gfx.linesize;
 			}
@@ -99,14 +99,14 @@
 	if (control.cursorx > -1 && control.cursory > -1 && control.currentbox > -1 && !control.clicklist) {
 		if (key.press && control.dragaction == 0) {
 			//Add note 
-			if (control.musicbox[control.currentbox].start + (11 - control.cursory) == -1) {
+			if (control.musicbox[control.currentbox].start + ((gfx.patterneditorheight - 1) - control.cursory) == -1) {
 				if (key.click) {
 					control.musicbox[control.currentbox].recordfilter = 1 - control.musicbox[control.currentbox].recordfilter;
 				}
 			}else{
-				control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + (11 - control.cursory)];
+				control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + ((gfx.patterneditorheight-1) - control.cursory)];
 				if (control.musicbox[control.currentbox].noteat(control.cursorx, control.currentnote)) {
-					control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + (11 - control.cursory)];
+					control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + ((gfx.patterneditorheight-1) - control.cursory)];
 				  control.musicbox[control.currentbox].removenote(control.cursorx, control.currentnote);
 					control.musicbox[control.currentbox].addnote(control.cursorx, control.currentnote, control.notelength);
 				}else{
@@ -117,8 +117,8 @@
 		
 		if (key.rightpress) {
 			//For the moment, just remove any note in this position
-			if (control.musicbox[control.currentbox].start + (11 - control.cursory) > -1) {
-				control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + (11 - control.cursory)];
+			if (control.musicbox[control.currentbox].start + ((gfx.patterneditorheight - 1) - control.cursory) > -1) {
+				control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + ((gfx.patterneditorheight - 1) - control.cursory)];
 				
 				control.musicbox[control.currentbox].removenote(control.cursorx, control.currentnote);
 			}
@@ -154,6 +154,7 @@
 						control.musicbox[control.currentbox].instr = control.list.selection;
 						control.musicbox[control.currentbox].palette = control.instrument[control.musicbox[control.currentbox].instr].palette;
 						control.list.close();
+						guiclass.changetab(control.currenttab);
 					}
 					if (control.list.type == control.LIST_KEY) {
 						control.changekey(control.list.selection);
@@ -321,25 +322,6 @@
 								control.voicelist.makesublist(control.instrument[control.currentinstrument].category);
 								control.filllist(control.LIST_INSTRUMENT);
 								control.list.init(235, (gfx.linesize * 3) + 3);
-							}
-						}
-					}
-				}
-			}else if (control.my > gfx.screenheight - gfx.linesize) {
-				if (control.currentbox > -1) {
-					if (!control.list.active) {
-						if (control.mx < 150) {
-							control.filllist(control.LIST_SELECTINSTRUMENT);
-							control.list.init(10, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
-						}else if (control.mx < 210) {
-							if (control.instrument[control.musicbox[control.currentbox].instr].type == 0) {
-								control.filllist(control.LIST_KEY);
-								control.list.init(170, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
-							}
-						}else {
-							if (control.instrument[control.musicbox[control.currentbox].instr].type == 0) {
-								control.filllist(control.LIST_SCALE);
-								control.list.init(220, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
 							}
 						}
 					}
