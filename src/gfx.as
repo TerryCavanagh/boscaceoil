@@ -1,5 +1,4 @@
 ﻿package{
-	import flash.desktop.InteractiveIcon;
 	import flash.display.*;
 	import flash.geom.*;
   import flash.events.*;

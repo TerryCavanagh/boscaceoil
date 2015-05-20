@@ -854,6 +854,13 @@
 			changeinstrumentvoice(voicelist.name[voicelist.index]);
 		}
 		
+		
+		public static function previousinstrument():void {
+			//Change to the previous instrument in a category
+			voicelist.index = voicelist.getprevious(voicelist.getvoice(instrument[currentinstrument].name));
+			changeinstrumentvoice(voicelist.name[voicelist.index]);
+		}
+		
 		public static function changeinstrumentvoice(t:String):void {
 			instrument[currentinstrument].name = t;
 			voicelist.index = voicelist.getvoice(t);

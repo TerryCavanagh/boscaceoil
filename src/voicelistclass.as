@@ -439,6 +439,14 @@ package {
 			return 0;
 		}
 		
+		public function getlast(cat:String):int {
+			//Return the index of the last member of this category
+			for (var i:int = listsize - 1; i >= 0; i--) {
+				if (category[i] == cat) return i;
+			}
+			return 0;
+		}
+		
 		public function getvoice(n:String):int {
 			//Get the voice by name, return index
 			for (var i:int = 0; i < listsize; i++) {
@@ -453,6 +461,14 @@ package {
 			  if (category[i] == category[current]) return i;	
 			}
 			return getfirst(category[current]);
+		}
+		
+		public function getprevious(current:int):int {
+			//Given current instrument, get the previous instrument in this category
+			for (var i:int = current - 1; i >= 0; i--) {
+			  if (category[i] == category[current]) return i;	
+			}
+			return getlast(category[current]);
 		}
 		
 		public var category:Vector.<String> = new Vector.<String>;

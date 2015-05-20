@@ -64,7 +64,7 @@ package {
 		}
 		
 		public static function addminusbutton(x:int, y:int, action:String):void {
-			addguipart(x, y, 16, 16, "", action, "minus");
+			addguipart(x, y, 12, 16, "", action, "minus");
 		}
 		
 		public static function adddownarrow(x:int, y:int, action:String):void {
@@ -501,6 +501,7 @@ package {
 			  break;
 			  case control.MENUTAB_INSTRUMENTS:
 				  addbutton(5, gfx.linespacing + gfx.pianorollposition - 14, 132, "ADD NEW INSTRUMENT", "addnewinstrument");
+					addminusbutton(351, (gfx.linespacing * 2) + 3, "previousinstrument");
 					addplusbutton(363, (gfx.linespacing * 2) + 3, "nextinstrument");
 				break;
 			  case control.MENUTAB_ADVANCED:
@@ -638,6 +639,8 @@ package {
 				control.musicbox[control.currentbox].transpose(-1);
 			}else if (currentbutton == "nextinstrument") {
 				control.nextinstrument();
+			}else if (currentbutton == "previousinstrument") {
+				control.previousinstrument();
 			}
 		}
 		
