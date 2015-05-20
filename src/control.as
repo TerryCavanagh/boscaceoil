@@ -979,8 +979,8 @@
 					instrument[i].index = readfilestream();
 					setinstrumenttoindex(i);
 					instrument[i].type = readfilestream();
-					instrument[i].palette= readfilestream();
-					instrument[i].cutoff= readfilestream();
+					instrument[i].palette = readfilestream();
+					instrument[i].cutoff = readfilestream();
 					instrument[i].resonance = readfilestream();
 					instrument[i].volume = readfilestream();
 					instrument[i].updatefilter();
