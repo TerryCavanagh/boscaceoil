@@ -144,6 +144,7 @@
 				  instrument[i].voice = _presets["midi.piano1"];
 				}else {
 					voicelist.index = int(Math.random() * voicelist.listsize);
+					instrument[i].index = voicelist.index;
 					instrument[i].voice = _presets[voicelist.voice[voicelist.index]];
 					instrument[i].category = voicelist.category[voicelist.index];
 					instrument[i].name = voicelist.name[voicelist.index];
@@ -853,7 +854,6 @@
 			voicelist.index = voicelist.getnext(voicelist.getvoice(instrument[currentinstrument].name));
 			changeinstrumentvoice(voicelist.name[voicelist.index]);
 		}
-		
 		
 		public static function previousinstrument():void {
 			//Change to the previous instrument in a category
