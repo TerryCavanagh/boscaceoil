@@ -1,0 +1,35 @@
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+# Operating system (build VM template)
+os: Windows Server 2012
+
+# Install scripts. (runs after repo cloning)
+install:
+  # download and unzip adobe air sdk
+  - ps: Start-FileDownload 'http://airdownload.adobe.com/air/win/download/17.0/AIRSDK_Compiler.zip'
+  - ps: '& "C:\Program Files\7-Zip\7z.exe" x AIRSDK_Compiler.zip "-o.\AIRSDK_Compiler"'
+
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+
+build_script:
+  # build desktop version
+  - AIRSDK_Compiler\bin\amxmlc -swf-version 20 -default-frame-rate 60 -default-size 768 480 -library-path+=lib/sion065.swc -source-path+=src -default-background-color 0x000000 -warnings -strict src/Main.as -o BoscaCeoil.swf -define+=CONFIG::desktop,true -define+=CONFIG::web,false
+  # build web version
+  - AIRSDK_Compiler\bin\amxmlc -swf-version 20 -default-frame-rate 60 -default-size 768 480 -library-path+=lib/sion065.swc -source-path+=src -default-background-color 0x000000 -warnings -strict src/Main.as -o BoscaCeoil.swf -define+=CONFIG::desktop,false -define+=CONFIG::web,true
+
+
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+
+# Post-install test scripts.
+test_script:
+  # - #todo
+
+# Disable automatic tests.
+test: off
