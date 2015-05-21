@@ -69,7 +69,9 @@ package{
 			}
 			
 			key = new KeyPoll(stage);
-			midicontrol.init();
+			CONFIG::desktop {
+				midicontrol.init();
+			}
 			control.init();
 			
 			//Working towards resolution independence!

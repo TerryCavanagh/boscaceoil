@@ -646,7 +646,9 @@ package {
 			}else if (currentbutton == "previousinstrument") {
 				control.previousinstrument();
 			}else if (currentbutton == "loadmidi") {
-				midicontrol.openfile();
+				CONFIG::desktop {
+					midicontrol.openfile();
+				}
 			}
 		}
 		
