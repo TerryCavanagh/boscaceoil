@@ -16,10 +16,7 @@ ActionScript code.
 ### Pre-requisites
 
 Make sure you've got the [Adobe AIR SDK](http://www.adobe.com/devnet/air/air-sdk-download.html)
-installed. You'll also need a copy of a particular version (0.65) of the
-[SiON library](https://sites.google.com/site/sioncenter/) that powers Bosca
-Ceoil's sound. Download `sion065.swc` and put it in Bosca Ceoil's `libs` folder
-(next to `src` and `assets`).
+installed.
 
 
 ### Building
@@ -32,7 +29,7 @@ The compiler needs quite a few options to produce a working Bosca Ceoil
 "movie":
 
 ```
-    amxmlc -swf-version 20 -default-frame-rate 60 -default-size 768 480 -library-path+=libs/sion065.swc -source-path+=src -default-background-color 0x000000 -warnings -strict src/Main.as -o BoscaCeoil.swf -define+=CONFIG::desktop,true -define+=CONFIG::web,false
+    amxmlc -swf-version 20 -default-frame-rate 60 -default-size 768 480 -library-path+=lib/sion065.swc -source-path+=src -default-background-color 0x000000 -warnings -strict src/Main.as -o BoscaCeoil.swf -define+=CONFIG::desktop,true -define+=CONFIG::web,false
 ```
 
 All the NativeApplication, File, etc. stuff from the Air API needs to be wrapped in CONFIG::desktop { ... } blocks so they don't get compiled into the web version, or else it breaks.
