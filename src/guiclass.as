@@ -507,7 +507,11 @@ package {
 			  case control.MENUTAB_ADVANCED:
 				  addcontrol(20, (gfx.linespacing * 3) + 2, "changesoundbuffer");
 					addcontrol(20, (gfx.linespacing * 6) + 2, "swingcontrol");
-					addcontrol(gfx.screenwidth - 120,  (gfx.linespacing * 3)+2, "globaleffects");
+					addcontrol(gfx.screenwidth - 120,  (gfx.linespacing * 3) + 2, "globaleffects");
+					
+					
+					addbutton(205, gfx.linespacing * 6, 75, "IMPORT .mid", "loadmidi");
+					addtextlabel(205, (gfx.linespacing * 7)+5, "(experimental)");
 				break;
 			}
 		}
@@ -641,6 +645,8 @@ package {
 				control.nextinstrument();
 			}else if (currentbutton == "previousinstrument") {
 				control.previousinstrument();
+			}else if (currentbutton == "loadmidi") {
+				midicontrol.openfile();
 			}
 		}
 		

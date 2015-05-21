@@ -155,7 +155,7 @@
 			numinstrument = 1;
 			instrumentmanagerview = 0;
 			
-			for (i = 0; i < 128; i++) {
+			for (i = 0; i < 256; i++) {
 			  musicbox.push(new musicphraseclass());
 			}
 			numboxes = 1;
