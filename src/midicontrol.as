@@ -1,3 +1,5 @@
+// temporary: ignore the entire contents of this file when building for web
+CONFIG::desktop {
 package {
 	import flash.display.*;
 	import flash.geom.*;
@@ -211,4 +213,6 @@ package {
 		public static var midinotes:Vector.<Rectangle> = new Vector.<Rectangle>;
 		public static var channelinstrument:Vector.<int> = new Vector.<int>;
 	}
+}
+
 }
