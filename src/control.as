@@ -956,6 +956,10 @@
 			numinstrument = 1;
 			instrumentmanagerview = 0;
 			patternmanagerview = 0;
+			// set instrument to grand piano
+			instrument[0] = new instrumentclass();
+			instrument[0].voice = _presets["midi.piano1"];
+			instrument[0].updatefilter();
 			showmessage("NEW SONG CREATED");
 		}
 		
