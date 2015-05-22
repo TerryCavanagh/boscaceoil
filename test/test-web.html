@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  </head>
+  <body>
+    <div id="container">
+      <div id="bosca-container">
+        <object id="BoscaCeoil" type="application/x-shockwave-flash" data="../BoscaCeoil.swf" width="100%" height="100%" allowscriptaccess="always" allowfullscreen="true">
+          <param name="scale" value="default">
+          <h1>This website requires Flash.</h1>
+        </object>
+      </div>
+
+      <div id="js-enabled">
+        <!-- "js enabled" goes here -->
+      </div>
+
+      <div id="result">
+        <!-- "success" goes here -->
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      // mock ExternalInterface functions
+      window.Bosca = {
+        _isReady: function () {
+          document.getElementById("result").textContent = "success";
+          return true;
+        },
+        _getStartupCeol: function () {
+          return '';
+        }
+      };
+
+      document.getElementById("js-enabled").textContent = "js enabled";
+    </script>
+  </body>
+</html>
