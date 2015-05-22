@@ -169,6 +169,51 @@ package {
 			return int(smfData.measures);
 		}
 		
+		public static function gettopbox(currentpattern:int, instr:int):int {
+			//return the first musicbox to either match instrument or be empty
+			for (var i:int = 0; i < 16; i++) {
+				if(control.arrange.bar[currentpattern].channel[i] == -1) {
+					return i;
+				}else{
+					if (control.musicbox[control.arrange.bar[currentpattern].channel[i]].instr == instr) {
+						return i;
+					}
+				}
+			}
+			return 0;
+		}
+		
+		public static function getmusicbox(currentpattern:int, instr:int):int {
+			//Find (or create a new) music box at the position we're placing the note.
+			var top:int = gettopbox(currentpattern, instr);
+			
+			if (control.arrange.bar[currentpattern].channel[top] == -1) {
+				control.currentinstrument = instr;
+				if (channelinstrument[instr] > -1) {
+					control.voicelist.index = channelinstrument[instr];
+					control.changeinstrumentvoice(control.voicelist.name[control.voicelist.index]);
+				}else {
+					control.voicelist.index = 0;
+					control.changeinstrumentvoice(control.voicelist.name[control.voicelist.index]);
+				}
+				control.addmusicbox();
+				control.arrange.addpattern(currentpattern, top, control.numboxes - 1);
+				return control.numboxes - 1;
+			}else {
+				return control.arrange.bar[currentpattern].channel[top];
+			}
+			
+			return -1;
+		}
+		
+		public static function addnotetoceol(currentpattern:int, time:int, pitch:int, notelength:int, instr:int):void {
+			//control.musicbox[currentpattern + (instr * numpatterns)].addnote(time, pitch, notelength);
+			currentpattern = getmusicbox(currentpattern, instr);
+			if(currentpattern>-1){
+				control.musicbox[currentpattern].addnote(time, pitch, notelength);
+			}
+		}
+		
 		public static function convertmiditoceol():void {
 			control.newsong();
 			control.numboxes = 0;
@@ -195,20 +240,17 @@ package {
 				if (channelinstrument[j] > -1) {
 					control.voicelist.index = channelinstrument[j];
 					control.changeinstrumentvoice(control.voicelist.name[control.voicelist.index]);
-					for (var i:int = 0; i < numpatterns; i++){
-						control.addmusicbox(); control.arrange.addpattern(i, j, i + (j * numpatterns));
-					}
 				}
 			}
 			
-			for (i = 0; i < midinotes.length; i++) {
+			for (var i:int = 0; i < midinotes.length; i++) {
 				//x = time
 				//y = note
 				//w = length
 				//h = instrument
 				var t:int = ((midinotes[i].x * numnotes) / boxsize);
-				var currentbox:int = int((midinotes[i].x  - (midinotes[i].x % boxsize)) / boxsize);
-				control.musicbox[currentbox + (midinotes[i].height * numpatterns)].addnote(t - (numnotes * currentbox), midinotes[i].y, midinotes[i].width);
+				var currentpattern:int = int((midinotes[i].x  - (midinotes[i].x % boxsize)) / boxsize);
+				addnotetoceol(currentpattern, t - (numnotes * currentpattern), midinotes[i].y, midinotes[i].width, midinotes[i].height);
 			}
 			
 			control.arrange.loopstart = 0;
