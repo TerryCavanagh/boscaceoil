@@ -14,7 +14,7 @@ package {
 			}
 			copybuffersize = 0;
 			
-			for (i = 0; i < 16; i++) {
+			for (i = 0; i < 8; i++) {
 				channelon.push(true);
 			}
 			clear();
@@ -22,7 +22,7 @@ package {
 		
 		public function copy():void {
 			for (var i:int = loopstart; i < loopend; i++) {
-				for (var j:int = 0; j < 16; j++) {
+				for (var j:int = 0; j < 8; j++) {
 					copybuffer[i-loopstart].channel[j] = bar[i].channel[j];
 				}
 			}
@@ -35,7 +35,7 @@ package {
 			}
 			
 			for (i = t; i < t + copybuffersize; i++) {
-				for (var j:int = 0; j < 16; j++) {
+				for (var j:int = 0; j < 8; j++) {
 					bar[i].channel[j] = copybuffer[i - t].channel[j];
 				}
 			}
@@ -47,7 +47,7 @@ package {
 			currentbar = 0;
 			
 			for (var i:int = 0; i < lastbar; i++) {
-				for (var j:int = 0; j < 16; j++) {
+				for (var j:int = 0; j < 8; j++) {
 					bar[i].channel[j] = -1;
 				}
 			}
@@ -64,7 +64,7 @@ package {
 			bar[a].channel[b] = -1;
 			var lbcheck:int = 0;
 			for (var i:int = 0; i <= lastbar; i++) {
-				for (var j:int = 0; j < 16; j++) {
+				for (var j:int = 0; j < 8; j++) {
 					if (bar[i].channel[j] > -1) {
 						lbcheck = i;
 					}
@@ -75,11 +75,11 @@ package {
 		
 		public function insertbar(t:int):void {
 			for (var i:int = lastbar+1; i > t; i--) {
-				for (var j:int = 0; j < 16; j++) {
+				for (var j:int = 0; j < 8; j++) {
 					bar[i].channel[j] = bar[i - 1].channel[j];
 				}
 			}
-			for (j = 0; j < 16; j++) {
+			for (j = 0; j < 8; j++) {
 				bar[t].channel[j] = -1;
 			}
 			lastbar++;
@@ -87,7 +87,7 @@ package {
 		
 		public function deletebar(t:int):void {
 			for (var i:int = t; i < lastbar+1; i++) {
-				for (var j:int = 0; j < 16; j++) {
+				for (var j:int = 0; j < 8; j++) {
 					bar[i].channel[j] = bar[i + 1].channel[j];
 				}
 			}

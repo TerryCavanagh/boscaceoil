@@ -75,7 +75,7 @@
 				scale.push(int(1));
 			}
 			
-			for (i = 0; i < 128; i++) {
+			for (i = 0; i < 256; i++) {
 				pianoroll.push(i);
 				invertpianoroll.push(i);
 			}
