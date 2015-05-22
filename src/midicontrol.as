@@ -13,9 +13,15 @@ package {
 	import com.newgonzo.midi.file.*;
 	
 	public class midicontrol {
-		public static function init():void {
-			for (var i:int; i < 16; i++) {
-				channelinstrument.push(0);
+		public static function resetinstruments():void {
+			if (channelinstrument.length == 0) {
+				for (var i:int = 0; i < 16; i++) {
+					channelinstrument.push(-1);
+				}
+			}else {
+				for (i = 0; i < 16; i++) {
+					channelinstrument[i] = -1;
+				}
 			}
 		}
 		
@@ -40,6 +46,8 @@ package {
 			decoder = new MIDIDecoder();
       midifile = decoder.decodeFile(midiData);
 			
+			smfData.loadBytes(midiData);
+			
 			var track:MIDITrack;
 			var event:MIDITrackEvent;
 			
@@ -51,14 +59,14 @@ package {
 			var c:ChannelMessage; 
 			var d:DataMessage; 
 			
-			
 			clearnotes();
+			resetinstruments();
 			
 			for each(track in midifile.tracks) {
 				for each(event in track.events){
 					if (event.message.status == MessageStatus.NOTE_ON) {
 						v = event.message as VoiceMessage;
-						trace(event.message.toString());
+						//trace(event.message.toString());
 						addnote(event.time, v.pitch, v.channel);
 						//trace(event.time, event.message.toString() + ", pitch = " + String(v.pitch));
 					}else if (event.message.status == MessageStatus.NOTE_OFF) {
@@ -85,7 +93,7 @@ package {
 		
 		public static function addnote(time:int, note:int, instr:int):void {
 			midinotes.push(new Rectangle(time, note, 1, instr));
-			trace("adding note: ", time, note, instr);
+			//trace("adding note: ", time, note, instr);
 		}
 		
 		private static function siononloadmidi(e:Event):void {  
@@ -150,41 +158,55 @@ package {
 			control.fixmouseclicks = true;
 		}
 		
+		public static var resolution:Number;
+		public static var signature:Number;
+		public static var numnotes:int;
+		public static var numpatterns:int;
+		
+		public static function getsonglength():int {
+			return int(smfData.measures);
+		}
+		
 		public static function convertmiditoceol():void {
 			control.newsong();
+			control.numboxes = 0;
 			control.bpm = (smfData.bpm - (smfData.bpm % 5));
 			control._driver.bpm = control.bpm;
+			control._driver.play(null, false);
 			
-			control.voicelist.index = channelinstrument[0];
-			control.changeinstrumentvoice(control.voicelist.name[control.voicelist.index]);
+			//trace(smfData.resolution);
+			trace(smfData.toString());
+			trace(smfData.signature_n, smfData.signature_d);
+			trace(smfData.measures);
 			
-			control.addmusicbox(); control.arrange.addpattern(1, 0, 1);
+			resolution = smfData.resolution;
+			signature = smfData.signature_d;
+			numnotes = smfData.signature_d * smfData.signature_n;
+			if (numnotes > 16) control.doublesize = true;
 			
-			control.numinstrument++;
-			control.currentinstrument = 1;
+			var boxsize:int = resolution;
+			numpatterns = getsonglength();
 			
-			control.voicelist.index = channelinstrument[1];
-			control.changeinstrumentvoice(control.voicelist.name[control.voicelist.index]);
+			control.numinstrument = 16;
+			for (var j:int = 0; j < 16; j++) {
+			  control.currentinstrument = j;
+				if (channelinstrument[j] > -1) {
+					control.voicelist.index = channelinstrument[j];
+					control.changeinstrumentvoice(control.voicelist.name[control.voicelist.index]);
+					for (var i:int = 0; i < numpatterns; i++){
+						control.addmusicbox(); control.arrange.addpattern(i, j, i + (j * numpatterns));
+					}
+				}
+			}
 			
-			control.addmusicbox(); control.arrange.addpattern(0, 1, 2);
-			control.addmusicbox(); control.arrange.addpattern(1, 1, 3);
-			
-			var boxsize:int = (96 * 4);
-			
-			for (var i:int = 0; i < midinotes.length; i++) {
+			for (i = 0; i < midinotes.length; i++) {
 				//x = time
 				//y = note
 				//w = length
 				//h = instrument
-				if(midinotes[i].height == 0){
-					var t:Number = ((midinotes[i].x * 16) / boxsize);
-					var currentbox:int = int((midinotes[i].x  - (midinotes[i].x % boxsize)) / boxsize);
-					control.musicbox[currentbox].addnote(t - (16 * currentbox), midinotes[i].y, midinotes[i].width);
-				}else {
-					t = ((midinotes[i].x * 16) / boxsize);
-					currentbox = int((midinotes[i].x  - (midinotes[i].x % boxsize)) / boxsize);
-					control.musicbox[currentbox + 2].addnote(t - (16 * currentbox), midinotes[i].y, midinotes[i].width);
-				}
+				var t:int = ((midinotes[i].x * numnotes) / boxsize);
+				var currentbox:int = int((midinotes[i].x  - (midinotes[i].x % boxsize)) / boxsize);
+				control.musicbox[currentbox + (midinotes[i].height * numpatterns)].addnote(t - (numnotes * currentbox), midinotes[i].y, midinotes[i].width);
 			}
 			
 			control.arrange.loopstart = 0;

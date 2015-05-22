@@ -6,14 +6,14 @@ package {
 	
 	public class barclass  {
 		public function barclass():void {
-			for (var i:int = 0; i < 8; i++) {
+			for (var i:int = 0; i < 16; i++) {
 				channel.push( -1);
 			}
 			clear();
 		}
 		
 		public function clear():void {
-			for (var i:int = 0; i < 8; i++) {
+			for (var i:int = 0; i < 16; i++) {
 				channel[i] = -1;
 			}
 		}
