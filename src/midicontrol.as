@@ -34,7 +34,7 @@ package {
 			control.stopmusic();	
 			
 			file = File.desktopDirectory.resolvePath("");
-		  file.addEventListener(Event.SELECT, onloadmidi);
+		  file.addEventListener(Event.SELECT, siononloadmidi);
 			file.browseForOpen("Load .mid File", [midiFilter]);
 		}
 		
@@ -89,9 +89,12 @@ package {
 						d = event.message as DataMessage;
 						c = event.message as ChannelMessage;
 						channelinstrument[c.channel] = d.data1;
+						//trace(event.time, event.message.toString());
 					}
 				}
 			} 
+			
+			channelinstrument[9] = 142;
 			
 			convertmiditoceol();
 			
@@ -109,7 +112,7 @@ package {
 		
 		public static function addnote(time:int, note:int, instr:int):void {
 			unmatchednotes.push(new Rectangle(time, note, 0, instr));
-			//trace("adding note: ", time, note, instr);
+			trace("adding note: ", time, note, instr);
 		}
 		
 		public static function changenotelength(time:int, note:int, instr:int):void {
@@ -163,8 +166,10 @@ package {
 				}
 			}
 			
-			if (unmatchednotes[unmatchednotes.length - 1].width == -1) {
-				unmatchednotes.pop();
+			if (unmatchednotes.length > 0) {
+				if (unmatchednotes[unmatchednotes.length - 1].width == -1) {
+					unmatchednotes.pop();
+				}
 			}
 		}
 		
@@ -183,6 +188,42 @@ package {
 			
 			var track:SMFTrack;
 			var event:SMFEvent;
+			
+			clearnotes();
+			resetinstruments();
+			
+			for (var trackn:int = 0; trackn < smfData.numTracks; trackn++) {
+				//trace("Reading track " + String(trackn) + ": " + String(smfData.tracks[trackn].sequence.length));
+				for each(event in smfData.tracks[trackn].sequence) {
+					//trace(String(event.time) + ": " + event.toString());
+					switch (event.type & 0xf0) {
+						case SMFEvent.NOTE_ON:
+							if(event.velocity == 0) {
+								//This is *actually* a note off event in disguise
+								changenotelength(event.time, event.note, event.channel);
+							}else{
+								addnote(event.time, event.note, event.channel);
+								if (event.velocity > channelvolume[event.channel]) {
+									channelvolume[event.channel] = event.velocity;
+								}
+							}
+						break;
+						case SMFEvent.NOTE_OFF:
+							changenotelength(event.time, event.note, event.channel);
+						break;
+						case SMFEvent.PROGRAM_CHANGE:
+							channelinstrument[event.channel] = event.value;
+						break;
+					}
+				}
+			} 
+			
+			channelinstrument[9] = 142;
+			
+			convertmiditoceol();
+			
+			control.arrange.currentbar = 0; control.arrange.viewstart = 0;
+			control.changemusicbox(0);
 			/*
 			clearnotes();
 			
@@ -199,10 +240,11 @@ package {
 			
 			convertmiditoceol();
 			*/
+			/*
 			control._driver.setBeatCallbackInterval(1);
 			control._driver.setTimerInterruption(1, null);
       control._driver.play(smfData, false);
-			
+			*/
       //control._driver.addEventListener(SiONMIDIEvent.NOTE_ON, onNoteOn);
 			
 			
@@ -249,6 +291,18 @@ package {
 		
 		public static function gettopbox(currentpattern:int, chan:int):int {
 			//return the first musicbox to either match instrument or be empty
+			if (chan == 9) {
+				//Drums, put it on the last row
+				if(control.arrange.bar[currentpattern].channel[7] == -1) {
+					return 7;
+				}else {
+					if (reversechannelinstrument(channelinstrument[control.musicbox[control.arrange.bar[currentpattern].channel[7]].instr]) == reversechannelinstrument(channelinstrument[chan])) {
+						return 7;
+					}	
+				}
+			}
+			
+			
 			for (var i:int = 0; i < 8; i++) {
 				if(control.arrange.bar[currentpattern].channel[i] == -1) {
 					return i;
