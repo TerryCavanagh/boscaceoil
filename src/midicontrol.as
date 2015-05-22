@@ -112,7 +112,7 @@ package {
 		
 		public static function addnote(time:int, note:int, instr:int):void {
 			unmatchednotes.push(new Rectangle(time, note, 0, instr));
-			trace("adding note: ", time, note, instr);
+			//trace("adding note: ", time, note, instr);
 		}
 		
 		public static function changenotelength(time:int, note:int, instr:int):void {
@@ -402,7 +402,7 @@ package {
 				//w = length
 				//h = instrument
 				var note:int = ((midinotes[i].x * numnotes) / boxsize);
-				var notelength:int = (((midinotes[i].width - midinotes[i].x) * numnotes) / boxsize) + 1;
+				var notelength:int = (((midinotes[i].width - midinotes[i].x - 1) * numnotes) / boxsize) + 1;
 				var currentpattern:int = int((midinotes[i].x  - (midinotes[i].x % boxsize)) / boxsize);
 				
 				addnotetoceol(currentpattern, note - (numnotes * currentpattern), midinotes[i].y, notelength, midinotes[i].height);
