@@ -82,7 +82,6 @@ package {
 				}
 			} 
 			
-			
 			convertmiditoceol();
 			
 			control.showmessage("MIDI IMPORTED");
@@ -113,7 +112,7 @@ package {
 			
 			var track:SMFTrack;
 			var event:SMFEvent;
-			
+			/*
 			clearnotes();
 			
 			for each(track in smfData.tracks) {
@@ -128,10 +127,10 @@ package {
 			} 
 			
 			convertmiditoceol();
-			
-			//control._driver.setBeatCallbackInterval(1);
-			//control._driver.setTimerInterruption(1, null);
-      //control._driver.play(smfData, false);
+			*/
+			control._driver.setBeatCallbackInterval(1);
+			control._driver.setTimerInterruption(1, null);
+      control._driver.play(smfData, false);
 			
       //control._driver.addEventListener(SiONMIDIEvent.NOTE_ON, onNoteOn);
 			
@@ -169,28 +168,38 @@ package {
 			return int(smfData.measures);
 		}
 		
-		public static function gettopbox(currentpattern:int, instr:int):int {
+		public static function reversechannelinstrument(t:int):int {
+			//Given instrument number t, return first channel using it.
+			for (var i:int = 0; i < 16; i++) {
+				if (channelinstrument[i] == t) return i;
+			}
+			return -1;
+		}
+		
+		public static function gettopbox(currentpattern:int, chan:int):int {
 			//return the first musicbox to either match instrument or be empty
 			for (var i:int = 0; i < 16; i++) {
 				if(control.arrange.bar[currentpattern].channel[i] == -1) {
 					return i;
-				}else{
-					if (control.musicbox[control.arrange.bar[currentpattern].channel[i]].instr == instr) {
-						return i;
-					}
+				}else {
+					if (channelinstrument[chan] != -1) {
+						if (reversechannelinstrument(channelinstrument[control.musicbox[control.arrange.bar[currentpattern].channel[i]].instr]) == reversechannelinstrument(channelinstrument[chan])) {
+							return i;
+						}	
+					}					
 				}
 			}
 			return 0;
 		}
 		
-		public static function getmusicbox(currentpattern:int, instr:int):int {
+		public static function getmusicbox(currentpattern:int, chan:int):int {
 			//Find (or create a new) music box at the position we're placing the note.
-			var top:int = gettopbox(currentpattern, instr);
+			var top:int = gettopbox(currentpattern, chan);
 			
 			if (control.arrange.bar[currentpattern].channel[top] == -1) {
-				control.currentinstrument = instr;
-				if (channelinstrument[instr] > -1) {
-					control.voicelist.index = channelinstrument[instr];
+				control.currentinstrument = chan;
+				if (channelinstrument[chan] > -1) {
+					control.voicelist.index = channelinstrument[chan];
 					control.changeinstrumentvoice(control.voicelist.name[control.voicelist.index]);
 				}else {
 					control.voicelist.index = 0;
@@ -206,9 +215,9 @@ package {
 			return -1;
 		}
 		
-		public static function addnotetoceol(currentpattern:int, time:int, pitch:int, notelength:int, instr:int):void {
+		public static function addnotetoceol(currentpattern:int, time:int, pitch:int, notelength:int, chan:int):void {
 			//control.musicbox[currentpattern + (instr * numpatterns)].addnote(time, pitch, notelength);
-			currentpattern = getmusicbox(currentpattern, instr);
+			currentpattern = getmusicbox(currentpattern, chan);
 			if(currentpattern>-1){
 				control.musicbox[currentpattern].addnote(time, pitch, notelength);
 			}
@@ -221,10 +230,14 @@ package {
 			control._driver.bpm = control.bpm;
 			control._driver.play(null, false);
 			
+			for (var tst:int = 0; tst < 16; tst++) trace("channel " + String(tst) + " uses instrument " + String(channelinstrument[tst]));
+			
 			//trace(smfData.resolution);
+			/*
 			trace(smfData.toString());
 			trace(smfData.signature_n, smfData.signature_d);
 			trace(smfData.measures);
+			*/
 			
 			resolution = smfData.resolution;
 			signature = smfData.signature_d;
@@ -233,6 +246,8 @@ package {
 			
 			var boxsize:int = resolution;
 			numpatterns = getsonglength();
+			control.numboxes = 0;
+			control.arrange.bar[0].channel[0] = -1;
 			
 			control.numinstrument = 16;
 			for (var j:int = 0; j < 16; j++) {
