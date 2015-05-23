@@ -346,9 +346,9 @@ package {
 			control._driver.bpm = control.bpm;
 			control._driver.play(null, false);
 			
-			for (var tst:int = 0; tst < 16; tst++) {
-				trace("channel " + String(tst) + " uses instrument " + String(channelinstrument[tst]) + " at volume " + String(channelvolume[tst]));
-			}
+			//for (var tst:int = 0; tst < 16; tst++) {
+			//	trace("channel " + String(tst) + " uses instrument " + String(channelinstrument[tst]) + " at volume " + String(channelvolume[tst]));
+			//}
 			
 			resolution = smfData.resolution;
 			signature = smfData.signature_d;
@@ -421,7 +421,6 @@ package {
 				}
 			  i--;	
 			}
-			
 			
 			control.arrange.loopstart = 0;
 			control.arrange.loopend = control.arrange.lastbar;	
