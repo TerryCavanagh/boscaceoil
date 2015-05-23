@@ -350,10 +350,36 @@ package {
 			}
 		}
 		
+		public static function replaceontimeline(_old:int, _new:int):void {
+			for (var i:int = 0; i < numpatterns; i++) {
+				for (var j:int = 0; j < 8; j++) {
+					if (control.arrange.bar[i].channel[j] == _old) {
+						control.arrange.bar[i].channel[j] = _new;
+					}
+				}
+			}
+		}
+		
+		public static function musicboxmatch(a:int, b:int):Boolean {
+			if (control.musicbox[a].numnotes == control.musicbox[b].numnotes) {
+				if (control.musicbox[a].instr == control.musicbox[b].instr) {
+					for (var i:int = 0; i < control.musicbox[a].numnotes; i++) {
+						if (control.musicbox[a].notes[i].x != control.musicbox[b].notes[i].x) {
+							return false;
+						}
+					}
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		
 		public static function convertmiditoceol():void {
 			control.newsong();
 			control.numboxes = 0;
 			control.bpm = (smfData.bpm - (smfData.bpm % 5));
+			if (control.bpm <= 10) control.bpm = 120;
 			control._driver.bpm = control.bpm;
 			control._driver.play(null, false);
 			
@@ -407,6 +433,35 @@ package {
 				
 				addnotetoceol(currentpattern, note - (numnotes * currentpattern), midinotes[i].y, notelength, midinotes[i].height);
 			}
+			
+			//Optimising stage: we want to quickly check for duplicate patterns and remove
+			//unused ones.
+			for (i = 0; i < control.numboxes; i++) {
+				var currenthash:int = control.musicbox[i].hash;
+				if (currenthash != -1) {
+					for (j = i + 1; j < control.numboxes; j++) {
+						if (control.musicbox[j].hash == currenthash) {
+							//Probably a match! Let's compare and remove if so
+							if (musicboxmatch(i, j)) {
+								replaceontimeline(j, i);
+								control.musicbox[j].hash = -1;
+							}
+						}
+					}
+				}
+			}
+			
+			//Delete unused boxes
+			i = control.numboxes;
+			while (i >= 0) {
+				if (i < control.numboxes) {
+					if (control.musicbox[i].hash == -1) {
+						control.deletemusicbox(i);
+					}
+				}
+			  i--;	
+			}
+			
 			
 			control.arrange.loopstart = 0;
 			control.arrange.loopend = control.arrange.lastbar;	

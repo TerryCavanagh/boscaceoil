@@ -511,7 +511,6 @@ package {
 					
 					
 					addbutton(205, gfx.linespacing * 6, 75, "IMPORT .mid", "loadmidi");
-					addtextlabel(205, (gfx.linespacing * 7)+5, "(experimental)");
 				break;
 			}
 		}
