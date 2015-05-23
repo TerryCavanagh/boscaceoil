@@ -22,7 +22,7 @@ installed.
 
 If you are on Windows, make sure you have the AIR SDK properly configured, and execute `RUN.bat` to compile the necessary .swf file, and/or automatically open Bosca Ceoil. If there are errors when compiling, the .bat file will continue trying until a .swf is generated. 
 
-For manual creation, please read follow these next steps.
+For manual creation, please read the following steps.
 
 ### Building
 
