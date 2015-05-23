@@ -224,50 +224,13 @@ package {
 			
 			control.arrange.currentbar = 0; control.arrange.viewstart = 0;
 			control.changemusicbox(0);
-			/*
-			clearnotes();
 			
-			for each(track in smfData.tracks) {
-				for each(event in track.sequence) {
-					if (event.type == SMFEvent.NOTE_ON) {
-					  trace("NOTE ON", event.note, event.channel, event.type, event.time);
-						addnote(event.time, event.note, event.type);
-					}else if (event.type == SMFEvent.NOTE_OFF) {
-					  trace("NOTE OFF", event.note, event.channel, event.type, event.time);
-					}
-				}
-			} 
-			
-			convertmiditoceol();
-			*/
 			/*
 			control._driver.setBeatCallbackInterval(1);
 			control._driver.setTimerInterruption(1, null);
       control._driver.play(smfData, false);
 			*/
-      //control._driver.addEventListener(SiONMIDIEvent.NOTE_ON, onNoteOn);
-			
-			
-			/*
-			decoder = new MIDIDecoder();
-			
-      midifile = decoder.decodeFile(midiData);
-			
-			// a MIDI file has an array of tracks that each contain an array of track events
-			var track:MIDITrack;
-			var event:MIDITrackEvent;
-			
-			for each(track in midifile.tracks){
-				for each(event in track.events){
-					trace("event.time: " + event.time);
-					trace("event.message: " + event.message); // [Message(status=...]
-				}
-			} */
-			/*
-			loadfilestring(filestring);
-			_driver.play(null, false);
-			
-			*/
+      
 			control.showmessage("MIDI IMPORTED");
 			control.fixmouseclicks = true;
 		}
@@ -387,16 +350,13 @@ package {
 				trace("channel " + String(tst) + " uses instrument " + String(channelinstrument[tst]) + " at volume " + String(channelvolume[tst]));
 			}
 			
-			//trace(smfData.resolution);
-			/*
-			trace(smfData.toString());
-			trace(smfData.signature_n, smfData.signature_d);
-			trace(smfData.measures);
-			*/
-			
 			resolution = smfData.resolution;
 			signature = smfData.signature_d;
 			numnotes = smfData.signature_d * smfData.signature_n;
+			if (signature == 0 || numnotes == 0) {
+				signature = 4;
+				numnotes = 16;
+			}
 			if (numnotes > 16) control.doublesize = true;
 			
 			var boxsize:int = resolution;
@@ -477,10 +437,6 @@ package {
 		public static var midifile:MIDIFile;
 		public static var decoder:MIDIDecoder;
 		public static var midiData:ByteArray;
-		
-		public static function onNoteOn(e:SiONMIDIEvent):void {
-			trace(e.midiChannelNumber, e.note);
-    }
 		
 		public static var midiFilter:FileFilter = new FileFilter("Midi", "*.mid");
 		
