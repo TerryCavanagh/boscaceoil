@@ -18,6 +18,11 @@ ActionScript code.
 Make sure you've got the [Adobe AIR SDK](http://www.adobe.com/devnet/air/air-sdk-download.html)
 installed.
 
+### Automatic Building and Running
+
+If you are on Windows, make sure you have the AIR SDK properly configured, and execute `RUN.bat` to compile the necessary .swf file, and/or automatically open Bosca Ceoil. If there are errors when compiling, the .bat file will continue trying until a .swf is generated. 
+
+For manual creation, please read follow these next steps.
 
 ### Building
 
