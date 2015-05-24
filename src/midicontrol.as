@@ -184,7 +184,7 @@ package {
 			
 			smfData.loadBytes(midiData);
 			
-			trace(smfData.toString());
+			//trace(smfData.toString());
 			
 			var track:SMFTrack;
 			var event:SMFEvent;
