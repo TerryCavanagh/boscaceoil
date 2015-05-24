@@ -38,9 +38,14 @@ test_url = "http://localhost:3000/test/test-web.html"
 client = Selenium::WebDriver::Remote::Http::Default.new
 client.timeout = 180 # seconds - default is 60
 
-#   I had mega problems getting firefox/chrome driver to work properly on
-# Appveyor, so I'm using IE here instead.
-browser = :ie
+if Gem.win_platform?
+  #   I had mega problems getting firefox/chrome driver to work properly on
+  # Appveyor, so I'm using IE here instead.
+  browser = :ie
+else
+  browser = :firefox
+end
+
 
 if browser == :ie
   ie_caps = Selenium::WebDriver::Remote::Capabilities.ie("initialBrowserUrl" => test_url)

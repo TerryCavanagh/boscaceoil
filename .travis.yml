@@ -1,0 +1,21 @@
+notifications:
+  email: false
+# Not actually obj-c but this is how you get a Mac env on Travis
+language: objective-c
+rvm:
+  - 2.1.3
+before_install:
+  - brew update
+install:
+  - brew install caskroom/cask/brew-cask
+  - brew cask install flash
+  - gem install sinatra:1.4.6 watir-webdriver:0.7.0 --no-document
+  # The Homebrew formula for adobe-air-sdk tends to break periodically, so install it manually
+  # - brew install homebrew/binary/adobe-air-sdk
+  - mkdir AIRSDK_Compiler
+  - curl http://airdownload.adobe.com/air/mac/download/17.0/AIRSDK_Compiler.tbz2 | tar xj -C AIRSDK_Compiler
+  - export PATH=$PATH:$PWD/AIRSDK_Compiler/bin/
+script:
+  - test/build-desktop.sh
+  - test/build-web.sh
+  - ruby test/test-web.rb
