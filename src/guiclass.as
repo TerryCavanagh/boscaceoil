@@ -509,8 +509,12 @@ package {
 					addcontrol(20, (gfx.linespacing * 6) + 2, "swingcontrol");
 					addcontrol(gfx.screenwidth - 120,  (gfx.linespacing * 3) + 2, "globaleffects");
 					
-					
-					addbutton(205, gfx.linespacing * 6, 75, "IMPORT .mid", "loadmidi");
+					CONFIG::desktop {
+						addbutton(205, gfx.linespacing * 6, 75, "IMPORT .mid", "loadmidi");
+						
+						addbutton(285, gfx.linespacing * 6, 75, "EXPORT .mid", "savemidi");
+						addtextlabel(285, (gfx.linespacing * 7) + 5, "work in progress");
+					}
 				break;
 			}
 		}
@@ -647,6 +651,10 @@ package {
 			}else if (currentbutton == "loadmidi") {
 				CONFIG::desktop {
 					midicontrol.openfile();
+				}
+			}else if (currentbutton == "savemidi") {
+				CONFIG::desktop {
+					midicontrol.savemidi();
 				}
 			}
 		}

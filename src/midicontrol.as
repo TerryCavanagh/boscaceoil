@@ -36,6 +36,39 @@ package {
 			file = File.desktopDirectory.resolvePath("");
 		  file.addEventListener(Event.SELECT, siononloadmidi);
 			file.browseForOpen("Load .mid File", [midiFilter]);
+			
+			control.fixmouseclicks = true;
+		}
+		
+		public static function savemidi():void {
+			control.stopmusic();	
+			
+			file = File.desktopDirectory.resolvePath("*.mid");
+      file.addEventListener(Event.SELECT, onsavemidi);
+			file.browseForSave("Save .mid File");
+			
+			control.fixmouseclicks = true;
+		}
+		
+		private static function onsavemidi(e:Event):void {    
+			file = e.currentTarget as File;
+			
+			if (!control.fileHasExtension(file, "mid")) {
+				control.addExtensionToFile(file, "mid");
+			}
+			
+			convertceoltomidi();
+			/*
+			makefilestring();
+			
+			stream = new FileStream();
+			stream.open(file, FileMode.WRITE);
+			stream.writeUTFBytes(filestring);
+			stream.close();
+			*/
+			
+			control.fixmouseclicks = true;
+			control.showmessage("SONG EXPORTED AS MIDI");
 		}
 		
 		private static function onloadmidi(e:Event):void {  
@@ -427,6 +460,10 @@ package {
 			if (control.arrange.loopend <= control.arrange.loopstart) {
 				control.arrange.loopend = control.arrange.loopstart + 1;
 			}
+		}
+		
+		public static function convertceoltomidi():void {
+		  //Export the song currently loaded as a midi.
 		}
 		
 		CONFIG::desktop {
