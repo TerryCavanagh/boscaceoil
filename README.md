@@ -6,6 +6,9 @@ Terry Cavanagh / http://www.distractionware.com
 
 -=-=-=-=-=-=-=-=
 
+[![TravisCI Build Status](https://travis-ci.org/TerryCavanagh/boscaceoil.svg?branch=master)](https://travis-ci.org/TerryCavanagh/boscaceoil)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/TerryCavanagh/boscaceoil?branch=master&svg=true)](https://ci.appveyor.com/project/TerryCavanagh/boscaceoil)
+
 ## Modifying Bosca Ceoil itself
 
 Bosca Ceoil is an Adobe AIR application, written in the programming language
@@ -29,7 +32,7 @@ The compiler needs quite a few options to produce a working Bosca Ceoil
 "movie":
 
 ```
-    amxmlc -swf-version 20 -default-frame-rate 60 -default-size 768 480 -library-path+=lib/sion065.swc -source-path+=src -default-background-color 0x000000 -warnings -strict src/Main.as -o BoscaCeoil.swf -define+=CONFIG::desktop,true -define+=CONFIG::web,false
+    amxmlc -swf-version 28 -default-frame-rate 60 -default-size 768 560 -library-path+=lib/sion065.swc -source-path+=src -default-background-color 0x000000 -warnings -strict src/Main.as -o BoscaCeoil.swf -define+=CONFIG::desktop,true -define+=CONFIG::web,false
 ```
 
 All the NativeApplication, File, etc. stuff from the Air API needs to be wrapped in CONFIG::desktop { ... } blocks so they don't get compiled into the web version, or else it breaks.
