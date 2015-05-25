@@ -74,7 +74,7 @@ package ocean.midi {
 		/**
 		* track array including main track
 		*/
-		private var _trackArray:Array;
+		public var _trackArray:Array;
 		
 		/**
 		 * Midi track format, 0/1/2 are available.
@@ -172,7 +172,7 @@ package ocean.midi {
 				_mainTrack = new MidiTrack();
 				var tempArray:Array = new Array();
 				var channels:Array = new Array();
-
+				
 				for each( var item:MessageItem in _trackArray[0].msgList ){
 					if( item is NoteItem ){
 						if( channels.indexOf((item as NoteItem).channel)<0 ){

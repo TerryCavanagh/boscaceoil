@@ -10,31 +10,16 @@ package {
 	import org.si.sion.midi.*;
 	import org.si.sion.events.*;
 	
-	import com.newgonzo.midi.MIDIDecoder;
-	import com.newgonzo.midi.messages.*;
-	import com.newgonzo.midi.file.*;
+	import ocean.midi.*;
+	import ocean.midi.event.*;
+	import ocean.midi.model.*;
 	
 	public class midicontrol {
-		public static function resetinstruments():void {
-			if (channelinstrument.length == 0) {
-				for (var i:int = 0; i < 16; i++) {
-					channelinstrument.push(-1);
-					channelvolume.push(0);
-				}
-			}else {
-				for (i = 0; i < 16; i++) {
-					channelinstrument[i] = -1;
-					channelvolume[i] = 0;
-				}
-			}
-		}
-		
-    public static var smfData:SMFData = new SMFData();
 		public static function openfile():void {
 			control.stopmusic();	
 			
 			file = File.desktopDirectory.resolvePath("");
-		  file.addEventListener(Event.SELECT, siononloadmidi);
+		  file.addEventListener(Event.SELECT, onloadmidi);
 			file.browseForOpen("Load .mid File", [midiFilter]);
 			
 			control.fixmouseclicks = true;
@@ -58,71 +43,63 @@ package {
 			}
 			
 			convertceoltomidi();
-			/*
-			makefilestring();
+			
+			tempbytes = new ByteArray();
+			tempbytes = clone(midifile.output());
 			
 			stream = new FileStream();
 			stream.open(file, FileMode.WRITE);
-			stream.writeUTFBytes(filestring);
+			stream.writeBytes(tempbytes, 0, tempbytes.length);
 			stream.close();
-			*/
 			
 			control.fixmouseclicks = true;
 			control.showmessage("SONG EXPORTED AS MIDI");
 		}
 		
 		private static function onloadmidi(e:Event):void {  
-			midiData = new ByteArray();
+			mididata = new ByteArray();
 			file = e.currentTarget as File;
 			
 			stream = new FileStream();
 			stream.open(file, FileMode.READ);
-			stream.readBytes(midiData);
+			stream.readBytes(mididata);
 			stream.close();
 			
-			decoder = new MIDIDecoder();
-      midifile = decoder.decodeFile(midiData);
+			tempbytes = new ByteArray;
+			tempbytes = clone(mididata);
+			midifile = new MidiFile;
+			midifile.input(tempbytes);
 			
-			smfData.loadBytes(midiData);
+			smfData.loadBytes(mididata);
 			
-			var track:MIDITrack;
-			var event:MIDITrackEvent;
-			
-			trace("midifile.division = " + String(midifile.division));
-			trace("midifile.format = " + String(midifile.format));
-			trace("midifile.numTracks = " + String(midifile.numTracks));
-			
-			var v:VoiceMessage;
-			var c:ChannelMessage; 
-			var d:DataMessage; 
+			var track:SMFTrack;
+			var event:SMFEvent;
 			
 			clearnotes();
 			resetinstruments();
 			
-			for each(track in midifile.tracks) {
-				for each(event in track.events) {
-					if (event.message.status == MessageStatus.NOTE_ON) {
-						v = event.message as VoiceMessage;
-						//trace(event.message.toString());
-						if(v.velocity == 0) {
-							//This is *actually* a note off event in disguise
-							changenotelength(event.time, v.pitch, v.channel);
-						}else{
-							addnote(event.time, v.pitch, v.channel);
-							if (v.velocity > channelvolume[v.channel]) {
-								channelvolume[v.channel] = v.velocity;
+			for (var trackn:int = 0; trackn < smfData.numTracks; trackn++) {
+				//trace("Reading track " + String(trackn) + ": " + String(smfData.tracks[trackn].sequence.length));
+				for each(event in smfData.tracks[trackn].sequence) {
+					//trace(String(event.time) + ": " + event.toString());
+					switch (event.type & 0xf0) {
+						case SMFEvent.NOTE_ON:
+							if(event.velocity == 0) {
+								//This is *actually* a note off event in disguise
+								changenotelength(event.time, event.note, event.channel);
+							}else{
+								addnote(event.time, event.note, event.channel);
+								if (event.velocity > channelvolume[event.channel]) {
+									channelvolume[event.channel] = event.velocity;
+								}
 							}
-						}
-						//trace(event.time, event.message.toString() + ", pitch = " + String(v.pitch));
-					}else if (event.message.status == MessageStatus.NOTE_OFF) {
-						v = event.message as VoiceMessage;
-						changenotelength(event.time, v.pitch, v.channel);
-						//trace(event.time, event.message.toString() + ", pitch = " + String(v.pitch));
-					}else if (event.message.status == MessageStatus.PROGRAM_CHANGE) {
-						d = event.message as DataMessage;
-						c = event.message as ChannelMessage;
-						channelinstrument[c.channel] = d.data1;
-						//trace(event.time, event.message.toString());
+						break;
+						case SMFEvent.NOTE_OFF:
+							changenotelength(event.time, event.note, event.channel);
+						break;
+						case SMFEvent.PROGRAM_CHANGE:
+							channelinstrument[event.channel] = event.value;
+						break;
 					}
 				}
 			} 
@@ -134,8 +111,35 @@ package {
 			control.arrange.currentbar = 0; control.arrange.viewstart = 0;
 			control.changemusicbox(0);
 			
+			/*
+			control._driver.setBeatCallbackInterval(1);
+			control._driver.setTimerInterruption(1, null);
+      control._driver.play(smfData, false);
+			*/
+      
 			control.showmessage("MIDI IMPORTED");
 			control.fixmouseclicks = true;
+		}
+		
+		public static function clone(source:Object):* { 
+			var myBA:ByteArray = new ByteArray(); 
+			myBA.writeObject(source); 
+			myBA.position = 0; 
+			return(myBA.readObject()); 
+		}
+		
+		public static function resetinstruments():void {
+			if (channelinstrument.length == 0) {
+				for (var i:int = 0; i < 16; i++) {
+					channelinstrument.push(-1);
+					channelvolume.push(0);
+				}
+			}else {
+				for (i = 0; i < 16; i++) {
+					channelinstrument[i] = -1;
+					channelvolume[i] = 0;
+				}
+			}
 		}
 		
 		public static function clearnotes():void {
@@ -205,73 +209,6 @@ package {
 				}
 			}
 		}
-		
-		private static function siononloadmidi(e:Event):void {  
-			midiData = new ByteArray();
-			file = e.currentTarget as File;
-			
-			stream = new FileStream();
-			stream.open(file, FileMode.READ);
-			stream.readBytes(midiData);
-			stream.close();
-			
-			smfData.loadBytes(midiData);
-			
-			//trace(smfData.toString());
-			
-			var track:SMFTrack;
-			var event:SMFEvent;
-			
-			clearnotes();
-			resetinstruments();
-			
-			for (var trackn:int = 0; trackn < smfData.numTracks; trackn++) {
-				//trace("Reading track " + String(trackn) + ": " + String(smfData.tracks[trackn].sequence.length));
-				for each(event in smfData.tracks[trackn].sequence) {
-					//trace(String(event.time) + ": " + event.toString());
-					switch (event.type & 0xf0) {
-						case SMFEvent.NOTE_ON:
-							if(event.velocity == 0) {
-								//This is *actually* a note off event in disguise
-								changenotelength(event.time, event.note, event.channel);
-							}else{
-								addnote(event.time, event.note, event.channel);
-								if (event.velocity > channelvolume[event.channel]) {
-									channelvolume[event.channel] = event.velocity;
-								}
-							}
-						break;
-						case SMFEvent.NOTE_OFF:
-							changenotelength(event.time, event.note, event.channel);
-						break;
-						case SMFEvent.PROGRAM_CHANGE:
-							channelinstrument[event.channel] = event.value;
-						break;
-					}
-				}
-			} 
-			
-			channelinstrument[9] = 142;
-			
-			convertmiditoceol();
-			
-			control.arrange.currentbar = 0; control.arrange.viewstart = 0;
-			control.changemusicbox(0);
-			
-			/*
-			control._driver.setBeatCallbackInterval(1);
-			control._driver.setTimerInterruption(1, null);
-      control._driver.play(smfData, false);
-			*/
-      
-			control.showmessage("MIDI IMPORTED");
-			control.fixmouseclicks = true;
-		}
-		
-		public static var resolution:Number;
-		public static var signature:Number;
-		public static var numnotes:int;
-		public static var numpatterns:int;
 		
 		public static function getsonglength():int {
 			return int(smfData.measures);
@@ -464,23 +401,48 @@ package {
 		
 		public static function convertceoltomidi():void {
 		  //Export the song currently loaded as a midi.
+			//midifile = new MidiFile();
+			
+			trace("num tracks:" + midifile.tracks);
+			for (var sel:int = 0 ; sel < midifile.tracks ; sel++) {
+				trace("track " + String(sel + 1) + ", data:" + String(midifile.track(sel).trackChannel) + ", channel:" + String(midifile.track(sel).trackChannel));
+				for (var i:int = 0 ; i < midifile.track(sel).msgList.length ; i++) {
+					var index:uint = i+1;
+					var time:uint = midifile.track(sel).msgList[i].timeline;
+					var len:uint = midifile.track(sel).msgList[i] is NoteItem? midifile.track(sel).msgList[i].duration : null;
+					var channel:uint = midifile.track(sel).msgList[i] is NoteItem?midifile.track(sel).msgList[i].channel+1 : midifile.track(sel).trackChannel+1;
+					var type:String = MidiEnum.getMessageName(midifile.track(sel).msgList[i].kind);
+					var param:String = midifile.track(sel).msgList[i] is NoteItem? midifile.track(sel).msgList[i].pitchName : "else";
+					var value:uint = midifile.track(sel).msgList[i] is NoteItem? midifile.track(sel).msgList[i].velocity : null;
+					trace("index:" + String(index) + ", time:" + String(time) + ", len:+" + String(len) + ", channel:" + String(channel) + ", event:" + String(type) + ", param:" + String(param) + ", value:" + String(value));
+				}				
+			}
+			
+			//midifile._trackArray[0].list.push(new NoteItem(0, 67, 127, 120));
+			//midifile.addTrack(new MidiTrack());
 		}
 		
 		CONFIG::desktop {
 			public static var file:File, stream:FileStream;
 		}
 		
-		public static var midifile:MIDIFile;
-		public static var decoder:MIDIDecoder;
-		public static var midiData:ByteArray;
+		public static var mididata:ByteArray;
+		public static var resolution:Number;
+		public static var signature:Number;
+		public static var numnotes:int;
+		public static var numpatterns:int;
 		
-		public static var midiFilter:FileFilter = new FileFilter("Midi", "*.mid");
+		public static var midiFilter:FileFilter = new FileFilter("Standard MIDI File", "*.mid;*.midi;");
 		
 		public static var unmatchednotes:Vector.<Rectangle> = new Vector.<Rectangle>;
 		public static var midinotes:Vector.<Rectangle> = new Vector.<Rectangle>;
 		public static var channelinstrument:Vector.<int> = new Vector.<int>;
 		public static var channelvolume:Vector.<int> = new Vector.<int>;
+    public static var smfData:SMFData = new SMFData();
+		
+		//Stuff for exporting
+		public static var midifile:MidiFile;
+		public static var tempbytes:ByteArray;
 	}
 }
-
 }

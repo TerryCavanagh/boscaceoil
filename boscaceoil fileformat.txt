@@ -40,7 +40,7 @@ for (i = 0; i < numpatterns; i++) {
   * pattern number of notes
   //We loop over the notes
   {
-    * note index [0-127]           // Middle C is around 65 I think
+    * note index [0-127]           // Middle C is 60.
     * note length [>0]                  
     * x offset in pattern [0-32]
     * dummy variable               // Just a wasted zero; notes are stored as a rectangle struct
