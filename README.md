@@ -1,62 +1,36 @@
-# BOSCA CEOIL v2.0
+# Bosca Ceoil
 
 A simple music making program
 
 Terry Cavanagh / http://www.distractionware.com
 
--=-=-=-=-=-=-=-=
+## Roadmap for version 2.0
 
-[![TravisCI Build Status](https://travis-ci.org/TerryCavanagh/boscaceoil.svg?branch=master)](https://travis-ci.org/TerryCavanagh/boscaceoil)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/TerryCavanagh/boscaceoil?branch=master&svg=true)](https://ci.appveyor.com/project/TerryCavanagh/boscaceoil)
+Bosca Ceoil is currently under active development for version 2.0. Here's the roadmap for what I want that version to contain, and where we currently are:
 
-## Modifying Bosca Ceoil itself
+ * New expandable GUI code [DONE]
+ * New GUI skin [DONE]
+ * Online version [DONE]
+ * Midi Importer [DONE]
+ * New gui controls: transpose, instrument next/prev, scrollbars [Partially done]
+ - XM Exporter [Partially done, some bugs]
+ 
+ - Built in Tutorial, General Reference guide
+ - Built in Tutorial, Interactive make-your-first-song guide
+ - Midi Exporter
+ - Resolution independance
+ - Expore posibility of better instrument control
+ - Linux fork updated to 2.0 to match
+ 
+## Contributing to Bosca Ceoil
 
-Bosca Ceoil is an Adobe AIR application, written in the programming language
-called "ActionScript 3". Making changes to Bosca Ceoil involves changing
-ActionScript code.
+RIGHT NOW is a really good time to contribute to Bosca Ceoil. Pull requests are very welcome - 2.0 is around the corner!
 
+See howtobuild.txt for a detailed guide to compiling Bosca Ceoil.
 
-### Pre-requisites
+## Open Source Licence
 
-Make sure you've got the [Adobe AIR SDK](http://www.adobe.com/devnet/air/air-sdk-download.html)
-installed.
-
-
-### Building
-
-The AIR SDK includes a tool called `amxmlc`, which is the compiler we'll use to
-turn the ActionScript 3 code into an .swf "movie" (which is the term for
-`.swf` files even when they represent applications).
-
-The compiler needs quite a few options to produce a working Bosca Ceoil
-"movie":
-
-```
-    amxmlc -swf-version 28 -default-frame-rate 60 -default-size 768 560 -library-path+=lib/sion065.swc -source-path+=src -default-background-color 0x000000 -warnings -strict src/Main.as -o BoscaCeoil.swf -define+=CONFIG::desktop,true -define+=CONFIG::web,false
-```
-
-All the NativeApplication, File, etc. stuff from the Air API needs to be wrapped in CONFIG::desktop { ... } blocks so they don't get compiled into the web version, or else it breaks.
-
-Desktop builds will now have to be compiled with the -define+=CONFIG::desktop,true -define+=CONFIG::web,false flags.
-Likewise, web builds will have to be compiled with -define+=CONFIG::desktop,false -define+=CONFIG::web,true.
-
-
-### Running
-
-The AIR application description file, `application.xml`, tells AIR about the application you'd like to create from which movie files.
-
-The AIR SDK comes with a tool called `adl`, the Application Description Loader, which lets you run Bosca with the newly-compiled SWF:
-
-```
-    adl application.xml
-```
-
-If you want to distribute the application, the AIR SDK contains all the tools you'll need for that.
-
-
-Available under the FreeBSD licence. Fork away!
-
----
+Available under the FreeBSD licence. Feel free to fork Bosca Ceoil and do your own thing with it! FreeBSD licence text follows:
 
 Copyright 1992-2013 Terry Cavanagh. All rights reserved.
 
