@@ -1,6 +1,6 @@
-[logo]
+![logo](boscalogo.png "Bosca Ceoil")
 
-A simple music making program
+A simple music making program.
 
 Terry Cavanagh / http://www.distractionware.com
 
