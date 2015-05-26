@@ -78,10 +78,12 @@ package {
 			clearnotes();
 			resetinstruments();
 			
+			trace(smfData.toString());
+			
 			for (var trackn:int = 0; trackn < smfData.numTracks; trackn++) {
-				//trace("Reading track " + String(trackn) + ": " + String(smfData.tracks[trackn].sequence.length));
+				trace("Reading track " + String(trackn) + ": " + String(smfData.tracks[trackn].sequence.length));
 				for each(event in smfData.tracks[trackn].sequence) {
-					//trace(String(event.time) + ": " + event.toString());
+					trace("msg: " + String(event.time) + ": " + event.toString());
 					switch (event.type & 0xf0) {
 						case SMFEvent.NOTE_ON:
 							if(event.velocity == 0) {
@@ -402,11 +404,14 @@ package {
 		public static function convertceoltomidi():void {
 		  //Export the song currently loaded as a midi.
 			//midifile = new MidiFile();
-			
+			/*
 			trace("num tracks:" + midifile.tracks);
 			for (var sel:int = 0 ; sel < midifile.tracks ; sel++) {
 				trace("track " + String(sel + 1) + ", data:" + String(midifile.track(sel).trackChannel) + ", channel:" + String(midifile.track(sel).trackChannel));
 				for (var i:int = 0 ; i < midifile.track(sel).msgList.length ; i++) {
+					if (midifile.track(sel).msgList[i] is ChannelItem) {
+						trace(i, "command: " + String(midifile.track(sel).msgList[i]._command) + ", data1:" + String(midifile.track(sel).msgList[i]._data1));
+					}
 					var index:uint = i+1;
 					var time:uint = midifile.track(sel).msgList[i].timeline;
 					var len:uint = midifile.track(sel).msgList[i] is NoteItem? midifile.track(sel).msgList[i].duration : null;
@@ -417,9 +422,64 @@ package {
 					trace("index:" + String(index) + ", time:" + String(time) + ", len:+" + String(len) + ", channel:" + String(channel) + ", event:" + String(type) + ", param:" + String(param) + ", value:" + String(value));
 				}				
 			}
+			*/
+			midifile = new MidiFile();
+			
+			midifile.addTrack(new MidiTrack());
+			currenttrack = midifile.track(0);
+			writeinstrument(1, 0);
+			writenote(0, 60, 0, 120, 255);
+			writenote(0, 63, 120, 120, 255);
+			writenote(0, 67, 240, 120, 255);
+			writenote(0, 72, 360, 120, 255);
+			
+			for (var j:int = 0; j < 4; j++) {
+				writenote(0, 60 - 24, 0 + (120 * j), 30, 255);
+				writenote(0, 63 - 24, 30 + (120 * j), 30, 255);
+				writenote(0, 67 - 24, 60 + (120 * j), 30, 255);
+				writenote(0, 72 - 24, 90 + (120 * j), 30, 255);
+				writenote(0, 60 + 12, 0 + (120 * j), 30, 255);
+				writenote(0, 63 + 12, 30 + (120 * j), 30, 255);
+				writenote(0, 60 + 12, 60 + (120 * j), 30, 255);
+				writenote(0, 67 + 12, 90 + (120 * j), 30, 255);
+			}
+			
+			midifile.addTrack(new MidiTrack());
+			currenttrack = midifile.track(1);
+			writeinstrument(20, 1);
+			
+			writenote(1, 48, 0, (120 * 2), 255);
+			writenote(1, 55, 240, (120 * 2), 255);
+			writenote(1, 48, 480, (120 * 2), 255);
+			writenote(1, 55, 620, (120 * 2), 255);
+			
+			
+			midifile.addTrack(new MidiTrack());
+			currenttrack = midifile.track(2);
+			writeinstrument(40, 2);
+			
+			writenote(2, 36, 0, (120 * 8), 255);
+			
+			
+			//currenttrack._msgList.push(new NoteItem(1, 67, 127, 120));
 			
 			//midifile._trackArray[0].list.push(new NoteItem(0, 67, 127, 120));
 			//midifile.addTrack(new MidiTrack());
+		}
+		
+		public static function writeinstrument(instr:int, channel:int):void {
+			currenttrack._msgList.push(new ChannelItem());
+			var t:int = currenttrack._msgList.length - 1;
+			currenttrack._msgList[t]._kind = MidiEnum.PROGRAM_CHANGE;
+			currenttrack._msgList[t]._command = 192 + channel;
+			currenttrack._msgList[t]._data1 = instr;
+		}
+		
+		public static function writenote(channel:int, pitch:int, time:int, length:int, volume:int):void {
+			volume = volume / 2;
+			if (volume > 127) volume = 127;
+			
+			currenttrack._msgList.push(new NoteItem(channel, pitch, volume, length, time)); 
 		}
 		
 		CONFIG::desktop {
@@ -443,6 +503,7 @@ package {
 		//Stuff for exporting
 		public static var midifile:MidiFile;
 		public static var tempbytes:ByteArray;
+		public static var currenttrack:MidiTrack;
 	}
 }
 }

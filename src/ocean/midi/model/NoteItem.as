@@ -33,12 +33,14 @@ package ocean.midi.model {
 		private var _channel:uint;
 		private static const _pitchName:Array = ["C","Db","D","Eb","E","F","F#","G","G#","A","Bb","B"];
 		
-		public function NoteItem( c:uint=0 , p:uint=67 , v:uint=127 , d:uint=120 ):void{
+		public function NoteItem( c:uint=0 , p:uint=67 , v:uint=127 , d:uint=120, t:int=0 ):void{
 			super();
 			_channel = c&0x0F;
 			_pitch = p&0x7F;
 			_velocity = v&0x7F;
 			_duration = d;
+			
+			_timeline = t;
 		}
 		
 		public function get channel():uint{

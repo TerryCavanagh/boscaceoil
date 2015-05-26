@@ -55,7 +55,8 @@ package ocean.midi {
 		/**
 		* stores midi events as message list, contents each note with a duration value, that is editable convenience.
 		*/
-		private var _msgList:MessageList;
+		//private var _msgList:MessageList;
+		public var _msgList:MessageList;
 		
 		/**
 		 * Stores the midi event messages as list data structure.

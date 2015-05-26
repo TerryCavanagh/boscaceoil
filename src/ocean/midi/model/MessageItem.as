@@ -27,8 +27,8 @@ package ocean.midi.model {
 	/**
 	 */
 	public class MessageItem {
-		private var _timeline:uint;
-		private var _kind:uint;
+		public var _timeline:uint;
+		public var _kind:uint;
 		/**
 		 * @default true Means this is an active item while false means to be erased.
 		 */

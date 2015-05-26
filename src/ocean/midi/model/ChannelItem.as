@@ -27,10 +27,10 @@ package ocean.midi.model {
 	/**
 	 */
 	public class ChannelItem extends MessageItem{
-		private var _channel:uint;
-		private var _command:uint;
-		private var _data1:uint;
-		private var _data2:*;
+		public var _channel:uint;
+		public var _command:uint;
+		public var _data1:uint;
+		public var _data2:*;
 
 		public function ChannelItem():void{
 			super();
