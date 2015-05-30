@@ -37,6 +37,8 @@ package {
 			
 			recordfilter = 0;
 			topnote = -1; bottomnote = 250;
+			
+			hash = 0;
 		}
 		
 		public function findtopnote():void {
@@ -74,6 +76,8 @@ package {
 			if (note > topnote) topnote = note;
 			if (note < bottomnote) bottomnote = note;
 			notespan = topnote-bottomnote;
+			
+			hash = (hash + (note * time)) % 2147483647;
 		}
 		
 		public function noteat(noteindex:int, note:int):Boolean {
@@ -135,5 +139,7 @@ package {
 		public var palette:int;
 		
 		public var isplayed:Boolean;
+		
+		public var hash:int; //massively simplified thing
 	}
 }

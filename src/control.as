@@ -682,6 +682,7 @@
 			musicbox[numboxes].clear();
 			musicbox[numboxes].instr = currentinstrument;
 			musicbox[numboxes].palette = instrument[currentinstrument].palette;
+			musicbox[numboxes].hash += currentinstrument;
 			numboxes++;
 		}
 		
