@@ -462,7 +462,7 @@ package {
 					
 					CONFIG::desktop {
 						addbutton(220, gfx.linespacing * 2, 75, "NEW SONG", "newsong");
-						addbutton(305, gfx.linespacing * 2, 75, "EXPORT", "exportlist");
+						addbutton(305, gfx.linespacing * 2, 75, "EXPORT...", "exportlist");
 						addbutton(220, (gfx.linespacing * 4) + 5, 75, "LOAD .ceol", "loadceol");
 						addbutton(305, (gfx.linespacing * 4) + 5, 75, "SAVE .ceol", "saveceol");
 					}

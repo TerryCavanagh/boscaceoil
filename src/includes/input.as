@@ -186,10 +186,12 @@
 					if (control.list.type == control.LIST_EXPORTS) {
 						if (control.list.selection == 0) {
 							control.exportwav();
-						}else {
-					    CONFIG::desktop {
-							  control.exportxm();
+						}else if (control.list.selection == 1) {
+							CONFIG::desktop {
+								control.exportxm();
 							}
+						} else if (control.list.selection == 2) {
+							control.exportmml();
 						}
 						control.list.close();
 					}
