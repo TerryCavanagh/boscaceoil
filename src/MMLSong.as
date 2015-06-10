@@ -4,7 +4,8 @@ package {
 	import mx.utils.StringUtil;
 
 	public class MMLSong {
-		protected var instrumentDefinitions:Vector.<String> = new Vector.<String>;
+		protected var instrumentDefinitions:Vector.<String>;
+		protected var mmlToUseInstrument:Vector.<String>;
 		protected var noteDivisions:uint = 4;
 		protected var bpm:uint = 120;
 		protected var lengthOfPattern:uint = 16;
@@ -23,18 +24,21 @@ package {
 			var patternNum:int;
 			var numberOfPatterns:int = control.numboxes;
 
-			instrumentDefinitions= new Vector.<String>();
+			instrumentDefinitions = new Vector.<String>();
+			mmlToUseInstrument = new Vector.<String>();
 			for (var i:uint = 0; i < control.numinstrument; i++) {
 				var boscaInstrument:instrumentclass = control.instrument[i];
 				if (boscaInstrument.type == 0) { //regular instrument, not a drumkit
-					instrumentDefinitions[i] = _boscaInstrumentToMML(control.instrument[i], i);
+					instrumentDefinitions[i] = _boscaInstrumentToMML(boscaInstrument, i);
+					mmlToUseInstrument[i] = _boscaInstrumentToMMLUse(boscaInstrument, i);
 				} else {
 					instrumentDefinitions[i] = "#OPN@" + i + " { //drum kit placeholder\n" +
 						"4,6,\n" +
 						"31,15, 0, 9, 1, 0, 0,15, 0, 0\n" +
 						"31,20, 5,14, 5, 3, 0, 4, 0, 0\n" +
 						"31,10, 9, 9, 1, 0, 0,10, 0, 0\n" +
-						"31,22, 5,14, 5, 0, 1, 7, 0, 0};\n"
+						"31,22, 5,14, 5, 0, 1, 7, 0, 0};\n";
+					mmlToUseInstrument[i] = _boscaInstrumentToMMLUse(boscaInstrument, i);
 				}
 			}
 
@@ -132,7 +136,7 @@ package {
 				}
 				while (notesInThisSlot.length > tracks.length) {
 					var emptyTrackSoFar:String = StringUtil.repeat(emptyNoteMML, place);
-					tracks.push("%6@" + pattern.instr + "\n" + emptyTrackSoFar);
+					tracks.push(mmlToUseInstrument[pattern.instr] + "\n" + emptyTrackSoFar);
 				}
 				var emptyNoteMML:String = "  r   ";
 
@@ -183,6 +187,10 @@ package {
 
 		protected function _boscaInstrumentToMML(instrument:instrumentclass, channel:int):String {
 			return StringUtil.substitute("// instrument \"{0}\"\n{1}\n", instrument.name, instrument.voice.getMML(channel));
+		}
+
+		protected function _boscaInstrumentToMMLUse(instrument:instrumentclass, channel:int):String {
+			return StringUtil.substitute("%6@{0} v{1} @f{2},{3}", channel, int(instrument.volume / 16), instrument.cutoff, instrument.resonance);
 		}
 
 	}
