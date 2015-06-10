@@ -191,7 +191,10 @@
 								control.exportxm();
 							}
 						} else if (control.list.selection == 2) {
-							control.exportmml();
+							// TODO: enable for web usage too (it's just text!)
+							CONFIG::desktop {
+								control.exportmml();
+							}
 						}
 						control.list.close();
 					}
