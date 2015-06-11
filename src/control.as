@@ -828,7 +828,8 @@
 				case LIST_EXPORTS:
 					list.item[0] = "EXPORT .wav";
 					list.item[1] = "EXPORT .xm (wip)";
-					list.numitems = 2;
+					list.item[2] = "EXPORT .mml (wip)";
+					list.numitems = 3;
 				break;
 			}
 		}
@@ -1257,6 +1258,36 @@
 			fixmouseclicks = true;
 			showmessage("SONG EXPORTED AS XM");
 		}
+
+		public static function exportmml():void {
+			stopmusic();
+
+			file = File.desktopDirectory.resolvePath("*.mml");
+			file.addEventListener(Event.SELECT, onexportmml);
+			file.browseForSave("Export MML music text file");
+
+			fixmouseclicks = true;
+		}
+
+		private static function onexportmml(e:Event):void {
+			file = e.currentTarget as File;
+
+			if (!fileHasExtension(file, "mml")) {
+				addExtensionToFile(file, "mml");
+			}
+
+			var song:MMLSong = new MMLSong();
+			song.loadFromLiveBoscaCeoilModel();
+
+			stream = new FileStream();
+			stream.open(file, FileMode.WRITE);
+			song.writeToStream(stream);
+			stream.close();
+
+			fixmouseclicks = true;
+			showmessage("SONG EXPORTED AS MML");
+		}
+
 
 		private static function onsavewav(e:Event):void {
 			file = e.currentTarget as File;
