@@ -87,7 +87,7 @@
   <options>
     <option showHiddenPaths="False" />
     <option testMovie="Custom" />
-    <option testMovieCommand="Run.bat" />
+    <option testMovieCommand="TerryRun.bat" />
   </options>
   <!-- Plugin storage -->
   <storage />
