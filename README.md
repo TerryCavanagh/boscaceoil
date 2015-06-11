@@ -1,5 +1,8 @@
 ![logo](boscalogo.png "Bosca Ceoil")
 
+[![TravisCI Build Status](https://travis-ci.org/TerryCavanagh/boscaceoil.svg?branch=master)](https://travis-ci.org/TerryCavanagh/boscaceoil)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/TerryCavanagh/boscaceoil?branch=master&svg=true)](https://ci.appveyor.com/project/TerryCavanagh/boscaceoil)
+
 A simple music making program.
 
 Terry Cavanagh / http://www.distractionware.com

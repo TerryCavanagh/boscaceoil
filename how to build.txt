@@ -2,9 +2,6 @@
 
 A simple music making program
 
-[![TravisCI Build Status](https://travis-ci.org/TerryCavanagh/boscaceoil.svg?branch=master)](https://travis-ci.org/TerryCavanagh/boscaceoil)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/TerryCavanagh/boscaceoil?branch=master&svg=true)](https://ci.appveyor.com/project/TerryCavanagh/boscaceoil)
-
 ## Modifying Bosca Ceoil itself
 
 Bosca Ceoil is an Adobe AIR application, written in the programming language
