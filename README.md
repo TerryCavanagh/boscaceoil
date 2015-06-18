@@ -28,7 +28,7 @@ Bosca Ceoil is currently under active development for version 2.0. Here's the ro
 
 RIGHT NOW is a really good time to contribute to Bosca Ceoil. Pull requests are very welcome - 2.0 is around the corner!
 
-See howtobuild.txt for a detailed guide to compiling Bosca Ceoil.
+See [howtobuild.MD](https://github.com/TerryCavanagh/boscaceoil/blob/master/how%20to%20build.MD) for a detailed guide to compiling Bosca Ceoil.
 
 ## Open Source Licence
 
