@@ -230,7 +230,7 @@ package ocean.midi {
 			file.writeShort( _division );
 			
 			//serialize every tracks.
-			for( var i:int=0 ; i< _tracks ; i++ ){
+			for( var i:int=0 ; i< _tracks ; i++){
 				_trackArray[i].serialize(file);
 			}
 			

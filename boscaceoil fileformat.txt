@@ -29,7 +29,7 @@ for (i = 0; i < numinstrument; i++) {
 
 // NEXT, PATTERNS
 
-* number of patterns [0,128]       // Not sure what the limit is; pretty high I think
+* number of patterns [>0]            // Not sure what the limit is; pretty high I think
 
 for (i = 0; i < numpatterns; i++) {
 {

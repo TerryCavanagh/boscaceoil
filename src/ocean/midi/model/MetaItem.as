@@ -31,8 +31,8 @@ package ocean.midi.model {
 	 * 
 	 */
 	public class MetaItem extends MessageItem{
-		private var _text:ByteArray;
-		private var _type:uint;
+		public var _text:ByteArray;
+		public var _type:uint;
 		
 		public function MetaItem():void{
 			super();

@@ -366,8 +366,7 @@ package {
 				addnotetoceol(currentpattern, note - (numnotes * currentpattern), midinotes[i].y, notelength, midinotes[i].height);
 			}
 			
-			//Optimising stage: we want to quickly check for duplicate patterns and remove
-			//unused ones.
+			//Optimising stage: Check for duplicate patterns and remove unused ones.
 			for (i = 0; i < control.numboxes; i++) {
 				var currenthash:int = control.musicbox[i].hash;
 				if (currenthash != -1) {
@@ -424,9 +423,13 @@ package {
 			}
 			*/
 			midifile = new MidiFile();
-			
 			midifile.addTrack(new MidiTrack());
 			currenttrack = midifile.track(0);
+			settimesig(4, 4);
+			settempo(120);
+			
+			midifile.addTrack(new MidiTrack());
+			currenttrack = midifile.track(1);
 			writeinstrument(1, 0);
 			writenote(0, 60, 0, 120, 255);
 			writenote(0, 63, 120, 120, 255);
@@ -465,6 +468,35 @@ package {
 			
 			//midifile._trackArray[0].list.push(new NoteItem(0, 67, 127, 120));
 			//midifile.addTrack(new MidiTrack());
+		}
+		
+		public static function settimesig(numerator:int, denominator:int):void {
+			currenttrack._msgList.push(new MetaItem());
+			var t:int = currenttrack._msgList.length - 1;
+			currenttrack._msgList[t].type = MidiEnum.TIME_SIGN;
+			var myba:ByteArray = new ByteArray();
+			myba.writeByte(0x04);
+			myba.writeByte(0x02);
+			myba.writeByte(0x18);
+			myba.writeByte(0x08);
+			currenttrack._msgList[t].text = myba;
+		}
+		
+		public static function settempo(tempo:int):void {
+			currenttrack._msgList.push(new MetaItem());
+			var t:int = currenttrack._msgList.length - 1;
+			currenttrack._msgList[t].type = MidiEnum.SET_TEMPO;
+			var tempoinmidiformat:int = 60000000 / tempo;
+			
+			var byte1:int = (tempoinmidiformat >> (8 * 2)) & 0xff;
+			var byte2:int = (tempoinmidiformat >> (8 * 1)) & 0xff;
+			var byte3:int = (tempoinmidiformat >> (8 * 0)) & 0xff;
+			
+			var myba:ByteArray = new ByteArray();
+			myba.writeByte(byte1);
+			myba.writeByte(byte2);
+			myba.writeByte(byte3);
+			currenttrack._msgList[t].text = myba;
 		}
 		
 		public static function writeinstrument(instr:int, channel:int):void {
