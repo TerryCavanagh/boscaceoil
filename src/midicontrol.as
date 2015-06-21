@@ -309,7 +309,6 @@ package {
 			return false;
 		}
 		
-		
 		public static function convertmiditoceol():void {
 			control.newsong();
 			control.numboxes = 0;
@@ -423,13 +422,45 @@ package {
 			}
 			*/
 			midifile = new MidiFile();
-			midifile.addTrack(new MidiTrack());
-			currenttrack = midifile.track(0);
-			settimesig(4, 4);
-			settempo(120);
 			
-			midifile.addTrack(new MidiTrack());
-			currenttrack = midifile.track(1);
+			nexttrack();
+			writetimesig();
+			writetempo(control.bpm);
+			
+			//Note sizes:
+			//30 = 1/16th
+			//60 = 1/8th
+			//120 = 1/4th
+			//240 = 1/2th
+			//480 = whole
+			
+			nexttrack();
+			
+			for (var j:int = 0; j < control.numinstrument; j++) {
+			  writeinstrument(instrumentconverttomidi(control.instrument[j].index), j);
+			}
+			
+			control.arrange.loopstart = 0;
+			control.arrange.loopend = control.arrange.lastbar;	
+			if (control.arrange.loopend <= control.arrange.loopstart) {
+				control.arrange.loopend = control.arrange.loopstart + 1;
+			}
+			
+			for (j = 0; j < control.arrange.lastbar; j++) {
+				for (var i:int = 0; i < 8; i++) {
+					if (control.arrange.bar[j].channel[i] != -1) {
+						var t:int = control.arrange.bar[j].channel[i];
+						for (var k:int = 0; k < control.musicbox[t].numnotes; k++) {
+							writenote(control.musicbox[t].instr, 
+												control.musicbox[t].notes[k].x, 
+												((j * control.boxcount) + control.musicbox[t].notes[k].width) * 30, 
+												control.musicbox[t].notes[k].y * 30, 255);
+						}
+					}
+				}
+			}
+			
+			/*
 			writeinstrument(1, 0);
 			writenote(0, 60, 0, 120, 255);
 			writenote(0, 63, 120, 120, 255);
@@ -447,8 +478,7 @@ package {
 				writenote(0, 67 + 12, 90 + (120 * j), 30, 255);
 			}
 			
-			midifile.addTrack(new MidiTrack());
-			currenttrack = midifile.track(1);
+			nexttrack();
 			writeinstrument(20, 1);
 			
 			writenote(1, 48, 0, (120 * 2), 255);
@@ -457,20 +487,28 @@ package {
 			writenote(1, 55, 620, (120 * 2), 255);
 			
 			
-			midifile.addTrack(new MidiTrack());
-			currenttrack = midifile.track(2);
+			nexttrack();
 			writeinstrument(40, 2);
 			
 			writenote(2, 36, 0, (120 * 8), 255);
-			
-			
+			*/
 			//currenttrack._msgList.push(new NoteItem(1, 67, 127, 120));
 			
 			//midifile._trackArray[0].list.push(new NoteItem(0, 67, 127, 120));
 			//midifile.addTrack(new MidiTrack());
 		}
 		
-		public static function settimesig(numerator:int, denominator:int):void {
+		public static function instrumentconverttomidi(t:int):int {
+			//Converts Bosca Ceoil instrument to a similar Midi one.
+			return t;
+		}
+		
+		public static function nexttrack():void {
+			midifile.addTrack(new MidiTrack());
+			currenttrack = midifile.track(midifile._trackArray.length - 1);
+		}
+		
+		public static function writetimesig():void {
 			currenttrack._msgList.push(new MetaItem());
 			var t:int = currenttrack._msgList.length - 1;
 			currenttrack._msgList[t].type = MidiEnum.TIME_SIGN;
@@ -482,15 +520,15 @@ package {
 			currenttrack._msgList[t].text = myba;
 		}
 		
-		public static function settempo(tempo:int):void {
+		public static function writetempo(tempo:int):void {
 			currenttrack._msgList.push(new MetaItem());
 			var t:int = currenttrack._msgList.length - 1;
 			currenttrack._msgList[t].type = MidiEnum.SET_TEMPO;
 			var tempoinmidiformat:int = 60000000 / tempo;
 			
-			var byte1:int = (tempoinmidiformat >> (8 * 2)) & 0xff;
-			var byte2:int = (tempoinmidiformat >> (8 * 1)) & 0xff;
-			var byte3:int = (tempoinmidiformat >> (8 * 0)) & 0xff;
+			var byte1:int = (tempoinmidiformat >> 16) & 0xFF;
+			var byte2:int = (tempoinmidiformat >> 8) & 0xFF;
+			var byte3:int = tempoinmidiformat & 0xFF;
 			
 			var myba:ByteArray = new ByteArray();
 			myba.writeByte(byte1);
