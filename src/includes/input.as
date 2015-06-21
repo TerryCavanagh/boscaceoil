@@ -134,18 +134,43 @@
 						control.voicelist.index = control.voicelist.getfirst(control.instrument[control.currentinstrument].category);
 						control.changeinstrumentvoice(control.voicelist.name[control.voicelist.index]);
 					}
-					if (control.list.type == control.LIST_INSTRUMENT) {
-						if (control.list.item[control.list.selection] == ">> Next Page") {
-							control.voicelist.pagenum++;
+					if (control.list.type == control.LIST_MIDIINSTRUMENT) {
+						if (help.Left(control.list.item[control.list.selection], 2) == "<<") {
+							control.voicelist.pagenum = 0;
 							control.list.close();
-							control.filllist(control.LIST_INSTRUMENT);
+							control.filllist(control.LIST_MIDIINSTRUMENT);
 							control.list.init(235, (gfx.linesize * 3) + 3);
-						}else if (control.list.item[control.list.selection] == "<< First Page") {
+						}else if (help.Left(control.list.item[control.list.selection], 2) == ">>") {
+						  if (control.list.item[control.list.selection] == ">> Next Category") {
+								control.voicelist.pagenum++;
+								if (control.voicelist.pagenum == 15) control.voicelist.pagenum = 0;
+								control.list.close();
+								control.filllist(control.LIST_MIDIINSTRUMENT);
+								control.list.init(235, (gfx.linesize * 3) + 3);
+							}else{
+								control.voicelist.pagenum = control.list.selection + 1;
+								control.list.close();
+								control.filllist(control.LIST_MIDIINSTRUMENT);
+								control.list.init(235, (gfx.linesize * 3) + 3);
+							}
+						}else {
+							control.changeinstrumentvoice(control.list.item[control.list.selection]);
+							control.list.close();
+						}
+					}
+					if (control.list.type == control.LIST_INSTRUMENT) {
+						if (help.Left(control.list.item[control.list.selection], 2) == "<<") {
 							control.voicelist.pagenum = 0;
 							control.list.close();
 							control.filllist(control.LIST_INSTRUMENT);
 							control.list.init(235, (gfx.linesize * 3) + 3);
-						}else{
+						}else if (help.Left(control.list.item[control.list.selection], 2) == ">>") {
+							control.voicelist.pagenum++;
+							if (control.voicelist.pagenum == 15) control.voicelist.pagenum = 0;
+							control.list.close();
+							control.filllist(control.LIST_INSTRUMENT);
+							control.list.init(235, (gfx.linesize * 3) + 3);
+						}else {
 							control.changeinstrumentvoice(control.list.item[control.list.selection]);
 							control.list.close();
 						}
@@ -324,9 +349,16 @@
 								control.filllist(control.LIST_CATEGORY);
 								control.list.init(145, (gfx.linesize * 3) + 3);
 							}else if (control.mx >= 230) {
-								control.voicelist.makesublist(control.instrument[control.currentinstrument].category);
-								control.filllist(control.LIST_INSTRUMENT);
-								control.list.init(235, (gfx.linesize * 3) + 3);
+								if (control.instrument[control.currentinstrument].category == "MIDI") {
+									control.voicelist.makesublist(control.instrument[control.currentinstrument].category);
+									control.voicelist.pagenum = 0;
+									control.filllist(control.LIST_MIDIINSTRUMENT);
+									control.list.init(235, (gfx.linesize * 3) + 3);
+								}else{
+									control.voicelist.makesublist(control.instrument[control.currentinstrument].category);
+									control.filllist(control.LIST_INSTRUMENT);
+									control.list.init(235, (gfx.linesize * 3) + 3);
+								}
 							}
 						}
 					}

@@ -276,19 +276,19 @@
 					if (control.list.selection > -1) {
 						fillrect(control.list.x, control.list.y + (control.list.selection * linesize), control.list.w, linesize, 100 + (control.instrument[control.list.selection].palette*10));
 					}
-				}else{
-					if (control.list.item[control.list.numitems - 1] == ">> Next Page") {
-						fillrect(control.list.x, control.list.y + ((control.list.numitems - 1) * linesize), control.list.w, linesize, 0);
-					}else if (control.list.item[control.list.numitems - 1] == "<< First Page") {
-						fillrect(control.list.x, control.list.y + ((control.list.numitems - 1) * linesize), control.list.w, linesize, 0);
-					}				
+				}else {
+					for (i = 0; i < control.list.numitems; i++) {
+						if (help.Left(control.list.item[i], 2) == ">>" || help.Left(control.list.item[i], 2) == "<<") {
+							fillrect(control.list.x, control.list.y + (i * linesize), control.list.w, linesize, 0);
+						}
+					}
 					if (control.list.selection > -1) {
 						fillrect(control.list.x, control.list.y + (control.list.selection * linesize), control.list.w, linesize, 2);
 					}
 				}
 				
 				for (i = 0; i < control.list.numitems; i++) {
-					if (control.list.item[i] == ">> Next Page" || control.list.item[i] == "<< First Page") {
+					if (help.Left(control.list.item[i], 2) == ">>" || help.Left(control.list.item[i], 2) == "<<") {
 						print(control.list.x + 2, control.list.y + (i * linesize), control.list.item[i], 14);
 					}else {
 						print(control.list.x + 2, control.list.y + (i * linesize), control.list.item[i], 0);

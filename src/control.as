@@ -53,6 +53,7 @@
 		public static var LIST_SCREENSIZE:int = 6;
 		public static var LIST_EFFECTS:int = 7;
 		public static var LIST_EXPORTS:int = 8;
+		public static var LIST_MIDIINSTRUMENT:int = 9;
 		
 		public static var MENUTAB_FILE:int = 0;
 		public static var MENUTAB_ARRANGEMENTS:int = 1;
@@ -770,7 +771,7 @@
 					list.item[12] = "WORLD";
 					list.numitems = 13;
 				break;
-			  case LIST_INSTRUMENT:
+				case LIST_INSTRUMENT:
 				  if (voicelist.sublistsize > 15) {
 						//Need to split into several pages
 						//Fix pagenum if it got broken somewhere
@@ -787,6 +788,50 @@
 							}
 							list.item[voicelist.sublistsize - (voicelist.pagenum * 15)] = "<< First Page";
 							list.numitems = voicelist.sublistsize - (voicelist.pagenum * 15)+1;
+						}
+					}else {
+						//Just a simple single page
+						for (i = 0; i < voicelist.sublistsize; i++ ) {
+							list.item[i] = voicelist.subname[i];
+						}
+						list.numitems = voicelist.sublistsize;
+					}
+				break;
+			  case LIST_MIDIINSTRUMENT:
+				  if (voicelist.sublistsize > 8) {
+						//Need to split into several pages
+						//Fix pagenum if it got broken somewhere
+						if (((voicelist.pagenum -1) * 8) > voicelist.sublistsize) voicelist.pagenum = 0;
+						if (voicelist.pagenum == 0) {
+							list.item[0] = ">> Piano";
+							list.item[1] = ">> Bells";
+							list.item[2] = ">> Organ";
+							list.item[3] = ">> Guitar";
+							list.item[4] = ">> Bass";
+							list.item[5] = ">> Strings";
+							list.item[6] = ">> Ensemble";
+							list.item[7] = ">> Brass";
+							list.item[8] = ">> Reed";
+							list.item[9] = ">> Pipe";
+							list.item[10] = ">> Synth Lead";
+							list.item[11] = ">> Synth Pad";
+							list.item[12] = ">> Synth Effects";
+							list.item[13] = ">> World";
+							list.item[14] = ">> Percussive";
+							list.item[15] = ">> Sound Effects";
+							list.numitems = 16;
+						}else if (voicelist.sublistsize - ((voicelist.pagenum - 1) * 8) > 8) {
+							for (i = 0; i < 8; i++ ) {
+								list.item[i] = voicelist.subname[((voicelist.pagenum - 1) * 8) + i];
+							}
+							list.item[8] = "<< Category List";
+							list.numitems = 9;
+						}else{
+							for (i = 0; i < voicelist.sublistsize - ((voicelist.pagenum - 1) * 8); i++) {
+								list.item[i] = voicelist.subname[((voicelist.pagenum - 1) * 8) + i];
+							}
+							list.item[voicelist.sublistsize - ((voicelist.pagenum - 1) * 8)] = "<< Category List";
+							list.numitems = voicelist.sublistsize - ((voicelist.pagenum - 1) * 8) + 1;
 						}
 					}else {
 						//Just a simple single page
