@@ -46,6 +46,7 @@ package{
 	import flash.utils.getTimer;
 	import flash.utils.Timer;
 	import flash.events.InvokeEvent;
+	
 	CONFIG::desktop {
 		import flash.desktop.NativeApplication;
 	}
@@ -122,8 +123,14 @@ package{
 		}
 
 		private function _startMainLoop():void {
-			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, __activate__);
-      NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, __deactivate__);
+			CONFIG::desktop {
+				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, __activate__);
+				NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, __deactivate__);
+			}			
+			CONFIG::web {
+				addEventListener(Event.DEACTIVATE, __activate__);
+				addEventListener(Event.ACTIVATE, __deactivate__);
+			}
 		  
 			_timer.addEventListener(TimerEvent.TIMER, mainloop);
 			_timer.start();
