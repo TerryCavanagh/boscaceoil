@@ -55,6 +55,23 @@
 		public static var LIST_EXPORTS:int = 8;
 		public static var LIST_MIDIINSTRUMENT:int = 9;
 		
+		public static var LIST_MIDI_0_PIANO:int = 10;
+		public static var LIST_MIDI_1_BELLS:int = 11;
+		public static var LIST_MIDI_2_ORGAN:int = 12;
+		public static var LIST_MIDI_3_GUITAR:int = 13;
+		public static var LIST_MIDI_4_BASS:int = 14;
+		public static var LIST_MIDI_5_STRINGS:int = 15;
+		public static var LIST_MIDI_6_ENSEMBLE:int = 16;
+		public static var LIST_MIDI_7_BRASS:int = 17;
+		public static var LIST_MIDI_8_REED:int = 18;
+		public static var LIST_MIDI_9_PIPE:int = 19;
+		public static var LIST_MIDI_10_SYNTHLEAD:int = 20;
+		public static var LIST_MIDI_11_SYNTHPAD:int = 21;
+		public static var LIST_MIDI_12_SYNTHEFFECTS:int = 22;
+		public static var LIST_MIDI_13_WORLD:int = 23;
+		public static var LIST_MIDI_14_PERCUSSIVE:int = 24;
+		public static var LIST_MIDI_15_SOUNDEFFECTS:int = 25;
+		
 		public static var MENUTAB_FILE:int = 0;
 		public static var MENUTAB_ARRANGEMENTS:int = 1;
 		public static var MENUTAB_INSTRUMENTS:int = 2;
@@ -64,6 +81,8 @@
 		
 		public static function init():void {
 			clicklist = false;
+			clicksecondlist = false;
+			midilistselection = -1;
 			
 			test = false; teststring = "TEST = True";
 			patternmanagerview = 0;
@@ -797,49 +816,25 @@
 						list.numitems = voicelist.sublistsize;
 					}
 				break;
-			  case LIST_MIDIINSTRUMENT:
-				  if (voicelist.sublistsize > 8) {
-						//Need to split into several pages
-						//Fix pagenum if it got broken somewhere
-						if (((voicelist.pagenum -1) * 8) > voicelist.sublistsize) voicelist.pagenum = 0;
-						if (voicelist.pagenum == 0) {
-							list.item[0] = ">> Piano";
-							list.item[1] = ">> Bells";
-							list.item[2] = ">> Organ";
-							list.item[3] = ">> Guitar";
-							list.item[4] = ">> Bass";
-							list.item[5] = ">> Strings";
-							list.item[6] = ">> Ensemble";
-							list.item[7] = ">> Brass";
-							list.item[8] = ">> Reed";
-							list.item[9] = ">> Pipe";
-							list.item[10] = ">> Synth Lead";
-							list.item[11] = ">> Synth Pad";
-							list.item[12] = ">> Synth Effects";
-							list.item[13] = ">> World";
-							list.item[14] = ">> Percussive";
-							list.item[15] = ">> Sound Effects";
-							list.numitems = 16;
-						}else if (voicelist.sublistsize - ((voicelist.pagenum - 1) * 8) > 8) {
-							for (i = 0; i < 8; i++ ) {
-								list.item[i] = voicelist.subname[((voicelist.pagenum - 1) * 8) + i];
-							}
-							list.item[8] = "<< Category List";
-							list.numitems = 9;
-						}else{
-							for (i = 0; i < voicelist.sublistsize - ((voicelist.pagenum - 1) * 8); i++) {
-								list.item[i] = voicelist.subname[((voicelist.pagenum - 1) * 8) + i];
-							}
-							list.item[voicelist.sublistsize - ((voicelist.pagenum - 1) * 8)] = "<< Category List";
-							list.numitems = voicelist.sublistsize - ((voicelist.pagenum - 1) * 8) + 1;
-						}
-					}else {
-						//Just a simple single page
-						for (i = 0; i < voicelist.sublistsize; i++ ) {
-							list.item[i] = voicelist.subname[i];
-						}
-						list.numitems = voicelist.sublistsize;
-					}
+				case LIST_MIDIINSTRUMENT:
+					midilistselection = -1;
+					list.item[0] = "> Piano";
+					list.item[1] = "> Bells";
+					list.item[2] = "> Organ";
+					list.item[3] = "> Guitar";
+					list.item[4] = "> Bass";
+					list.item[5] = "> Strings";
+					list.item[6] = "> Ensemble";
+					list.item[7] = "> Brass";
+					list.item[8] = "> Reed";
+					list.item[9] = "> Pipe";
+					list.item[10] = "> Lead";
+					list.item[11] = "> Pads";
+					list.item[12] = "> Synth";
+					list.item[13] = "> World";
+					list.item[14] = "> Drums";
+					list.item[15] = "> Effects";
+					list.numitems = 16;
 				break;
 			  case LIST_SELECTINSTRUMENT:
 				  //For choosing from existing instruments
@@ -875,6 +870,15 @@
 					list.item[1] = "EXPORT .xm (wip)";
 					list.item[2] = "EXPORT .mml (wip)";
 					list.numitems = 3;
+				break;
+				default:
+					//Midi list
+					list.type = LIST_MIDIINSTRUMENT;
+					secondlist.type = t;
+					for (i = 0; i < 8; i++) {
+						secondlist.item[i] = voicelist.name[i + ((t - 10) * 8)];
+					}
+					secondlist.numitems = 8;
 				break;
 			}
 		}
@@ -1497,6 +1501,7 @@
 		public static var keypriority:int = 0;
 		public static var keyheld:Boolean = false;;
 		public static var clicklist:Boolean;
+		public static var clicksecondlist:Boolean;
 		public static var copykeyheld:Boolean = false;
 		
 		public static var keydelay:int, keyboardpressed:int = 0;
@@ -1556,6 +1561,8 @@
 		public static var trashbutton:int;
 		
 		public static var list:listclass = new listclass;
+		public static var secondlist:listclass = new listclass;
+		public static var midilistselection:int;
 		
 		public static var musicplaying:Boolean = true;
 		public static var nowexporting:Boolean = false;

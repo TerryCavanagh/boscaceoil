@@ -278,20 +278,49 @@
 					}
 				}else {
 					for (i = 0; i < control.list.numitems; i++) {
-						if (help.Left(control.list.item[i], 2) == ">>" || help.Left(control.list.item[i], 2) == "<<") {
+						if (help.Left(control.list.item[i], 1) == ">" || help.Left(control.list.item[i], 1) == "<") {
 							fillrect(control.list.x, control.list.y + (i * linesize), control.list.w, linesize, 0);
 						}
 					}
+					
+					if (control.list.type == control.LIST_MIDIINSTRUMENT) {
+						if (control.midilistselection > -1) {
+							fillrect(control.list.x, control.list.y + (control.midilistselection * linesize), control.list.w, linesize, 3);
+						}
+					}
+					
 					if (control.list.selection > -1) {
 						fillrect(control.list.x, control.list.y + (control.list.selection * linesize), control.list.w, linesize, 2);
 					}
 				}
 				
 				for (i = 0; i < control.list.numitems; i++) {
-					if (help.Left(control.list.item[i], 2) == ">>" || help.Left(control.list.item[i], 2) == "<<") {
+					if (help.Left(control.list.item[i], 1) == ">" || help.Left(control.list.item[i], 1) == "<") {
 						print(control.list.x + 2, control.list.y + (i * linesize), control.list.item[i], 14);
 					}else {
 						print(control.list.x + 2, control.list.y + (i * linesize), control.list.item[i], 0);
+					}
+				}
+			}
+			
+			if (control.secondlist.active) {
+				//Draw list
+				fillrect(control.secondlist.x - 2, control.secondlist.y - 2, control.secondlist.w + 4, control.secondlist.h + 4, 12);
+				fillrect(control.secondlist.x, control.secondlist.y, control.secondlist.w, control.secondlist.h, 11);
+				for (i = 0; i < control.secondlist.numitems; i++) {
+					if (help.Left(control.secondlist.item[i], 1) == ">" || help.Left(control.secondlist.item[i], 1) == "<") {
+						fillrect(control.secondlist.x, control.secondlist.y + (i * linesize), control.secondlist.w, linesize, 0);
+					}
+				}
+				if (control.secondlist.selection > -1) {
+					fillrect(control.secondlist.x, control.secondlist.y + (control.secondlist.selection * linesize), control.secondlist.w, linesize, 2);
+				}
+				
+				for (i = 0; i < control.secondlist.numitems; i++) {
+					if (help.Left(control.secondlist.item[i], 1) == ">" || help.Left(control.secondlist.item[i], 1) == "<") {
+						print(control.secondlist.x + 2, control.secondlist.y + (i * linesize), control.secondlist.item[i], 14);
+					}else {
+						print(control.secondlist.x + 2, control.secondlist.y + (i * linesize), control.secondlist.item[i], 0);
 					}
 				}
 			}

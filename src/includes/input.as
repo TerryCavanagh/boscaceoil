@@ -12,6 +12,7 @@
 	control.arrangecurx = -1; control.arrangecury = -1;
 	control.patterncury = -1; control.timelinecurx = -1;
 	control.list.selection = -1;
+	control.secondlist.selection = -1;
 	
 	if(control.clicklist){
 	  if (!key.press) {
@@ -19,12 +20,26 @@
 		}
 	}
 	
+	if(control.clicksecondlist){
+	  if (!key.press) {
+			control.clicksecondlist = false;
+		}
+	}
+	
 	guiclass.checkinput(key);
 	
-	if (control.list.active){
-		if(control.mx > control.list.x && control.mx < control.list.x + control.list.w && control.my > control.list.y && control.my < control.list.y + control.list.h) {
-			control.list.selection = control.my - control.list.y;
-			control.list.selection = (control.list.selection - (control.list.selection % gfx.linesize)) / gfx.linesize;
+	if (control.list.active || control.secondlist.active) {
+		if(control.secondlist.active){
+			if(control.mx > control.secondlist.x && control.mx < control.secondlist.x + control.secondlist.w && control.my > control.secondlist.y && control.my < control.secondlist.y + control.secondlist.h) {
+				control.secondlist.selection = control.my - control.secondlist.y;
+				control.secondlist.selection = (control.secondlist.selection - (control.secondlist.selection % gfx.linesize)) / gfx.linesize;
+			}
+		}
+		if (control.list.active){
+			if(control.mx > control.list.x && control.mx < control.list.x + control.list.w && control.my > control.list.y && control.my < control.list.y + control.list.h) {
+				control.list.selection = control.my - control.list.y;
+				control.list.selection = (control.list.selection - (control.list.selection % gfx.linesize)) / gfx.linesize;
+			}
 		}
 	}else {
 		if (control.mx > 20 && control.mx < gfx.screenwidth - 12) {
@@ -125,6 +140,24 @@
 		}
 	}else {
 		if (key.click) {
+			if (control.secondlist.active) {
+				if (control.secondlist.selection > -1) {
+					//List selection stuff here
+					if (control.secondlist.type >= control.LIST_MIDI_0_PIANO && control.secondlist.type <= control.LIST_MIDI_15_SOUNDEFFECTS) {
+						control.changeinstrumentvoice(control.secondlist.item[control.secondlist.selection]);
+						control.secondlist.close();
+						control.list.close();
+					}
+				}else {
+					control.secondlist.close();
+					if (control.list.selection == -1) {
+						control.list.close();
+					}
+				}
+				
+				control.clicksecondlist = true;
+			}
+			
 			if (control.list.active){
 				if (control.list.selection > -1) {
 					//List selection stuff here
@@ -135,28 +168,14 @@
 						control.changeinstrumentvoice(control.voicelist.name[control.voicelist.index]);
 					}
 					if (control.list.type == control.LIST_MIDIINSTRUMENT) {
-						if (help.Left(control.list.item[control.list.selection], 2) == "<<") {
-							control.voicelist.pagenum = 0;
-							control.list.close();
-							control.filllist(control.LIST_MIDIINSTRUMENT);
-							control.list.init(235, (gfx.linesize * 3) + 3);
-						}else if (help.Left(control.list.item[control.list.selection], 2) == ">>") {
-						  if (control.list.item[control.list.selection] == ">> Next Category") {
-								control.voicelist.pagenum++;
-								if (control.voicelist.pagenum == 15) control.voicelist.pagenum = 0;
-								control.list.close();
-								control.filllist(control.LIST_MIDIINSTRUMENT);
-								control.list.init(235, (gfx.linesize * 3) + 3);
-							}else{
-								control.voicelist.pagenum = control.list.selection + 1;
-								control.list.close();
-								control.filllist(control.LIST_MIDIINSTRUMENT);
-								control.list.init(235, (gfx.linesize * 3) + 3);
-							}
-						}else {
-							control.changeinstrumentvoice(control.list.item[control.list.selection]);
-							control.list.close();
-						}
+						control.list.close();
+						control.filllist(control.LIST_MIDIINSTRUMENT);
+						control.list.init(215, (gfx.linesize * 3) + 3);
+						control.midilistselection = control.list.selection;
+						
+						control.secondlist.close();
+						control.filllist(control.LIST_MIDI_0_PIANO + control.list.selection);
+						control.secondlist.init(280, (gfx.linesize * 3) + 3 + (control.list.selection * gfx.linesize));
 					}
 					if (control.list.type == control.LIST_INSTRUMENT) {
 						if (help.Left(control.list.item[control.list.selection], 2) == "<<") {
@@ -226,6 +245,9 @@
 				}else {
 					control.list.close();
 				}
+				control.clicklist = true;
+			}else if (control.clicksecondlist) {
+				//Clumsy workaround :3
 				control.clicklist = true;
 			}else if (control.my <= gfx.linesize) {
 				//Change tabs
@@ -353,7 +375,7 @@
 									control.voicelist.makesublist(control.instrument[control.currentinstrument].category);
 									control.voicelist.pagenum = 0;
 									control.filllist(control.LIST_MIDIINSTRUMENT);
-									control.list.init(235, (gfx.linesize * 3) + 3);
+									control.list.init(215, (gfx.linesize * 3) + 3);
 								}else{
 									control.voicelist.makesublist(control.instrument[control.currentinstrument].category);
 									control.filllist(control.LIST_INSTRUMENT);
@@ -379,7 +401,7 @@
 			}
 		}
 		
-		if (key.press && !control.clicklist) {
+		if (key.press && (!control.clicklist && !control.clicksecondlist)) {
 			if (control.currenttab == control.MENUTAB_INSTRUMENTS) {
 				if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 10) {				
 					if (control.mx >= 140 && control.my > 35 && control.mx < gfx.screenwidth - 25) {
