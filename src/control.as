@@ -416,6 +416,18 @@
 			drumkit[t].voicelist.push(_presets[voice]);
       drumkit[t].voicename.push(name);
       drumkit[t].voicenote.push(note);
+			if (t == 2) {
+				//Midi drumkit
+				var voicenum:String = "";
+				var afterdot:Boolean = false;
+				for (var i:int = 0; i < voice.length; i++) {
+					if (afterdot) {
+						voicenum = voicenum + voice.charAt(i);
+					}
+					if (i >= 8) afterdot = true;
+				}
+				drumkit[t].midivoice.push(int(voicenum));
+			}
 			drumkit[t].size++;
 		}
 		
@@ -535,7 +547,7 @@
 					adddrumkitnote(2, "Wood Block L", "midi.drum77");
 					adddrumkitnote(2, "Cuica Mute", "midi.drum78");
 					adddrumkitnote(2, "Cuica Open", "midi.drum79");
-					adddrumkitnote(2, "Triangle Mute", "midi.drum82");
+					adddrumkitnote(2, "Triangle Mute", "midi.drum80");
 					adddrumkitnote(2, "Triangle Open", "midi.drum81");
 					adddrumkitnote(2, "Shaker", "midi.drum82");
 					adddrumkitnote(2, "Jingle Bells", "midi.drum83");

@@ -30,6 +30,7 @@ package {
 		public var voicelist:Vector.<SiONVoice> = new Vector.<SiONVoice>;
 		public var voicename:Vector.<String> = new Vector.<String>;
 		public var voicenote:Vector.<int> = new Vector.<int>;
+		public var midivoice:Vector.<int> = new Vector.<int>;
 		public var kitname:String;
 		public var size:int;
 	}

@@ -15,6 +15,54 @@ package {
 	import ocean.midi.model.*;
 	
 	public class midicontrol {
+		public static var MIDIDRUM_35_Acoustic_Bass_Drum:int = 35;
+		public static var MIDIDRUM_36_Bass_Drum_1:int = 36;
+		public static var MIDIDRUM_37_Side_Stick:int = 37;
+		public static var MIDIDRUM_38_Acoustic_Snare:int = 38;
+		public static var MIDIDRUM_39_Hand_Clap:int = 39;
+		public static var MIDIDRUM_40_Electric_Snare:int = 40;
+		public static var MIDIDRUM_41_Low_Floor_Tom:int = 41;
+		public static var MIDIDRUM_42_Closed_Hi_Hat:int = 42;
+		public static var MIDIDRUM_43_High_Floor_Tom:int = 43;
+		public static var MIDIDRUM_44_Pedal_Hi_Hat:int = 44;
+		public static var MIDIDRUM_45_Low_Tom:int = 45;
+		public static var MIDIDRUM_46_Open_Hi_Hat:int = 46;
+		public static var MIDIDRUM_47_Low_Mid_Tom:int = 47;
+		public static var MIDIDRUM_48_Hi_Mid_Tom:int = 48;
+		public static var MIDIDRUM_49_Crash_Cymbal_1:int = 49;
+		public static var MIDIDRUM_50_High_Tom:int = 50;
+		public static var MIDIDRUM_51_Ride_Cymbal_1:int = 51;
+		public static var MIDIDRUM_52_Chinese_Cymbal:int = 52;
+		public static var MIDIDRUM_53_Ride_Bell:int = 53;
+		public static var MIDIDRUM_54_Tambourine:int = 54;
+		public static var MIDIDRUM_55_Splash_Cymbal:int = 55;
+		public static var MIDIDRUM_56_Cowbell:int = 56;
+		public static var MIDIDRUM_57_Crash_Cymbal_2:int = 57;
+		public static var MIDIDRUM_58_Vibraslap:int = 58;
+		public static var MIDIDRUM_59_Ride_Cymbal_2:int = 59;
+		public static var MIDIDRUM_60_Hi_Bongo:int = 60;
+		public static var MIDIDRUM_61_Low_Bongo:int = 61;
+		public static var MIDIDRUM_62_Mute_Hi_Conga:int = 62;
+		public static var MIDIDRUM_63_Open_Hi_Conga:int = 63;
+		public static var MIDIDRUM_64_Low_Conga:int = 64;
+		public static var MIDIDRUM_65_High_Timbale:int = 65;
+		public static var MIDIDRUM_66_Low_Timbale:int = 66;
+		public static var MIDIDRUM_67_High_Agogo:int = 67;
+		public static var MIDIDRUM_68_Low_Agogo:int = 68;
+		public static var MIDIDRUM_69_Cabasa:int = 69;
+		public static var MIDIDRUM_70_Maracas:int = 70;
+		public static var MIDIDRUM_71_Short_Whistle:int = 71;
+		public static var MIDIDRUM_72_Long_Whistle:int = 72;
+		public static var MIDIDRUM_73_Short_Guiro:int = 73;
+		public static var MIDIDRUM_74_Long_Guiro:int = 74;
+		public static var MIDIDRUM_75_Claves:int = 75;
+		public static var MIDIDRUM_76_Hi_Wood_Block:int = 76;
+		public static var MIDIDRUM_77_Low_Wood_Block:int = 77;
+		public static var MIDIDRUM_78_Mute_Cuica:int = 78;
+		public static var MIDIDRUM_79_Open_Cuica:int = 79;
+		public static var MIDIDRUM_80_Mute_Triangle:int = 80;
+		public static var MIDIDRUM_81_Open_Triangle:int = 81;
+		
 		public static function openfile():void {
 			control.stopmusic();	
 			
@@ -78,12 +126,12 @@ package {
 			clearnotes();
 			resetinstruments();
 			
-			trace(smfData.toString());
+			//trace(smfData.toString());
 			
 			for (var trackn:int = 0; trackn < smfData.numTracks; trackn++) {
-				trace("Reading track " + String(trackn) + ": " + String(smfData.tracks[trackn].sequence.length));
+				//trace("Reading track " + String(trackn) + ": " + String(smfData.tracks[trackn].sequence.length));
 				for each(event in smfData.tracks[trackn].sequence) {
-					trace("msg: " + String(event.time) + ": " + event.toString());
+					//trace("msg: " + String(event.time) + ": " + event.toString());
 					switch (event.type & 0xf0) {
 						case SMFEvent.NOTE_ON:
 							if(event.velocity == 0) {
@@ -429,25 +477,60 @@ package {
 			
 			nexttrack();
 			
+			//Write all the instruments to each channel.
+			//In MIDI, channel 9 is special.
 			for (var j:int = 0; j < control.numinstrument; j++) {
 			  writeinstrument(instrumentconverttomidi(control.instrument[j].index), j);
 			}
 			
+			//Cover the entire song
 			control.arrange.loopstart = 0;
 			control.arrange.loopend = control.arrange.lastbar;	
 			if (control.arrange.loopend <= control.arrange.loopstart) {
 				control.arrange.loopend = control.arrange.loopstart + 1;
 			}
 			
+			/*
+			These are the same patch numbers as defined in the original version of GS. 
+			Drum bank is accessed by setting cc#0 (Bank Select MSB) to 120 and cc#32 (Bank 
+			Select LSB) to 0 and PC (Program Change) to select drum kit.	
+			1 	Standard Kit 	The only kit specified by General MIDI Level 1
+			 * */
+			
+			//Write notes
 			for (j = 0; j < control.arrange.lastbar; j++) {
 				for (var i:int = 0; i < 8; i++) {
 					if (control.arrange.bar[j].channel[i] != -1) {
 						var t:int = control.arrange.bar[j].channel[i];
-						for (var k:int = 0; k < control.musicbox[t].numnotes; k++) {
-							writenote(control.musicbox[t].instr, 
-												control.musicbox[t].notes[k].x, 
-												((j * control.boxcount) + control.musicbox[t].notes[k].width) * 30, 
-												control.musicbox[t].notes[k].y * 30, 255);
+						//Do normal instruments first
+						if (control.instrument[control.musicbox[control.arrange.bar[j].channel[i]].instr].type == 0) {
+							for (var k:int = 0; k < control.musicbox[t].numnotes; k++) {
+								writenote(control.musicbox[t].instr, 
+													control.musicbox[t].notes[k].x, 
+													((j * control.boxcount) + control.musicbox[t].notes[k].width) * 30, 
+													control.musicbox[t].notes[k].y * 30, 255);
+							}
+						}
+					}
+				}
+			}
+			
+			nexttrack();
+			writeinstrument(0, 9);
+			//Drumkits
+			for (j = 0; j < control.arrange.lastbar; j++) {
+				for (i = 0; i < 8; i++) {
+					if (control.arrange.bar[j].channel[i] != -1) {
+						t = control.arrange.bar[j].channel[i];
+						var drumkit:int = control.musicbox[control.arrange.bar[j].channel[i]].instr;
+						//Now do drum kits
+						if (help.Left(control.voicelist.voice[control.instrument[drumkit].index], 7) == "drumkit") {
+							for (k = 0; k < control.musicbox[t].numnotes; k++) {
+								writenote(9, 
+													convertdrumtonote(control.musicbox[t].notes[k].x, control.instrument[drumkit].index), 
+													((j * control.boxcount) + control.musicbox[t].notes[k].width) * 30, 
+													control.musicbox[t].notes[k].y * 30, 255);
+							}
 						}
 					}
 				}
@@ -489,6 +572,92 @@ package {
 			
 			//midifile._trackArray[0].list.push(new NoteItem(0, 67, 127, 120));
 			//midifile.addTrack(new MidiTrack());
+		}
+		
+		public static function convertdrumtonote(note:int, drumkit:int):int {
+			//Takes a drum beat from control.createdrumkit()'s list and converts it
+			//to a drum beat from the General Midi list (http://www.midi.org/techspecs/gm1sound.php)
+			var i:int;
+			var voicename:String = "";
+			if (control.voicelist.name[drumkit] == "Simple Drumkit") {
+				voicename = control.drumkit[0].voicename[note];
+				
+				if (voicename == "Bass Drum 1") return MIDIDRUM_35_Acoustic_Bass_Drum;
+				if (voicename == "Bass Drum 2") return MIDIDRUM_36_Bass_Drum_1;
+				if (voicename == "Bass Drum 3") return MIDIDRUM_66_Low_Timbale;
+				if (voicename == "Snare Drum") return MIDIDRUM_38_Acoustic_Snare;
+				if (voicename == "Snare Drum 2") return MIDIDRUM_40_Electric_Snare;
+				if (voicename == "Open Hi-Hat") return MIDIDRUM_46_Open_Hi_Hat;
+				if (voicename == "Closed Hi-Hat") return MIDIDRUM_42_Closed_Hi_Hat;
+				if (voicename == "Crash Cymbal") return MIDIDRUM_49_Crash_Cymbal_1;
+			}else if (control.voicelist.name[drumkit] == "SiON Drumkit") {
+				voicename = control.drumkit[1].voicename[note];
+				
+				if (voicename == "Bass Drum 2") return MIDIDRUM_35_Acoustic_Bass_Drum;
+				if (voicename == "Bass Drum 3 o1f") return MIDIDRUM_36_Bass_Drum_1;
+				if (voicename == "RUFINA BD o2c") return MIDIDRUM_35_Acoustic_Bass_Drum;
+				if (voicename == "B.D.(-vBend)") return MIDIDRUM_35_Acoustic_Bass_Drum;
+				if (voicename == "BD808_2(-vBend)") return MIDIDRUM_36_Bass_Drum_1;
+				if (voicename == "Cho cho 3 (o2e)") return MIDIDRUM_72_Long_Whistle;
+				if (voicename == "Cow-Bell 1") return MIDIDRUM_56_Cowbell;
+				if (voicename == "Crash Cymbal (noise)") return MIDIDRUM_49_Crash_Cymbal_1;
+				if (voicename == "Crash Noise") return MIDIDRUM_57_Crash_Cymbal_2;
+				if (voicename == "Crash Noise Short") return MIDIDRUM_51_Ride_Cymbal_1;
+				if (voicename == "ETHNIC Percus.0") return MIDIDRUM_40_Electric_Snare;
+				if (voicename == "ETHNIC Percus.1") return MIDIDRUM_40_Electric_Snare;
+				if (voicename == "Heavy BD.") return MIDIDRUM_35_Acoustic_Bass_Drum;
+				if (voicename == "Heavy BD2") return MIDIDRUM_36_Bass_Drum_1;
+				if (voicename == "Heavy SD1") return MIDIDRUM_38_Acoustic_Snare;
+				if (voicename == "Hi-Hat close 5_") return MIDIDRUM_42_Closed_Hi_Hat;
+				if (voicename == "Hi-Hat close 4") return MIDIDRUM_42_Closed_Hi_Hat;
+				if (voicename == "Hi-Hat close 5") return MIDIDRUM_42_Closed_Hi_Hat;
+				if (voicename == "Hi-Hat Close 6 -808-") return MIDIDRUM_42_Closed_Hi_Hat;
+				if (voicename == "Hi-hat #7 Metal o3-6") return MIDIDRUM_42_Closed_Hi_Hat;
+				if (voicename == "Hi-Hat Close #8 o4") return MIDIDRUM_42_Closed_Hi_Hat;
+				if (voicename == "Hi-hat Open o4e-g+") return MIDIDRUM_46_Open_Hi_Hat;
+				if (voicename == "Open-hat2 Metal o4c-") return MIDIDRUM_46_Open_Hi_Hat;
+				if (voicename == "Open-hat3 Metal") return MIDIDRUM_46_Open_Hi_Hat;
+				if (voicename == "Hi-Hat Open #4 o4f") return MIDIDRUM_46_Open_Hi_Hat;
+				if (voicename == "Metal ride o4c or o5c") return MIDIDRUM_51_Ride_Cymbal_1;
+				if (voicename == "Rim Shot #1 o3c") return MIDIDRUM_59_Ride_Cymbal_2;
+				if (voicename == "Snare Drum Light") return MIDIDRUM_38_Acoustic_Snare;
+				if (voicename == "Snare Drum Lighter") return MIDIDRUM_38_Acoustic_Snare;
+				if (voicename == "Snare Drum 808 o2-o3") return MIDIDRUM_38_Acoustic_Snare;
+				if (voicename == "Snare4 -808type- o2") return MIDIDRUM_38_Acoustic_Snare;
+				if (voicename == "Snare5 o1-2(Franger)") return MIDIDRUM_38_Acoustic_Snare;
+				if (voicename == "Tom (old)") return MIDIDRUM_45_Low_Tom;
+				if (voicename == "Synth tom 2 algo 3") return MIDIDRUM_47_Low_Mid_Tom;
+				if (voicename == "Synth (Noisy) Tom #3") return MIDIDRUM_48_Hi_Mid_Tom;
+				if (voicename == "Synth Tom #3") return MIDIDRUM_50_High_Tom;
+				if (voicename == "Synth -DX7- Tom #4") return MIDIDRUM_76_Hi_Wood_Block;
+				if (voicename == "Triangle 1 o5c") return MIDIDRUM_81_Open_Triangle;
+			}else if (control.voicelist.name[drumkit] == "Midi Drumkit") {
+				//This one's easy: we already have the mapping saved.
+				trace(note, control.drumkit[2].midivoice[note]);
+				if (control.drumkit[2].midivoice[note] >= 35 && control.drumkit[2].midivoice[note] <= 81) {
+					return control.drumkit[2].midivoice[note];
+				}
+				//There are a handful of notes in the SiON midi drumkit that aren't standard:
+				//Map them to something similar in the standard set:
+				voicename = control.drumkit[2].voicename[note];
+				if (voicename == "Seq Click H") return MIDIDRUM_42_Closed_Hi_Hat;
+				if (voicename == "Brush Tap") return MIDIDRUM_55_Splash_Cymbal;
+				if (voicename == "Brush Swirl") return MIDIDRUM_59_Ride_Cymbal_2;
+				if (voicename == "Brush Slap") return MIDIDRUM_49_Crash_Cymbal_1;
+				if (voicename == "Brush Tap Swirl") return MIDIDRUM_49_Crash_Cymbal_1;
+				if (voicename == "Snare Roll") return MIDIDRUM_38_Acoustic_Snare;
+				if (voicename == "Castanet") return MIDIDRUM_35_Acoustic_Bass_Drum;
+				if (voicename == "Snare L") return MIDIDRUM_40_Electric_Snare;
+				if (voicename == "Sticks") return MIDIDRUM_37_Side_Stick;
+				if (voicename == "Bass Drum L") return MIDIDRUM_36_Bass_Drum_1;
+				if (voicename == "Open Rim Shot") return MIDIDRUM_46_Open_Hi_Hat;
+				if (voicename == "Shaker") return MIDIDRUM_70_Maracas;
+				if (voicename == "Jingle Bells") return MIDIDRUM_81_Open_Triangle;
+				if (voicename == "Bell Tree") return MIDIDRUM_74_Long_Guiro;
+			}
+			
+			//If in doubt just return sum bass \:D/
+			return 35;
 		}
 		
 		public static function instrumentconverttomidi(t:int):int {
