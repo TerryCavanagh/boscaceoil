@@ -427,13 +427,6 @@ package {
 			writetimesig();
 			writetempo(control.bpm);
 			
-			//Note sizes:
-			//30 = 1/16th
-			//60 = 1/8th
-			//120 = 1/4th
-			//240 = 1/2th
-			//480 = whole
-			
 			nexttrack();
 			
 			for (var j:int = 0; j < control.numinstrument; j++) {
@@ -500,7 +493,7 @@ package {
 		
 		public static function instrumentconverttomidi(t:int):int {
 			//Converts Bosca Ceoil instrument to a similar Midi one.
-			return t;
+			return control.voicelist.midimap[t];
 		}
 		
 		public static function nexttrack():void {
