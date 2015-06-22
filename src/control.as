@@ -915,6 +915,7 @@
 		public static function changeinstrumentvoice(t:String):void {
 			instrument[currentinstrument].name = t;
 			voicelist.index = voicelist.getvoice(t);
+			instrument[currentinstrument].category = voicelist.category[voicelist.index];
 			if (help.Left(voicelist.voice[voicelist.index], 7) == "drumkit") {
 			  instrument[currentinstrument].type = int(help.Right(voicelist.voice[voicelist.index]));
 				instrument[currentinstrument].updatefilter();
