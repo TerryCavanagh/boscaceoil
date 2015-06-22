@@ -54,7 +54,6 @@
 		public static var LIST_EFFECTS:int = 7;
 		public static var LIST_EXPORTS:int = 8;
 		public static var LIST_MIDIINSTRUMENT:int = 9;
-		
 		public static var LIST_MIDI_0_PIANO:int = 10;
 		public static var LIST_MIDI_1_BELLS:int = 11;
 		public static var LIST_MIDI_2_ORGAN:int = 12;
@@ -71,6 +70,7 @@
 		public static var LIST_MIDI_13_WORLD:int = 23;
 		public static var LIST_MIDI_14_PERCUSSIVE:int = 24;
 		public static var LIST_MIDI_15_SOUNDEFFECTS:int = 25;
+		public static var LIST_MOREEXPORTS:int = 26;
 		
 		public static var MENUTAB_FILE:int = 0;
 		public static var MENUTAB_ARRANGEMENTS:int = 1;
@@ -877,10 +877,15 @@
 					}
 					list.numitems = 7;
 				break;
+				case LIST_MOREEXPORTS:
+					list.item[0] = "EXPORT .xm (wip)";
+					list.item[1] = "EXPORT .mml (wip)";
+					list.numitems = 2;
+				break;
 				case LIST_EXPORTS:
 					list.item[0] = "EXPORT .wav";
-					list.item[1] = "EXPORT .xm (wip)";
-					list.item[2] = "EXPORT .mml (wip)";
+					list.item[1] = "EXPORT .mid";
+					list.item[2] = "> More";
 					list.numitems = 3;
 				break;
 				default:

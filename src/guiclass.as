@@ -481,13 +481,14 @@ package {
 				  addtextlabel(10, (gfx.linespacing * 3), "sites.google.com/site/sioncenter/");
 					addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 3), "dy-dx.com/");
 					
-					addtextlabel(10, (gfx.linespacing * 5), "Swing function by Stephen Lavelle",0);
-					addrighttextlabel(gfx.screenwidth-10, (gfx.linespacing * 5), "XM Exporter by Rob Hunter",0);
-					addtextlabel(10, (gfx.linespacing * 6), "increpare.com/");
+					addtextlabel(10, (gfx.linespacing * 8), "Swing function by Stephen Lavelle",0);
+					addtextlabel(10, (gfx.linespacing * 9), "increpare.com/");
+					
+					addrighttextlabel(gfx.screenwidth-10, (gfx.linespacing * 5), "XM and MML Exporters by Rob Hunter",0);
 					addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 6), "about.me/rjhunter/");
 					
-					addtextlabel(10, (gfx.linespacing * 8), "Linux port by Damien L",0);
-					addtextlabel(10, (gfx.linespacing * 9), "uncovergame.com/");
+					addtextlabel(10, (gfx.linespacing * 5), "Linux port by Damien L",0);
+					addtextlabel(10, (gfx.linespacing * 6), "uncovergame.com/");
 					addrighttextlabel(gfx.screenwidth-10, (gfx.linespacing * 8), "Open Source under FreeBSD licence",0);
 					
 					addbutton(gfx.screenwidth - 82, (gfx.linespacing * 9)+4, 75, "BACK", "filetab");
@@ -511,9 +512,6 @@ package {
 					
 					CONFIG::desktop {
 						addbutton(205, gfx.linespacing * 6, 75, "IMPORT .mid", "loadmidi");
-						
-						addbutton(285, gfx.linespacing * 6, 75, "EXPORT .mid", "savemidi");
-						addtextlabel(285, (gfx.linespacing * 7) + 5, "work in progress");
 					}
 				break;
 			}
@@ -561,7 +559,7 @@ package {
 			}else if (currentbutton == "exportlist") {
 				CONFIG::desktop {
 					control.filllist(control.LIST_EXPORTS);
-					control.list.init(gfx.screenwidth - 110, (gfx.linespacing * 3) - 1);
+					control.list.init(gfx.screenwidth - 80, (gfx.linespacing * 4) - 7);
 				}
 				
 				CONFIG::web {
@@ -651,10 +649,6 @@ package {
 			}else if (currentbutton == "loadmidi") {
 				CONFIG::desktop {
 					midicontrol.openfile();
-				}
-			}else if (currentbutton == "savemidi") {
-				CONFIG::desktop {
-					midicontrol.savemidi();
 				}
 			}
 		}

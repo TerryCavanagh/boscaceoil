@@ -227,20 +227,32 @@
 						control.list.close();
 					}
 					
-					if (control.list.type == control.LIST_EXPORTS) {
+					if (control.list.type == control.LIST_MOREEXPORTS) {
 						if (control.list.selection == 0) {
-							control.exportwav();
-						}else if (control.list.selection == 1) {
 							CONFIG::desktop {
 								control.exportxm();
 							}
-						} else if (control.list.selection == 2) {
+						}else if (control.list.selection == 1) {
 							// TODO: enable for web usage too (it's just text!)
 							CONFIG::desktop {
 								control.exportmml();
 							}
 						}
 						control.list.close();
+					}
+					
+					if (control.list.type == control.LIST_EXPORTS) {
+						control.list.close();
+						if (control.list.selection == 0) {
+							control.exportwav();
+						}else if (control.list.selection == 1) {
+							CONFIG::desktop {
+								midicontrol.savemidi();
+							}
+						}else if (control.list.selection == 2) {
+							control.filllist(control.LIST_MOREEXPORTS);
+							control.list.init(gfx.screenwidth - 110, (gfx.linespacing * 4) - 7);
+						}
 					}
 				}else {
 					control.list.close();
