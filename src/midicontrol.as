@@ -154,7 +154,8 @@ package {
 				}
 			} 
 			
-			channelinstrument[9] = 142;
+			//channelinstrument[9] = 142;
+			channelinstrument[9] = control.voicelist.getvoice("Simple Drumkit");
 			
 			convertmiditoceol();
 			
@@ -401,16 +402,94 @@ package {
 				}
 			}
 			
-			for (var i:int = 0; i < midinotes.length; i++) {
-				//x = time
-				//y = note
-				//w = length
-				//h = instrument
-				var note:int = ((midinotes[i].x * numnotes) / boxsize);
-				var notelength:int = (((midinotes[i].width - midinotes[i].x - 1) * numnotes) / boxsize) + 1;
-				var currentpattern:int = int((midinotes[i].x  - (midinotes[i].x % boxsize)) / boxsize);
-				
-				addnotetoceol(currentpattern, note - (numnotes * currentpattern), midinotes[i].y, notelength, midinotes[i].height);
+			var i:int;
+			var note:int;
+			var notelength:int;
+			var currentpattern:int;
+			
+			for (i = 0; i < midinotes.length; i++) {
+				//Drums
+				if (int(midinotes[i].height) == 9) {
+					//x = time
+					//y = note
+					//w = length
+					//h = instrument
+				  note = ((midinotes[i].x * numnotes) / boxsize);
+					notelength = (((midinotes[i].width - midinotes[i].x - 1) * numnotes) / boxsize) + 1;
+					currentpattern = int((midinotes[i].x  - (midinotes[i].x % boxsize)) / boxsize);
+					
+					var drumnote:int = 0;
+					
+					//0 "Bass Drum 1"
+				  //1 "Bass Drum 2"
+					//2 "Bass Drum 3"
+					//3 "Snare Drum"
+					//4 "Snare Drum 2"
+					//5 "Open Hi-Hat"
+					//6 "Closed Hi-Hat"
+					//7 "Crash Cymbal"
+					switch(midinotes[i].y) {
+						case MIDIDRUM_35_Acoustic_Bass_Drum: drumnote = 0; break;
+						case MIDIDRUM_36_Bass_Drum_1: drumnote = 1; break;
+						case MIDIDRUM_37_Side_Stick: drumnote = 3; break;
+						case MIDIDRUM_38_Acoustic_Snare: drumnote = 3; break;
+						case MIDIDRUM_39_Hand_Clap: drumnote = 1; break;
+						case MIDIDRUM_40_Electric_Snare: drumnote = 4; break;
+						case MIDIDRUM_41_Low_Floor_Tom: drumnote = 1; break;
+						case MIDIDRUM_42_Closed_Hi_Hat: drumnote = 6; break;
+						case MIDIDRUM_43_High_Floor_Tom: drumnote = 2; break;
+						case MIDIDRUM_44_Pedal_Hi_Hat: drumnote = 5; break;
+						case MIDIDRUM_45_Low_Tom: drumnote = 1; break;
+						case MIDIDRUM_46_Open_Hi_Hat: drumnote = 5; break;
+						case MIDIDRUM_47_Low_Mid_Tom: drumnote = 1; break;
+						case MIDIDRUM_48_Hi_Mid_Tom: drumnote = 2; break;
+						case MIDIDRUM_49_Crash_Cymbal_1: drumnote = 7; break;
+						case MIDIDRUM_50_High_Tom: drumnote = 2; break;
+						case MIDIDRUM_51_Ride_Cymbal_1: drumnote = 7; break;
+						case MIDIDRUM_52_Chinese_Cymbal: drumnote = 7; break;
+						case MIDIDRUM_53_Ride_Bell: drumnote = 5; break;
+						case MIDIDRUM_54_Tambourine: drumnote = 5; break;
+						case MIDIDRUM_55_Splash_Cymbal: drumnote = 7; break;
+						case MIDIDRUM_56_Cowbell: drumnote = 7; break;
+						case MIDIDRUM_57_Crash_Cymbal_2: drumnote = 7; break;
+						case MIDIDRUM_58_Vibraslap: drumnote = 5; break;
+						case MIDIDRUM_59_Ride_Cymbal_2: drumnote = 7; break;
+						case MIDIDRUM_60_Hi_Bongo: drumnote = 4; break;
+						case MIDIDRUM_61_Low_Bongo: drumnote = 3; break;
+						case MIDIDRUM_62_Mute_Hi_Conga: drumnote = 4; break;
+						case MIDIDRUM_63_Open_Hi_Conga: drumnote = 5; break;
+						case MIDIDRUM_64_Low_Conga: drumnote = 2; break;
+						case MIDIDRUM_65_High_Timbale: drumnote = 4; break;
+						case MIDIDRUM_66_Low_Timbale: drumnote = 3; break;
+						case MIDIDRUM_67_High_Agogo: drumnote = 4; break;
+						case MIDIDRUM_68_Low_Agogo: drumnote = 3; break;
+						case MIDIDRUM_69_Cabasa: drumnote = 5; break;
+						case MIDIDRUM_70_Maracas: drumnote = 7; break;
+						case MIDIDRUM_71_Short_Whistle: drumnote = 7; break;
+						case MIDIDRUM_72_Long_Whistle: drumnote = 7; break;
+						case MIDIDRUM_73_Short_Guiro: drumnote = 3; break;
+						case MIDIDRUM_74_Long_Guiro: drumnote = 4; break;
+						case MIDIDRUM_75_Claves: drumnote = 6; break;
+						case MIDIDRUM_76_Hi_Wood_Block: drumnote = 4; break;
+						case MIDIDRUM_77_Low_Wood_Block: drumnote = 3; break;
+						case MIDIDRUM_78_Mute_Cuica: drumnote = 2; break;
+						case MIDIDRUM_79_Open_Cuica: drumnote = 4; break;
+						case MIDIDRUM_80_Mute_Triangle: drumnote = 5; break;
+						case MIDIDRUM_81_Open_Triangle: drumnote = 7; break;
+					}
+					
+					addnotetoceol(currentpattern, note - (numnotes * currentpattern), drumnote, notelength, midinotes[i].height);
+				}else {
+					//x = time
+					//y = note
+					//w = length
+					//h = instrument
+					note = ((midinotes[i].x * numnotes) / boxsize);
+			    notelength = (((midinotes[i].width - midinotes[i].x - 1) * numnotes) / boxsize) + 1;
+					currentpattern = int((midinotes[i].x  - (midinotes[i].x % boxsize)) / boxsize);
+					
+					addnotetoceol(currentpattern, note - (numnotes * currentpattern), midinotes[i].y, notelength, midinotes[i].height);
+				}
 			}
 			
 			//Optimising stage: Check for duplicate patterns and remove unused ones.

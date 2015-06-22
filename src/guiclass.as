@@ -484,7 +484,7 @@ package {
 					addtextlabel(10, (gfx.linespacing * 8), "Swing function by Stephen Lavelle",0);
 					addtextlabel(10, (gfx.linespacing * 9), "increpare.com/");
 					
-					addrighttextlabel(gfx.screenwidth-10, (gfx.linespacing * 5), "XM and MML Exporters by Rob Hunter",0);
+					addrighttextlabel(gfx.screenwidth-10, (gfx.linespacing * 5), "XM, MML Exporters by Rob Hunter",0);
 					addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 6), "about.me/rjhunter/");
 					
 					addtextlabel(10, (gfx.linespacing * 5), "Linux port by Damien L",0);
@@ -511,7 +511,7 @@ package {
 					addcontrol(gfx.screenwidth - 120,  (gfx.linespacing * 3) + 2, "globaleffects");
 					
 					CONFIG::desktop {
-						addbutton(205, gfx.linespacing * 6, 75, "IMPORT .mid", "loadmidi");
+						addbutton(300, gfx.linespacing * 6, 75, "IMPORT .mid", "loadmidi");
 					}
 				break;
 			}
