@@ -15,11 +15,11 @@ Bosca Ceoil is currently under active development for version 2.0. Here's the ro
  - *[DONE]* New GUI skin
  - *[DONE]* Online version
  - *[DONE]* Midi Importer 
+ - *[DONE]* Midi Exporter
  - *[Partially done]* New gui controls: transpose, instrument next/prev, scrollbars
  - *[Partially done]* XM Exporter
  - Built in Tutorial, General Reference guide
  - Built in Tutorial, Interactive make-your-first-song guide
- - Midi Exporter
  - Resolution independance
  - Expore posibility of better instrument control
  - Linux fork updated to 2.0 to match

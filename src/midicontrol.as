@@ -10,10 +10,6 @@ package {
 	import org.si.sion.midi.*;
 	import org.si.sion.events.*;
 	
-	import ocean.midi.*;
-	import ocean.midi.event.*;
-	import ocean.midi.model.*;
-	
 	public class midicontrol {
 		public static var MIDIDRUM_35_Acoustic_Bass_Drum:int = 35;
 		public static var MIDIDRUM_36_Bass_Drum_1:int = 36;
@@ -93,7 +89,7 @@ package {
 			convertceoltomidi();
 			
 			tempbytes = new ByteArray();
-			tempbytes = clone(midifile.output());
+			tempbytes = clone(midiexporter.midifile.output());
 			
 			stream = new FileStream();
 			stream.open(file, FileMode.WRITE);
@@ -115,8 +111,8 @@ package {
 			
 			tempbytes = new ByteArray;
 			tempbytes = clone(mididata);
-			midifile = new MidiFile;
-			midifile.input(tempbytes);
+			midiexporter = new Midiexporter;
+			midiexporter.midifile.input(tempbytes);
 			
 			smfData.loadBytes(mididata);
 			
@@ -548,18 +544,18 @@ package {
 				}				
 			}
 			*/
-			midifile = new MidiFile();
+			midiexporter = new Midiexporter;
 			
-			nexttrack();
-			writetimesig();
-			writetempo(control.bpm);
+			midiexporter.nexttrack();
+			midiexporter.writetimesig();
+			midiexporter.writetempo(control.bpm);
 			
-			nexttrack();
+			midiexporter.nexttrack();
 			
 			//Write all the instruments to each channel.
 			//In MIDI, channel 9 is special.
 			for (var j:int = 0; j < control.numinstrument; j++) {
-			  writeinstrument(instrumentconverttomidi(control.instrument[j].index), j);
+			  midiexporter.writeinstrument(instrumentconverttomidi(control.instrument[j].index), j);
 			}
 			
 			//Cover the entire song
@@ -584,18 +580,18 @@ package {
 						//Do normal instruments first
 						if (control.instrument[control.musicbox[control.arrange.bar[j].channel[i]].instr].type == 0) {
 							for (var k:int = 0; k < control.musicbox[t].numnotes; k++) {
-								writenote(control.musicbox[t].instr, 
-													control.musicbox[t].notes[k].x, 
-													((j * control.boxcount) + control.musicbox[t].notes[k].width) * 30, 
-													control.musicbox[t].notes[k].y * 30, 255);
+								midiexporter.writenote(control.musicbox[t].instr, 
+																			 control.musicbox[t].notes[k].x, 
+																			 ((j * control.boxcount) + control.musicbox[t].notes[k].width) * 30, 
+																			 control.musicbox[t].notes[k].y * 30, 255);
 							}
 						}
 					}
 				}
 			}
 			
-			nexttrack();
-			writeinstrument(0, 9);
+			midiexporter.nexttrack();
+			midiexporter.writeinstrument(0, 9);
 			//Drumkits
 			for (j = 0; j < control.arrange.lastbar; j++) {
 				for (i = 0; i < 8; i++) {
@@ -605,10 +601,10 @@ package {
 						//Now do drum kits
 						if (help.Left(control.voicelist.voice[control.instrument[drumkit].index], 7) == "drumkit") {
 							for (k = 0; k < control.musicbox[t].numnotes; k++) {
-								writenote(9, 
-													convertdrumtonote(control.musicbox[t].notes[k].x, control.instrument[drumkit].index), 
-													((j * control.boxcount) + control.musicbox[t].notes[k].width) * 30, 
-													control.musicbox[t].notes[k].y * 30, 255);
+								midiexporter.writenote(9, 
+																			 convertdrumtonote(control.musicbox[t].notes[k].x, control.instrument[drumkit].index), 
+																			 ((j * control.boxcount) + control.musicbox[t].notes[k].width) * 30, 
+																			 control.musicbox[t].notes[k].y * 30, 255);
 							}
 						}
 					}
@@ -744,55 +740,6 @@ package {
 			return control.voicelist.midimap[t];
 		}
 		
-		public static function nexttrack():void {
-			midifile.addTrack(new MidiTrack());
-			currenttrack = midifile.track(midifile._trackArray.length - 1);
-		}
-		
-		public static function writetimesig():void {
-			currenttrack._msgList.push(new MetaItem());
-			var t:int = currenttrack._msgList.length - 1;
-			currenttrack._msgList[t].type = MidiEnum.TIME_SIGN;
-			var myba:ByteArray = new ByteArray();
-			myba.writeByte(0x04);
-			myba.writeByte(0x02);
-			myba.writeByte(0x18);
-			myba.writeByte(0x08);
-			currenttrack._msgList[t].text = myba;
-		}
-		
-		public static function writetempo(tempo:int):void {
-			currenttrack._msgList.push(new MetaItem());
-			var t:int = currenttrack._msgList.length - 1;
-			currenttrack._msgList[t].type = MidiEnum.SET_TEMPO;
-			var tempoinmidiformat:int = 60000000 / tempo;
-			
-			var byte1:int = (tempoinmidiformat >> 16) & 0xFF;
-			var byte2:int = (tempoinmidiformat >> 8) & 0xFF;
-			var byte3:int = tempoinmidiformat & 0xFF;
-			
-			var myba:ByteArray = new ByteArray();
-			myba.writeByte(byte1);
-			myba.writeByte(byte2);
-			myba.writeByte(byte3);
-			currenttrack._msgList[t].text = myba;
-		}
-		
-		public static function writeinstrument(instr:int, channel:int):void {
-			currenttrack._msgList.push(new ChannelItem());
-			var t:int = currenttrack._msgList.length - 1;
-			currenttrack._msgList[t]._kind = MidiEnum.PROGRAM_CHANGE;
-			currenttrack._msgList[t]._command = 192 + channel;
-			currenttrack._msgList[t]._data1 = instr;
-		}
-		
-		public static function writenote(channel:int, pitch:int, time:int, length:int, volume:int):void {
-			volume = volume / 2;
-			if (volume > 127) volume = 127;
-			
-			currenttrack._msgList.push(new NoteItem(channel, pitch, volume, length, time)); 
-		}
-		
 		CONFIG::desktop {
 			public static var file:File, stream:FileStream;
 		}
@@ -812,9 +759,8 @@ package {
     public static var smfData:SMFData = new SMFData();
 		
 		//Stuff for exporting
-		public static var midifile:MidiFile;
 		public static var tempbytes:ByteArray;
-		public static var currenttrack:MidiTrack;
+		public static var midiexporter:Midiexporter;
 	}
 }
 }

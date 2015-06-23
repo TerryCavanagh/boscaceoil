@@ -476,20 +476,25 @@ package {
 					addstopbutton(180, (gfx.linespacing * 9)-1, "stop");
 				break;
 			  case control.MENUTAB_CREDITS:
-				  addtextlabel(10, (gfx.linespacing * 2), "SiON softsynth library by Kei Mesuda", 0);
-					addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 2), "Online version by Chris Kim", 0);
-				  addtextlabel(10, (gfx.linespacing * 3), "sites.google.com/site/sioncenter/");
-					addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 3), "dy-dx.com/");
+				  addtextlabel(10, (gfx.linespacing * 1)+5, "SiON softsynth library by Kei Mesuda", 0);
+					addtextlabel(10, (gfx.linespacing * 2)+5, "sites.google.com/site/sioncenter/");
 					
-					addtextlabel(10, (gfx.linespacing * 8), "Swing function by Stephen Lavelle",0);
-					addtextlabel(10, (gfx.linespacing * 9), "increpare.com/");
+					addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 1)+5, "Midias library by Efishocean", 0);
+					addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 2)+5, "code.google.com/p/midas3/");
 					
-					addrighttextlabel(gfx.screenwidth-10, (gfx.linespacing * 5), "XM, MML Exporters by Rob Hunter",0);
-					addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 6), "about.me/rjhunter/");
+					addtextlabel(10, (gfx.linespacing * 4), "XM, MML Exporters by Rob Hunter",0);
+					addtextlabel(10, (gfx.linespacing * 5), "about.me/rjhunter/");
 					
-					addtextlabel(10, (gfx.linespacing * 5), "Linux port by Damien L",0);
-					addtextlabel(10, (gfx.linespacing * 6), "uncovergame.com/");
-					addrighttextlabel(gfx.screenwidth-10, (gfx.linespacing * 8), "Open Source under FreeBSD licence",0);
+					addrighttextlabel(gfx.screenwidth-10, (gfx.linespacing * 4), "Linux port by Damien L",0);
+					addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 5), "uncovergame.com/");
+					
+					addtextlabel(10, (gfx.linespacing * 7)-5, "Swing function by Stephen Lavelle",0);
+					addtextlabel(10, (gfx.linespacing * 8)-5, "increpare.com/");
+					
+					addtextlabel(10, (gfx.linespacing * 9)+4, "Available under FreeBSD Licence",0);
+					
+					addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 7)-5, "Online version by Chris Kim", 0);
+				  addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 8)-5, "dy-dx.com/");
 					
 					addbutton(gfx.screenwidth - 82, (gfx.linespacing * 9)+4, 75, "BACK", "filetab");
 				break;
