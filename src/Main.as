@@ -76,6 +76,9 @@ package{
 			gfx.xres = 384; gfx.yres = 280;
 			gfx.init(stage);
 			
+			stage.addEventListener(Event.RESIZE, handleResize);
+			handleResize(null);
+			
 			var tempbmp:Bitmap;
 			tempbmp = new im_icons();	gfx.buffer = tempbmp.bitmapData;	gfx.makeiconarray();
 			tempbmp = new im_logo0();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
@@ -91,7 +94,7 @@ package{
 			control.changetab(control.MENUTAB_FILE);
 			
 			control.voicelist.fixlengths();
-			stage.fullScreenSourceRect = new Rectangle(0, 0, gfx.xres * 2, gfx.yres * 2);
+			//stage.fullScreenSourceRect = new Rectangle(0, 0, gfx.xres * 2, gfx.yres * 2);
 			addChild(gfx.screen);
 			
 			control.loadscreensettings();
@@ -121,7 +124,24 @@ package{
 				}
 			}
 		}
-
+		
+		private function handleResize(e:Event):void {
+			// adjust the gui to fit the new device resolution
+			if (e != null) {
+				trace(e);
+			  gfx.changewindowsize(e.target.stageWidth, e.target.stageHeight);
+				
+				var temp:BitmapData = new BitmapData(gfx.windowwidth, gfx.windowheight, false, 0x000000);
+				gfx.backbuffer = temp;
+				gfx.screen.bitmapData.dispose();
+				gfx.screen.bitmapData = gfx.backbuffer;
+				
+			}else {
+				trace(e);
+				//Init
+			}
+		}
+		
 		private function _startMainLoop():void {
 			CONFIG::desktop {
 				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, __activate__);
@@ -159,8 +179,8 @@ package{
 		}
 			
 		public function _input():void {
-			control.mx = (mouseX / 2);
-			control.my = (mouseY / 2);
+			control.mx = mouseX;
+			control.my = mouseY;
 				
 			input(key);
 		}
@@ -197,6 +217,9 @@ package{
 		}
 		
 		public function updategraphicsmode():void {
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.align = StageAlign.TOP_LEFT;
+			
 		 	if (control.fullscreen) {
 				stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 			}else {

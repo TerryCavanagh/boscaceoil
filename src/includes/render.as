@@ -6,7 +6,7 @@
 	
 	//Tabs
 	CONFIG::desktop {
-	  j = (gfx.screenwidth - 40) / 4;
+	  j = (gfx.screenwidth - 20) / 4;
 	}
 	CONFIG::web {
 	  j = (gfx.screenwidth) / 4;
@@ -26,11 +26,6 @@
 	gfx.print((j * 3) + 2, 0, "ADVANCED", control.currenttab == control.MENUTAB_ADVANCED?0:2, false, true);
 	gfx.fillrect((j * 4), 0, 21, 10, 4);
 	CONFIG::desktop {
-		if (control.fullscreen) {
-			gfx.print((j * 4) + 6, 0, "F", 2, false, true);
-		}else{
-			gfx.print((j * 4) + 2, 0, "x" + String(gfx.screenscale), 2, false, true);
-		}
 		gfx.fillrect((j * 4) + 20, 0, 21, 10, 3);
 		gfx.drawicon((j * 4) + 26, 1, control.fullscreen?5:4);
 	}

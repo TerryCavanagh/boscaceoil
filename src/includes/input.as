@@ -220,13 +220,6 @@
 						control.list.close();
 					}
 					
-					if (control.list.type == control.LIST_SCREENSIZE) {
-						gfx.changewindowsize(control.list.selection + 1);
-						control.fullscreen = false;
-						control.savescreensettings();
-						control.list.close();
-					}
-					
 					if (control.list.type == control.LIST_MOREEXPORTS) {
 						if (control.list.selection == 0) {
 							CONFIG::desktop {
@@ -274,9 +267,6 @@
 						if (control.fullscreen) {control.fullscreen = false;
 						}else {control.fullscreen = true;}
 						updategraphicsmode();
-					}else if (control.mx >= gfx.screenwidth - 40) {
-						control.filllist(control.LIST_SCREENSIZE);
-						control.list.init(gfx.screenwidth - 40, gfx.linesize - 2);
 					}else{
 						control.changetab(control.MENUTAB_ADVANCED);
 					}

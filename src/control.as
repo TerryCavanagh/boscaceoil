@@ -50,7 +50,7 @@
 		public static var LIST_CATEGORY:int = 3;
 		public static var LIST_SELECTINSTRUMENT:int = 4;
 		public static var LIST_BUFFERSIZE:int = 5;
-		public static var LIST_SCREENSIZE:int = 6;
+		public static var LIST_MOREEXPORTS:int = 6;
 		public static var LIST_EFFECTS:int = 7;
 		public static var LIST_EXPORTS:int = 8;
 		public static var LIST_MIDIINSTRUMENT:int = 9;
@@ -70,7 +70,6 @@
 		public static var LIST_MIDI_13_WORLD:int = 23;
 		public static var LIST_MIDI_14_PERCUSSIVE:int = 24;
 		public static var LIST_MIDI_15_SOUNDEFFECTS:int = 25;
-		public static var LIST_MOREEXPORTS:int = 26;
 		
 		public static var MENUTAB_FILE:int = 0;
 		public static var MENUTAB_ARRANGEMENTS:int = 1;
@@ -379,7 +378,15 @@
 				fullscreen = true;
 			}
 			
-			gfx.changewindowsize(programsettings.data.windowsize);
+			if (programsettings.data.windowwidth == null) {
+				gfx.windowwidth = 768;
+				gfx.windowheight = 560;
+			}else {
+				gfx.windowwidth = programsettings.data.windowwidth;
+				gfx.windowheight = programsettings.data.windowheight;
+			}
+			
+			gfx.changewindowsize(gfx.windowwidth, gfx.windowheight);
 			
 			programsettings.flush();
 			programsettings.close();
@@ -394,7 +401,8 @@
 				programsettings.data.fullscreen = 1;
 			}
 			
-			programsettings.data.windowsize = gfx.screenscale;
+			programsettings.data.windowwidth = gfx.windowwidth;
+			programsettings.data.windowheight = gfx.windowheight;
 			
 			programsettings.flush();
 			programsettings.close();
@@ -860,16 +868,6 @@
 					list.item[1] = "4096 (try if you get cracking on wav exports)";
 					list.item[2] = "8192 (slow, not recommended)";
 					list.numitems = 3;
-				break;
-			  case LIST_SCREENSIZE:
-				  i = 1;
-					var sw:int = flash.system.Capabilities.screenResolutionX;
-					var sh:int = flash.system.Capabilities.screenResolutionY;
-					while (384 * i < sw && 240 * i < sh) {
-					  list.item[i - 1] = "x" + String(i);
-						i++;
-					}
-					list.numitems = i - 1;
 				break;
 			  case LIST_EFFECTS:
 				  for (i = 0; i < 7; i++) {

@@ -621,11 +621,6 @@
 		
 		public static function initgfx():void {
 			//We initialise a few things
-			screenscale = 2;
-			
-			screenwidth = xres; screenheight = yres;
-			screenwidthmid = screenwidth / 2; screenheightmid = screenheight / 2;
-			screenviewwidth = screenwidth; screenviewheight = screenheight;
 			linesize = 10; 
 			linespacing = 10;
 			buttonheight = 13; 
@@ -651,7 +646,6 @@
 			tempicon = new BitmapData(16, 16, false, 0x000000);
 			
 			backbuffer = new BitmapData(xres, yres, false, 0x000000);
-			screenbuffer = new BitmapData(xres, yres, false, 0x000000);
 			
 			for (i = 0; i < 400; i++) {
 				pal.push(new paletteclass());
@@ -659,9 +653,7 @@
 			
 			buttonpress = 0;
 			
-			screen = new Bitmap(screenbuffer);
-			screen.width = screenwidth * 2;
-			screen.height = screenheight * 2; 
+			screen = new Bitmap(backbuffer);
 			screen.x = 0;
 			screen.y = 0; 
 		}
@@ -672,17 +664,21 @@
 		}
 		
 		CONFIG::desktop {
-			public static function changewindowsize(t:int):void {
-				screenscale = t;
+			public static function changewindowsize(w:int, h:int):void {
+				windowwidth = w;
+				windowheight = h;
 				if (stage && stage.nativeWindow) {
-					stage.nativeWindow.width = (screenwidth * t) + 18;
-					stage.nativeWindow.height = (screenheight * t) + 45;
+					stage.nativeWindow.width = w + 18;
+					stage.nativeWindow.height = h + 45;
 				}
+				screenwidth = w; screenheight = h;
+				screenwidthmid = screenwidth / 2; screenheightmid = screenheight / 2;
+				screenviewwidth = screenwidth; screenviewheight = screenheight;			
 			}
 		}
 
 		CONFIG::web {
-			public static function changewindowsize(t:int):void {
+			public static function changewindowsize(w:int, h:int):void {
 				// no-op
 			}
 		}
@@ -913,11 +909,6 @@
 		//Render functions
 		public static function normalrender():void {
 			backbuffer.unlock();
-			
-			screenbuffer.lock();
-			screenbuffer.copyPixels(backbuffer, backbuffer.rect, tl, null, null, false);
-			screenbuffer.unlock();
-			
 			backbuffer.lock();
 		}
 
@@ -941,7 +932,6 @@
 		public static var screenwidth:int, screenheight:int;
 		public static var screenwidthmid:int, screenheightmid:int;
 		public static var screenviewwidth:int, screenviewheight:int;
-		public static var screenscale:int;
 		public static var linesize:int, patternheight:int, patternwidth:int, patterncount:int;
 		public static var linespacing:int;
 		public static var patterneditorheight:int;
@@ -958,6 +948,7 @@
 		
 		public static var tempicon:BitmapData;
 		//Actual backgrounds
+		public static var drawto:BitmapData;
 		public static var backbuffer:BitmapData;
 		public static var screenbuffer:BitmapData;
 		public static var screen:Bitmap;
@@ -981,5 +972,6 @@
 		public static var stage:Stage;
 		
 		public static var xres:int, yres:int;
+		public static var windowwidth:int, windowheight:int;
 	}
 }
