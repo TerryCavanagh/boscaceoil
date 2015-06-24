@@ -93,7 +93,7 @@ package{
 			control.changetab(control.MENUTAB_FILE);
 			
 			control.voicelist.fixlengths();
-			//stage.fullScreenSourceRect = new Rectangle(0, 0, gfx.xres * 2, gfx.yres * 2);
+			stage.fullScreenSourceRect = null;
 			addChild(gfx.screen);
 			
 			control.loadscreensettings();
@@ -128,11 +128,14 @@ package{
 			// adjust the gui to fit the new device resolution
 			if (e != null) {
 				//trace(e);
+				e.preventDefault();
 				control.savescreencountdown = 30; //Half a second after a resize, save the settings
 			  gfx.changewindowsize(e.target.stageWidth, e.target.stageHeight);
 				
 				gfx.patterneditorheight = (gfx.windowheight - (gfx.pianorollposition - (gfx.linesize + 2))) / 12;
 				gfx.tf_1.width = gfx.windowwidth;
+				
+				guiclass.changetab(control.currenttab);
 				
 				var temp:BitmapData = new BitmapData(gfx.windowwidth, gfx.windowheight, false, 0x000000);
 				temp.copyPixels(gfx.backbuffer, gfx.backbuffer.rect, gfx.tl);

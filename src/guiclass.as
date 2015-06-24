@@ -104,36 +104,36 @@ package {
 				addvariable(x + 200, y, "bpm");
 				addrightarrow(x + 260, y, "bpmup");
 			}else if (type == "changesoundbuffer") {
-				addrect(x, y - 2, 160, gfx.buttonheight);
-				addrighttextlabel(x + 80, y, "SOUND BUFFER ", 0);
+				addrect(x, y - 4, 320, gfx.buttonheight);
+				addrighttextlabel(x + 160, y, "SOUND BUFFER ", 0);
 				
-				adddownarrow(x + 105, y, "bufferlist");
-				addvariable(x + 120, y, "buffersize");
-				addvariable(x + 4, y + gfx.buttonheight + 2, "buffersizealert");
+				adddownarrow(x + 210, y, "bufferlist");
+				addvariable(x + 240, y, "buffersize");
+				addvariable(x + 8, y + gfx.buttonheight + 4, "buffersizealert");
 			}else if (type == "swingcontrol") {
-				addrect(x, y - 2, 160, gfx.buttonheight);
-				addrighttextlabel(x + 60, y, "SWING", 0);
+				addrect(x, y - 4, 320, gfx.buttonheight);
+				addrighttextlabel(x + 120, y, "SWING", 0);
 				
-				addleftarrow(x + 85, y, "swingdown");
-				addvariable(x + 100, y, "swing");
-				addrightarrow(x + 130, y, "swingup");
+				addleftarrow(x + 170, y, "swingdown");
+				addvariable(x + 200, y, "swing");
+				addrightarrow(x + 260, y, "swingup");
 			}else if (type == "globaleffects") {
-				addrect(x, y - 2, 110, gfx.buttonheight, 6);
-				adddownarrow(x - 15, y, "effectslist");
-				addvariable(x - 20, y, "currenteffect");
-				addhorizontalslider(x, y - 2, 100, "currenteffect");
+				addrect(x, y - 4, 220, gfx.buttonheight, 6);
+				adddownarrow(x - 30, y, "effectslist");
+				addvariable(x - 40, y, "currenteffect");
+				addhorizontalslider(x, y - 4, 200, "currenteffect");
 			}else if (type == "footer_instrumentlist") {
-				addrect(x, y, 140, gfx.linesize, 1, "footer_instrumentlist");
-				adduparrow(x + 5, y + 2, "footer_instrumentlist");
-				addvariable(x + 19, y, "currentinstrument");	
+				addrect(x, y, 280, gfx.linesize, 1, "footer_instrumentlist");
+				adduparrow(x + 10, y + 4, "footer_instrumentlist");
+				addvariable(x + 38, y, "currentinstrument");	
 			}else if (type == "footer_keylist") {
-				addrect(x, y, 40, gfx.linesize, 1, "footer_keylist");
-				adduparrow(x + 5, y + 2, "footer_keylist");
-				addvariable(x + 19, y, "currentkey");
+				addrect(x, y, 80, gfx.linesize, 1, "footer_keylist");
+				adduparrow(x + 10, y + 4, "footer_keylist");
+				addvariable(x + 38, y, "currentkey");
 			}else if (type == "footer_scalelist") {
-				addrect(x, y, 150, gfx.linesize, 1, "footer_scalelist");
-				adduparrow(x + 5, y + 2, "footer_scalelist");
-				addvariable(x + 19, y, "currentscale");
+				addrect(x, y, 300, gfx.linesize, 1, "footer_scalelist");
+				adduparrow(x + 10, y + 4, "footer_scalelist");
+				addvariable(x + 38, y, "currentscale");
 			}
 		}
 		
@@ -297,15 +297,15 @@ package {
 					}else if (button[i].style == "horizontalslider") {
 						if (button[i].action == "currenteffect") {
 							gfx.fillrect(button[i].position.x, button[i].position.y, 20, 26, 6);
-							gfx.fillrect(button[i].position.x + 1, button[i].position.y + 1, 16, 22, 5);
+							gfx.fillrect(button[i].position.x + 2, button[i].position.y + 2, 16, 22, 5);
 							
 							tx = int((control.effectvalue));
-							gfx.fillrect(button[i].position.x +tx, button[i].position.y, 20, 26, 4);
-							gfx.fillrect(button[i].position.x +tx + 1, button[i].position.y + 1, 16, 22, 2);
+							gfx.fillrect(button[i].position.x + tx, button[i].position.y, 20, 26, 4);
+							gfx.fillrect(button[i].position.x + tx + 2, button[i].position.y + 2, 16, 22, 2);
 							
-							gfx.fillrect(button[i].position.x +tx + 2, button[i].position.y + 4, 12, 2, 4);
-							gfx.fillrect(button[i].position.x +tx + 2, button[i].position.y + 6, 12, 2, 4);
-							gfx.fillrect(button[i].position.x +tx + 2, button[i].position.y + 8, 12, 2, 4);
+							gfx.fillrect(button[i].position.x + tx + 4, button[i].position.y + 8, 12, 2, 4);
+							gfx.fillrect(button[i].position.x + tx + 4, button[i].position.y + 12, 12, 2, 4);
+							gfx.fillrect(button[i].position.x + tx + 4, button[i].position.y + 16, 12, 2, 4);
 						}
 					}else if (button[i].style == "variable") {
 						if(button[i].action == "barcount"){
@@ -352,18 +352,18 @@ package {
 						}
 						
 						if (button[i].pressed > 0) {
-							gfx.drawimage(7, tx + 3, ty + 1);
-							gfx.drawimage(timage, tx, ty - 4);
+							gfx.drawimage(7, tx + 6, ty + 2);
+							gfx.drawimage(timage, tx, ty - 8);
 							if (control.looptime % control.barcount == 1) {
 								button[i].pressed--;
 							}
 						}else{
 							if (control.looptime % control.barcount == 1) {
-								gfx.drawimage(7, tx+3, ty + 5 - 4);
-								gfx.drawimage(timage, tx, ty + 2 - 4);
+								gfx.drawimage(7, tx + 6, ty + 10 - 8);
+								gfx.drawimage(timage, tx, ty + 4 - 8);
 							}else {
-								gfx.drawimage(7, tx+3, ty + 5);
-								gfx.drawimage(timage, tx, ty + 2);
+								gfx.drawimage(7, tx + 6, ty + 10);
+								gfx.drawimage(timage, tx, ty + 4);
 							}
 						}
 					}
@@ -440,12 +440,12 @@ package {
 			//Footer
 			addrect(0, gfx.screenheight - (gfx.linesize), gfx.screenwidth, gfx.linesize, 4);
 			if (control.currentbox > -1) {
-				addcontrol(5, gfx.screenheight - (gfx.linesize), "footer_instrumentlist");
+				addcontrol(10, gfx.screenheight - (gfx.linesize), "footer_instrumentlist");
 				if (control.instrument[control.musicbox[control.currentbox].instr].type == 0) {
-					addplusbutton(gfx.screenwidth - 230, gfx.screenheight - (gfx.linesize), "transposeup");
-					addminusbutton(gfx.screenwidth - 210, gfx.screenheight - (gfx.linesize), "transposedown");
-					addcontrol(gfx.screenwidth - 190, gfx.screenheight - (gfx.linesize), "footer_scalelist");
-				  addcontrol(gfx.screenwidth - 40, gfx.screenheight - (gfx.linesize), "footer_keylist");
+					addplusbutton(gfx.screenwidth - 460, gfx.screenheight - (gfx.linesize), "transposeup");
+					addminusbutton(gfx.screenwidth - 420, gfx.screenheight - (gfx.linesize), "transposedown");
+					addcontrol(gfx.screenwidth - 380, gfx.screenheight - (gfx.linesize), "footer_scalelist");
+				  addcontrol(gfx.screenwidth - 80, gfx.screenheight - (gfx.linesize), "footer_keylist");
 				}
 			}
 			
@@ -461,14 +461,14 @@ package {
 					addbutton(154, (gfx.linespacing * 9)-6, 120, "HELP", "helptab");
 					
 					CONFIG::desktop {
-						addbutton(440, gfx.linespacing * 2, 150, "NEW SONG", "newsong");
-						addbutton(610, gfx.linespacing * 2, 150, "EXPORT...", "exportlist");
-						addbutton(440, (gfx.linespacing * 4) + 10, 150, "LOAD .ceol", "loadceol");
-						addbutton(610, (gfx.linespacing * 4) + 10, 150, "SAVE .ceol", "saveceol");
+						addbutton(gfx.screenwidth - 340, gfx.linespacing * 2, 150, "NEW SONG", "newsong");
+						addbutton(gfx.screenwidth - 170, gfx.linespacing * 2, 150, "EXPORT...", "exportlist");
+						addbutton(gfx.screenwidth - 340, (gfx.linespacing * 4) + 10, 150, "LOAD .ceol", "loadceol");
+						addbutton(gfx.screenwidth - 170, (gfx.linespacing * 4) + 10, 150, "SAVE .ceol", "saveceol");
 					}
 					
-					addcontrol(440, (gfx.linespacing * 7) - 2, "changepatternlength");
-					addcontrol(440, (gfx.linespacing * 9) - 2, "changebpm");
+					addcontrol(gfx.screenwidth - 340, (gfx.linespacing * 7) - 2, "changepatternlength");
+					addcontrol(gfx.screenwidth - 340, (gfx.linespacing * 9) - 2, "changebpm");
 					
 				  addrect(290, (gfx.linespacing * 9) - 6, 100, 26);
 					addplayarrow(300, (gfx.linespacing * 9) - 2, "play");
@@ -476,47 +476,47 @@ package {
 					addstopbutton(360, (gfx.linespacing * 9) - 2, "stop");
 				break;
 			  case control.MENUTAB_CREDITS:
-				  addtextlabel(10, (gfx.linespacing * 1)+5, "SiON softsynth library by Kei Mesuda", 0);
-					addtextlabel(10, (gfx.linespacing * 2)+5, "sites.google.com/site/sioncenter/");
+				  addtextlabel(20, (gfx.linespacing * 1)+10, "SiON softsynth library by Kei Mesuda", 0);
+					addtextlabel(20, (gfx.linespacing * 2)+10, "sites.google.com/site/sioncenter/");
 					
-					addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 1)+5, "Midias library by Efishocean", 0);
-					addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 2)+5, "code.google.com/p/midas3/");
+					addrighttextlabel(gfx.screenwidth - 20, (gfx.linespacing * 1)+10, "Midias library by Efishocean", 0);
+					addrighttextlabel(gfx.screenwidth - 20, (gfx.linespacing * 2)+10, "code.google.com/p/midas3/");
 					
-					addtextlabel(10, (gfx.linespacing * 4), "XM, MML Exporters by Rob Hunter",0);
-					addtextlabel(10, (gfx.linespacing * 5), "about.me/rjhunter/");
+					addtextlabel(20, (gfx.linespacing * 4), "XM, MML Exporters by Rob Hunter",0);
+					addtextlabel(20, (gfx.linespacing * 5), "about.me/rjhunter/");
 					
-					addrighttextlabel(gfx.screenwidth-10, (gfx.linespacing * 4), "Linux port by Damien L",0);
-					addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 5), "uncovergame.com/");
+					addrighttextlabel(gfx.screenwidth-20, (gfx.linespacing * 4), "Linux port by Damien L",0);
+					addrighttextlabel(gfx.screenwidth - 20, (gfx.linespacing * 5), "uncovergame.com/");
 					
-					addtextlabel(10, (gfx.linespacing * 7)-5, "Swing function by Stephen Lavelle",0);
-					addtextlabel(10, (gfx.linespacing * 8)-5, "increpare.com/");
+					addtextlabel(20, (gfx.linespacing * 7) - 10, "Swing function by Stephen Lavelle", 0);
+					addtextlabel(20, (gfx.linespacing * 8) - 10, "increpare.com/");
 					
-					addtextlabel(10, (gfx.linespacing * 9)+4, "Available under FreeBSD Licence",0);
+					addtextlabel(20, (gfx.linespacing * 9) + 8, "Available under FreeBSD Licence", 0);
 					
-					addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 7)-5, "Online version by Chris Kim", 0);
-				  addrighttextlabel(gfx.screenwidth - 10, (gfx.linespacing * 8)-5, "dy-dx.com/");
+					addrighttextlabel(gfx.screenwidth - 20, (gfx.linespacing * 7) - 10, "Online version by Chris Kim", 0);
+				  addrighttextlabel(gfx.screenwidth - 20, (gfx.linespacing * 8) - 10, "dy-dx.com/");
 					
-					addbutton(gfx.screenwidth - 82, (gfx.linespacing * 9)+4, 75, "BACK", "filetab");
+					addbutton(gfx.screenwidth - 164, (gfx.linespacing * 9) + 8, 150, "BACK", "filetab");
 				break;
 			  case control.MENUTAB_HELP:
-				  addtextlabel(10, (gfx.linespacing * 2), "To do: Help system", 0);
-					addbutton(gfx.screenwidth - 82, (gfx.linespacing * 9)+4, 75, "BACK", "filetab");
+				  addtextlabel(20, (gfx.linespacing * 2), "To do: Help system", 0);
+					addbutton(gfx.screenwidth - 164, (gfx.linespacing * 9) + 8, 150, "BACK", "filetab");
 				break;
 			  case control.MENUTAB_ARRANGEMENTS:
-				  addbutton((gfx.patterncount * 6) + 5, gfx.linespacing + gfx.pianorollposition - 14, gfx.screenwidth - (gfx.patterncount * 6) - 8, "ADD NEW", "addnewpattern");
+				  addbutton((gfx.patterncount * 6) + 10, gfx.linespacing + gfx.pianorollposition - 28, gfx.screenwidth - (gfx.patterncount * 6) - 8, "ADD NEW", "addnewpattern");
 			  break;
 			  case control.MENUTAB_INSTRUMENTS:
-				  addbutton(5, gfx.linespacing + gfx.pianorollposition - 14, 132, "ADD NEW INSTRUMENT", "addnewinstrument");
-					addminusbutton(351, (gfx.linespacing * 2) + 3, "previousinstrument");
-					addplusbutton(363, (gfx.linespacing * 2) + 3, "nextinstrument");
+				  addbutton(10, gfx.linespacing + gfx.pianorollposition - 28, 132, "ADD NEW INSTRUMENT", "addnewinstrument");
+					addminusbutton(gfx.screenwidth - 66, (gfx.linespacing * 2) + 6, "previousinstrument");
+					addplusbutton(gfx.screenwidth - 42, (gfx.linespacing * 2) + 6, "nextinstrument");
 				break;
 			  case control.MENUTAB_ADVANCED:
-				  addcontrol(20, (gfx.linespacing * 3) + 2, "changesoundbuffer");
-					addcontrol(20, (gfx.linespacing * 6) + 2, "swingcontrol");
-					addcontrol(gfx.screenwidth - 120,  (gfx.linespacing * 3) + 2, "globaleffects");
+				  addcontrol(40, (gfx.linespacing * 3) + 4, "changesoundbuffer");
+					addcontrol(40, (gfx.linespacing * 6) + 4, "swingcontrol");
+					addcontrol(gfx.screenwidth - 240,  (gfx.linespacing * 3) + 4, "globaleffects");
 					
 					CONFIG::desktop {
-						addbutton(300, gfx.linespacing * 6, 75, "IMPORT .mid", "loadmidi");
+						addbutton(gfx.screenwidth - 168, gfx.linespacing * 6, 150, "IMPORT .mid", "loadmidi");
 					}
 				break;
 			}

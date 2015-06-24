@@ -663,6 +663,8 @@
 		
 		CONFIG::desktop {
 			public static function changewindowsize(w:int, h:int):void {
+				//if (w < 768) w = 768;
+				//if (h < 480) h = 480;
 				windowwidth = w;
 				windowheight = h;
 				if (stage && stage.nativeWindow) {
