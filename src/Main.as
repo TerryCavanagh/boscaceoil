@@ -131,7 +131,7 @@ package{
 				control.savescreencountdown = 30; //Half a second after a resize, save the settings
 			  gfx.changewindowsize(e.target.stageWidth, e.target.stageHeight);
 				
-				gfx.patterneditorheight = (gfx.windowheight - (gfx.pianorollposition - (gfx.linesize+2))) / 12;
+				gfx.patterneditorheight = (gfx.windowheight - (gfx.pianorollposition - (gfx.linesize + 2))) / 12;
 				gfx.tf_1.width = gfx.windowwidth;
 				
 				var temp:BitmapData = new BitmapData(gfx.windowwidth, gfx.windowheight, false, 0x000000);

@@ -40,39 +40,39 @@ package {
 		}
 		
 		public static function addleftarrow(x:int, y:int, action:String):void {
-			addguipart(x, y, 16, 16, "", action, "leftarrow");
+			addguipart(x, y, 32, 32, "", action, "leftarrow");
 		}
 		
 		public static function addrightarrow(x:int, y:int, action:String):void {
-			addguipart(x, y, 16, 16, "", action, "rightarrow");
+			addguipart(x, y, 32, 32, "", action, "rightarrow");
 		}
 		
 		public static function addplayarrow(x:int, y:int, action:String):void {
-			addguipart(x, y, 16, 16, "", action, "playarrow");
+			addguipart(x, y, 32, 32, "", action, "playarrow");
 		}
 		
 		public static function addpausebutton(x:int, y:int, action:String):void {
-			addguipart(x, y, 16, 16, "", action, "pause");
+			addguipart(x, y, 32, 32, "", action, "pause");
 		}
 		
 		public static function addstopbutton(x:int, y:int, action:String):void {
-			addguipart(x, y, 16, 16, "", action, "stop");
+			addguipart(x, y, 32, 32, "", action, "stop");
 		}
 		
 		public static function addplusbutton(x:int, y:int, action:String):void {
-			addguipart(x, y, 16, 16, "", action, "plus");
+			addguipart(x, y, 32, 32, "", action, "plus");
 		}
 		
 		public static function addminusbutton(x:int, y:int, action:String):void {
-			addguipart(x, y, 12, 16, "", action, "minus");
+			addguipart(x, y, 32, 32, "", action, "minus");
 		}
 		
 		public static function adddownarrow(x:int, y:int, action:String):void {
-			addguipart(x, y, 16, 16, "", action, "downarrow");
+			addguipart(x, y, 32, 32, "", action, "downarrow");
 		}
 			
 		public static function adduparrow(x:int, y:int, action:String):void {
-			addguipart(x, y, 16, 16, "", action, "uparrow");
+			addguipart(x, y, 32, 32, "", action, "uparrow");
 		}
 		
 		public static function addvariable(x:int, y:int, variable:String, col:int = 0):void {
@@ -86,23 +86,23 @@ package {
 		public static function addcontrol(x:int, y:int, type:String):void {
 			//For complex multipart things
 			if (type == "changepatternlength") {
-				addrect(x, y-2, 160, 13);
-				addrighttextlabel(x + 60, y, "PATTERN", 0);
+				addrect(x, y - 4, 320, 26);
+				addrighttextlabel(x + 120, y, "PATTERN", 0);
 				
-				addleftarrow(x + 70, y , "barcountdown");
-				addvariable(x + 85, y, "barcount");
-				addrightarrow(x + 100, y, "barcountup");
+				addleftarrow(x + 140, y , "barcountdown");
+				addvariable(x + 170, y, "barcount");
+				addrightarrow(x + 200, y, "barcountup");
 				
-				addleftarrow(x + 115, y, "boxcountdown");
-				addvariable(x + 125, y, "boxcount");
-				addrightarrow(x + 145, y, "boxcountup");
+				addleftarrow(x + 230, y, "boxcountdown");
+				addvariable(x + 250, y, "boxcount");
+				addrightarrow(x + 290, y, "boxcountup");
 			}else if (type == "changebpm") {
-				addrect(x, y - 2, 160, gfx.buttonheight);
-				addrighttextlabel(x + 60, y, "BPM", 0);
+				addrect(x, y - 4, 320, gfx.buttonheight);
+				addrighttextlabel(x + 120, y, "BPM", 0);
 				
-				addleftarrow(x + 85, y, "bpmdown");
-				addvariable(x + 100, y, "bpm");
-				addrightarrow(x + 130, y, "bpmup");
+				addleftarrow(x + 170, y, "bpmdown");
+				addvariable(x + 200, y, "bpm");
+				addrightarrow(x + 260, y, "bpmup");
 			}else if (type == "changesoundbuffer") {
 				addrect(x, y - 2, 160, gfx.buttonheight);
 				addrighttextlabel(x + 80, y, "SOUND BUFFER ", 0);
@@ -296,16 +296,16 @@ package {
 						gfx.drawicon(button[i].position.x, button[i].position.y, 0);
 					}else if (button[i].style == "horizontalslider") {
 						if (button[i].action == "currenteffect") {
-							gfx.fillrect(button[i].position.x, button[i].position.y, 10, 13, 6);
-							gfx.fillrect(button[i].position.x + 1, button[i].position.y + 1, 8, 11, 5);
+							gfx.fillrect(button[i].position.x, button[i].position.y, 20, 26, 6);
+							gfx.fillrect(button[i].position.x + 1, button[i].position.y + 1, 16, 22, 5);
 							
 							tx = int((control.effectvalue));
-							gfx.fillrect(button[i].position.x +tx, button[i].position.y, 10, 13, 4);
-							gfx.fillrect(button[i].position.x +tx + 1, button[i].position.y + 1, 8, 11, 2);
+							gfx.fillrect(button[i].position.x +tx, button[i].position.y, 20, 26, 4);
+							gfx.fillrect(button[i].position.x +tx + 1, button[i].position.y + 1, 16, 22, 2);
 							
-							gfx.fillrect(button[i].position.x +tx + 2, button[i].position.y + 4, 6, 1, 4);
-							gfx.fillrect(button[i].position.x +tx + 2, button[i].position.y + 6, 6, 1, 4);
-							gfx.fillrect(button[i].position.x +tx + 2, button[i].position.y + 8, 6, 1, 4);
+							gfx.fillrect(button[i].position.x +tx + 2, button[i].position.y + 4, 12, 2, 4);
+							gfx.fillrect(button[i].position.x +tx + 2, button[i].position.y + 6, 12, 2, 4);
+							gfx.fillrect(button[i].position.x +tx + 2, button[i].position.y + 8, 12, 2, 4);
 						}
 					}else if (button[i].style == "variable") {
 						if(button[i].action == "barcount"){
@@ -451,29 +451,29 @@ package {
 			
 		  switch(t) {
 				case control.MENUTAB_FILE:
-					addlogo(12, (gfx.linespacing * 2));
-					addtextlabel(165, (gfx.linespacing * 5), control.versionnumber);
+					addlogo(24, (gfx.linespacing * 2));
+					addtextlabel(330, (gfx.linespacing * 5), control.versionnumber);
 					
-					addtextlabel(10, (gfx.linespacing * 6)+1, "Created by Terry Cavanagh");
-					addtextlabel(10, (gfx.linespacing * 7)+1, "http://www.distractionware.com");
+					addtextlabel(20, (gfx.linespacing * 6) + 2, "Created by Terry Cavanagh");
+					addtextlabel(20, (gfx.linespacing * 7) + 2, "http://www.distractionware.com");
 					
-					addbutton(10, (gfx.linespacing * 9)-3, 60, "CREDITS", "creditstab");
-					addbutton(77, (gfx.linespacing * 9)-3, 60, "HELP", "helptab");
+					addbutton(20, (gfx.linespacing * 9)-6, 120, "CREDITS", "creditstab");
+					addbutton(154, (gfx.linespacing * 9)-6, 120, "HELP", "helptab");
 					
 					CONFIG::desktop {
-						addbutton(220, gfx.linespacing * 2, 75, "NEW SONG", "newsong");
-						addbutton(305, gfx.linespacing * 2, 75, "EXPORT...", "exportlist");
-						addbutton(220, (gfx.linespacing * 4) + 5, 75, "LOAD .ceol", "loadceol");
-						addbutton(305, (gfx.linespacing * 4) + 5, 75, "SAVE .ceol", "saveceol");
+						addbutton(440, gfx.linespacing * 2, 150, "NEW SONG", "newsong");
+						addbutton(610, gfx.linespacing * 2, 150, "EXPORT...", "exportlist");
+						addbutton(440, (gfx.linespacing * 4) + 10, 150, "LOAD .ceol", "loadceol");
+						addbutton(610, (gfx.linespacing * 4) + 10, 150, "SAVE .ceol", "saveceol");
 					}
 					
-					addcontrol(220, (gfx.linespacing * 7) - 1, "changepatternlength");
-					addcontrol(220, (gfx.linespacing * 9) - 1, "changebpm");
+					addcontrol(440, (gfx.linespacing * 7) - 2, "changepatternlength");
+					addcontrol(440, (gfx.linespacing * 9) - 2, "changebpm");
 					
-				  addrect(145, (gfx.linespacing * 9)-3, 50, 13);
-					addplayarrow(150, (gfx.linespacing * 9)-1, "play");
-					addpausebutton(165, (gfx.linespacing * 9)-1, "pause");
-					addstopbutton(180, (gfx.linespacing * 9)-1, "stop");
+				  addrect(290, (gfx.linespacing * 9) - 6, 100, 26);
+					addplayarrow(300, (gfx.linespacing * 9) - 2, "play");
+					addpausebutton(330, (gfx.linespacing * 9) - 2, "pause");
+					addstopbutton(360, (gfx.linespacing * 9) - 2, "stop");
 				break;
 			  case control.MENUTAB_CREDITS:
 				  addtextlabel(10, (gfx.linespacing * 1)+5, "SiON softsynth library by Kei Mesuda", 0);

@@ -626,7 +626,7 @@
 			buttonheight = 26; 
 			patternheight = 24; patterncount = 54;
 			setzoomlevel(4);
-			pianorollposition = linesize * 20;
+			pianorollposition = linesize * 10;
 			
 			fontsize.push(0); fontsize.push(0); fontsize.push(0); fontsize.push(0);		
 			fontsize.push(0); fontsize.push(0); fontsize.push(0); fontsize.push(0);		
@@ -705,8 +705,8 @@
 		
 		public static function makeiconarray():void {
 			for (var i:int = 0; i < 20; i++) {
-				var t:BitmapData = new BitmapData(16, 16, true, 0x000000);
-				var temprect:Rectangle = new Rectangle(i * 16, 0, 16, 16);	
+				var t:BitmapData = new BitmapData(32, 32, true, 0x000000);
+				var temprect:Rectangle = new Rectangle(i * 32, 0, 32, 32);	
 				t.copyPixels(buffer, temprect, tl);
 				icons.push(t);
 			}

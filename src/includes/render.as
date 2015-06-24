@@ -6,28 +6,27 @@
 	
 	//Tabs
 	CONFIG::desktop {
-	  j = (gfx.screenwidth - 20) / 4;
+	  j = (gfx.screenwidth - 40) / 4;
 	}
 	CONFIG::web {
 	  j = (gfx.screenwidth) / 4;
 	}
 	if (control.currenttab == control.MENUTAB_HELP) {
 	  gfx.fillrect(0, 0, j, gfx.linesize, 5);
-		gfx.print(12, 0, "HELP", control.currenttab == control.MENUTAB_HELP?0:2, false, true);
+		gfx.print(14, 0, "HELP", control.currenttab == control.MENUTAB_HELP?0:2, false, true);
 	}else if (control.currenttab == control.MENUTAB_CREDITS) {
 	  gfx.fillrect(0, 0, j, gfx.linesize, 5);
-		gfx.print(12, 0, "CREDITS", control.currenttab == control.MENUTAB_CREDITS?0:2, false, true);
+		gfx.print(14, 0, "CREDITS", control.currenttab == control.MENUTAB_CREDITS?0:2, false, true);
 	}else{
 	  gfx.fillrect(control.currenttab * j, 0, j, gfx.linesize, 5);
-		gfx.print(12, 0, "FILE", control.currenttab == control.MENUTAB_FILE?0:2, false, true);
+		gfx.print(14, 0, "FILE", control.currenttab == control.MENUTAB_FILE?0:2, false, true);
 	}
-	gfx.print(j+ 2, 0, "ARRANGEMENT", control.currenttab==control.MENUTAB_ARRANGEMENTS?0:2, false, true);
-	gfx.print((j * 2) + 2, 0, "INSTRUMENT", control.currenttab == control.MENUTAB_INSTRUMENTS?0:2, false, true);
-	gfx.print((j * 3) + 2, 0, "ADVANCED", control.currenttab == control.MENUTAB_ADVANCED?0:2, false, true);
-	gfx.fillrect((j * 4), 0, 21, 10, 4);
+	gfx.print(j + 14, 0, "ARRANGEMENT", control.currenttab==control.MENUTAB_ARRANGEMENTS?0:2, false, true);
+	gfx.print((j * 2) + 14, 0, "INSTRUMENT", control.currenttab == control.MENUTAB_INSTRUMENTS?0:2, false, true);
+	gfx.print((j * 3) + 14, 0, "ADVANCED", control.currenttab == control.MENUTAB_ADVANCED?0:2, false, true);
 	CONFIG::desktop {
-		gfx.fillrect((j * 4), 0, 21, 10, 3);
-		gfx.drawicon((j * 4) + 6, 1, control.fullscreen?5:4);
+		gfx.fillrect((j * 4), 0, 42, 20, 3);
+		gfx.drawicon((j * 4) + 12, 1, control.fullscreen?5:4);
 	}
 	
 	gfx.fillrect(0, gfx.linesize, gfx.screenwidth, gfx.linesize * 10, 5);
