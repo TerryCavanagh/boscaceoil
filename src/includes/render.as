@@ -26,8 +26,8 @@
 	gfx.print((j * 3) + 2, 0, "ADVANCED", control.currenttab == control.MENUTAB_ADVANCED?0:2, false, true);
 	gfx.fillrect((j * 4), 0, 21, 10, 4);
 	CONFIG::desktop {
-		gfx.fillrect((j * 4) + 20, 0, 21, 10, 3);
-		gfx.drawicon((j * 4) + 26, 1, control.fullscreen?5:4);
+		gfx.fillrect((j * 4), 0, 21, 10, 3);
+		gfx.drawicon((j * 4) + 6, 1, control.fullscreen?5:4);
 	}
 	
 	gfx.fillrect(0, gfx.linesize, gfx.screenwidth, gfx.linesize * 10, 5);

@@ -82,6 +82,7 @@
 			clicklist = false;
 			clicksecondlist = false;
 			midilistselection = -1;
+			savescreencountdown = 0;
 			
 			test = false; teststring = "TEST = True";
 			patternmanagerview = 0;
@@ -1606,5 +1607,6 @@
 		public static var effectname:Vector.<String> = new Vector.<String>;
 		
 		public static var versionnumber:String;
+		public static var savescreencountdown:int;
 	}
 }

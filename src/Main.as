@@ -73,7 +73,6 @@ package{
 			control.init();
 			
 			//Working towards resolution independence!
-			gfx.xres = 384; gfx.yres = 280;
 			gfx.init(stage);
 			
 			stage.addEventListener(Event.RESIZE, handleResize);
@@ -89,7 +88,7 @@ package{
 			tempbmp = new im_logo5();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			tempbmp = new im_logo6();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			tempbmp = new im_logo7();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
-			gfx.buffer = new BitmapData(gfx.xres, gfx.yres, false, 0x000000);
+			gfx.buffer = new BitmapData(1, 1, false, 0x000000);
 			
 			control.changetab(control.MENUTAB_FILE);
 			
@@ -128,16 +127,20 @@ package{
 		private function handleResize(e:Event):void {
 			// adjust the gui to fit the new device resolution
 			if (e != null) {
-				trace(e);
+				//trace(e);
+				control.savescreencountdown = 30; //Half a second after a resize, save the settings
 			  gfx.changewindowsize(e.target.stageWidth, e.target.stageHeight);
 				
-				var temp:BitmapData = new BitmapData(gfx.windowwidth, gfx.windowheight, false, 0x000000);
-				gfx.backbuffer = temp;
-				gfx.screen.bitmapData.dispose();
-				gfx.screen.bitmapData = gfx.backbuffer;
+				gfx.patterneditorheight = (gfx.windowheight - (gfx.pianorollposition - (gfx.linesize+2))) / 12;
+				gfx.tf_1.width = gfx.windowwidth;
 				
+				var temp:BitmapData = new BitmapData(gfx.windowwidth, gfx.windowheight, false, 0x000000);
+				temp.copyPixels(gfx.backbuffer, gfx.backbuffer.rect, gfx.tl);
+				gfx.backbuffer = temp;
+				//gfx.screen.bitmapData.dispose();
+				gfx.screen.bitmapData = gfx.backbuffer;
 			}else {
-				trace(e);
+				//trace(e);
 				//Init
 			}
 		}

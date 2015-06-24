@@ -621,31 +621,29 @@
 		
 		public static function initgfx():void {
 			//We initialise a few things
-			linesize = 10; 
-			linespacing = 10;
-			buttonheight = 13; 
-			patternheight = 12; patterncount = 54;
+			linesize = 20; 
+			linespacing = 20;
+			buttonheight = 26; 
+			patternheight = 24; patterncount = 54;
 			setzoomlevel(4);
-			pianorollposition = linesize * 10;
-			
-			patterneditorheight = (yres - (pianorollposition - (linesize+2))) / 12;
+			pianorollposition = linesize * 20;
 			
 			fontsize.push(0); fontsize.push(0); fontsize.push(0); fontsize.push(0);		
 			fontsize.push(0); fontsize.push(0); fontsize.push(0); fontsize.push(0);		
 			
-			fontsize[0] = 8;
-			fontsize[1] = 16;
-			fontsize[2] = 24;
-			fontsize[3] = 32;
-			fontsize[4] = 48;
+			fontsize[0] = 16;
+			fontsize[1] = 32;
+			fontsize[2] = 48;
+			fontsize[3] = 64;
+			fontsize[4] = 96;
 			
-			icons_rect = new Rectangle(0, 0, 16, 16);
+			icons_rect = new Rectangle(0, 0, 32, 32);
 			trect = new Rectangle; tpoint = new Point();
 			tbuffer = new BitmapData(1, 1, true);
 			ct = new ColorTransform(0, 0, 0, 1, 255, 255, 255, 1); //Set to white
-			tempicon = new BitmapData(16, 16, false, 0x000000);
+			tempicon = new BitmapData(32, 32, false, 0x000000);
 			
-			backbuffer = new BitmapData(xres, yres, false, 0x000000);
+			backbuffer = new BitmapData(1, 1, false, 0x000000);
 			
 			for (i = 0; i < 400; i++) {
 				pal.push(new paletteclass());
@@ -660,7 +658,7 @@
 		
 		public static function setzoomlevel(t:int):void {
 			zoom = t;
-			patternwidth = 22 + (zoom * 8);
+			patternwidth = 44 + (zoom * 16);
 		}
 		
 		CONFIG::desktop {
@@ -758,27 +756,27 @@
 		//Text Functions
 		public static function initfont():void {			
 		  tf_1.embedFonts = true;
-			tf_1.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed",fontsize[0],0,true);
-			tf_1.width = screenwidth; tf_1.height = 48;
+			tf_1.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed", fontsize[0], 0, true);
+			tf_1.width = screenwidth; tf_1.height = 200;
 			tf_1.antiAliasType = AntiAliasType.NORMAL;
 			
 		  tf_2.embedFonts = true;
-			tf_2.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed",fontsize[1],0,true);
+			tf_2.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed", fontsize[1], 0, true);
 			tf_2.width = screenwidth; tf_2.height = 100;
 			tf_2.antiAliasType = AntiAliasType.NORMAL;
 			
 		  tf_3.embedFonts = true;
-			tf_3.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed",fontsize[2],0,true);
+			tf_3.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed", fontsize[2], 0, true);
 			tf_3.width = screenwidth; tf_3.height = 100;
 			tf_3.antiAliasType = AntiAliasType.NORMAL;
 			
 		  tf_4.embedFonts = true;
-			tf_4.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed",fontsize[3],0,true);
+			tf_4.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed", fontsize[3], 0, true);
 			tf_4.width = screenwidth; tf_4.height = 100;
 			tf_4.antiAliasType = AntiAliasType.NORMAL;
 			
 		  tf_5.embedFonts = true;
-			tf_5.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed",fontsize[4],0,true);
+			tf_5.defaultTextFormat = new TextFormat("FFF Aquarius Bold Condensed", fontsize[4], 0, true);
 			tf_5.width = screenwidth; tf_5.height = 100;
 			tf_5.antiAliasType = AntiAliasType.NORMAL;
 		}
@@ -787,7 +785,7 @@
 			x = x - len(t);
 			print(x, y, t, col, false, shadow);
 		}
-
+		
 		public static function print(x:int, y:int, t:String, col:int, cen:Boolean = false, shadow:Boolean=false):void {
 			y -= 3;
 			
@@ -796,7 +794,7 @@
 			if (cen) x = screenwidthmid - (tf_1.textWidth / 2) + x;
 			
 			if (shadow) {
-				shapematrix.translate(x+1, y+1);
+				shapematrix.translate(x + 1, y + 1);
 				tf_1.textColor = RGB(0, 0, 0);
 				backbuffer.draw(tf_1, shapematrix);
 				
@@ -911,7 +909,7 @@
 			backbuffer.unlock();
 			backbuffer.lock();
 		}
-
+		
 		public static function render():void {
 			if (control.test) {
 				backbuffer.fillRect(new Rectangle(0, 0, screenwidth, 10), 0x000000);
@@ -971,7 +969,6 @@
 		
 		public static var stage:Stage;
 		
-		public static var xres:int, yres:int;
 		public static var windowwidth:int, windowheight:int;
 	}
 }

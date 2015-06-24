@@ -5,6 +5,11 @@
   if (control.doubleclickcheck > 0) control.doubleclickcheck--;
 	if (gfx.buttonpress > 0) gfx.buttonpress--;
 	
+	if (control.savescreencountdown > 0) {
+		control.savescreencountdown--;
+		if (control.savescreencountdown <= 0) control.savescreensettings();
+	}
+	
 	if (control.dragaction == 2) {
 		control.trashbutton++;
 		if (control.trashbutton > 10) control.trashbutton = 10;
