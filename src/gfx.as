@@ -4,6 +4,7 @@
   import flash.events.*;
   import flash.net.*;
 	import flash.text.*;
+	import flash.utils.Dictionary;
 	CONFIG::desktop {
 		import flash.display.NativeWindow;
 	}
@@ -846,7 +847,48 @@
 			print(x, y, t, col, false, shadow);
 		}
 		
-		public static function print(x:int, y:int, t:String, col:int, cen:Boolean = false, shadow:Boolean=false):void {
+		public static var cachedtextindex:Dictionary = new Dictionary;
+		public static var cachedtext:Vector.<BitmapData> = new Vector.<BitmapData>;
+		public static var cacheindex:int;
+		
+		public static function print(x:int, y:int, t:String, col:int, cen:Boolean = false, shadow:Boolean = false):void {
+			if (cachedtextindex[t] == null) {
+				//Cache the text
+				cacheindex = cachedtext.length;
+				cachedtextindex[t] = cacheindex;
+				cachedtext.push(new BitmapData(len(t), 20, true, 0));
+				
+				printoncache(0, 0, t, col, false, shadow);
+			}
+			
+			cacheindex = cachedtextindex[t];
+			settpoint(x, y);
+			backbuffer.copyPixels(cachedtext[cacheindex], cachedtext[cacheindex].rect, tpoint);
+		}
+		
+		public static function printoncache(x:int, y:int, t:String, col:int, cen:Boolean = false, shadow:Boolean=false):void {
+			y -= 3;
+			
+			tf_1.textColor = RGB(pal[col].r, pal[col].g, pal[col].b);
+			tf_1.text = t;
+			if (cen) x = screenwidthmid - (tf_1.textWidth / 2) + x;
+			
+			if (shadow) {
+				shapematrix.translate(x + 1, y + 1);
+				tf_1.textColor = RGB(0, 0, 0);
+				cachedtext[cacheindex].draw(tf_1, shapematrix);
+				
+				shapematrix.translate( -x - 1, -y - 1);
+			}
+			
+			shapematrix.translate(x, y);
+			tf_1.textColor = RGB(pal[col].r, pal[col].g, pal[col].b);
+			cachedtext[cacheindex].draw(tf_1, shapematrix);
+			
+			shapematrix.translate(-x, -y);
+		}
+		
+		public static function normalprint(x:int, y:int, t:String, col:int, cen:Boolean = false, shadow:Boolean=false):void {
 			y -= 3;
 			
 			tf_1.textColor = RGB(pal[col].r, pal[col].g, pal[col].b);
@@ -858,7 +900,7 @@
 				tf_1.textColor = RGB(0, 0, 0);
 				backbuffer.draw(tf_1, shapematrix);
 				
-				shapematrix.translate(-x-1, -y-1);
+				shapematrix.translate( -x - 1, -y - 1);
 			}
 			
 			shapematrix.translate(x, y);
