@@ -342,8 +342,8 @@
 				zoomoffset = zoom / 2;
 				if (control.doublesize) zoomoffset = zoomoffset / 2;
 				
-				fillrect(xp, yp, patternwidth, 12, 100 + (temppal * 10));
-				fillrect(xp+22, yp+1, patternwidth - 23, 10, 101 + (temppal * 10));
+				fillrect(xp, yp, patternwidth, 24, 100 + (temppal * 10));
+				fillrect(xp + 44, yp + 2, patternwidth - 46, 20, 101 + (temppal * 10));
 				for (mbj = 0; mbj < control.musicbox[t].numnotes; mbj++) {
 					mbi = control.musicbox[t].notes[mbj].width;
 					control.drawnoteposition = control.musicbox[t].notes[mbj].x;
@@ -355,7 +355,7 @@
 					}
 					if (control.drawnoteposition > -1) {			
 						control.drawnoteposition -= control.musicbox[t].bottomnote;
-						if(control.musicbox[t].notespan>10){
+						if (control.musicbox[t].notespan > 10) {
 							control.drawnoteposition = ((control.drawnoteposition * 8) / control.musicbox[t].notespan) + 2;
 						}else {
 							control.drawnoteposition++;
@@ -364,26 +364,26 @@
 							}
 						}
 						if (control.drawnoteposition >= 1 && control.drawnoteposition < 11) {
-							fillrect(xp + 21 + int(mbi * zoomoffset), yp + 11 - control.drawnoteposition, control.drawnotelength, 1, 105 + (temppal * 10));
+							fillrect(xp + 42 + int((mbi*2) * zoomoffset), yp + 22 - (control.drawnoteposition*2), control.drawnotelength*2, 2, 105 + (temppal * 10));
 						}
 					}
 				}
 				
-				fillrect(xp, yp, 20, 12, 101 + (temppal * 10));
-				fillrect(xp, yp, 20, 8, 100 + (temppal * 10));
+				fillrect(xp, yp, 40, 24, 101 + (temppal * 10));
+				fillrect(xp, yp, 40, 16, 100 + (temppal * 10));
 				
-				fillrect(xp + 21, yp, 1, 12, 100 + (temppal * 10));
-				fillrect(xp + patternwidth - 1, yp, 1, 12, 100 + (temppal * 10));
+				fillrect(xp + 42, yp, 2, 24, 100 + (temppal * 10));
+				fillrect(xp + patternwidth - 2, yp, 2, 24, 100 + (temppal * 10));
 				
 				if (control.currentbox == t) {
 					drawbox(xp, yp, patternwidth, patternheight, 9);
-					drawbox(xp + 1, yp + 1, patternwidth - 2, patternheight - 2, 12);
+					drawbox(xp + 2, yp + 2, patternwidth - 4, patternheight - 4, 12);
 				}
 				
 				if (t + 1 < 10) {
-					print(xp + 5, yp + 1, String(t + 1), 2, false, true);
+					print(xp + 10, yp + 2, String(t + 1), 2, false, true);
 				}else {
-					print(xp + 2, yp + 1, String(t + 1), 2, false, true);
+					print(xp + 4, yp + 2, String(t + 1), 2, false, true);
 				}
 			}
 		}
@@ -514,43 +514,43 @@
 		}
 		
 		public static function drawinstrumentlist():void {
-			fillrect(0, linesize, 140, pianorollposition, 2);
+			fillrect(0, linesize, 280, pianorollposition, 2);
 			
 			//List
 			for (k = 0; k < 7; k++) {
 				if (k==0 && control.instrumentmanagerview > 0 && control.numinstrument > 0) {
 					//Draw scrollup
-					drawicon(66, linesize + 4 + (k * patternheight), 1);
+					drawicon(132, linesize + 8 + (k * patternheight), 1);
 				}else if (k == 6 && k + control.instrumentmanagerview < control.numinstrument) {
 					//Draw scrolldown
-					drawicon(66, linesize + 2 + (k * patternheight), 0);
+					drawicon(132, linesize + 4 + (k * patternheight), 0);
 				}else {
 					//Normal
 					if (control.instrumentmanagerview + k < control.numinstrument) {
-						fillrect(2, linesize + 2 + (k * patternheight), 136, 12, 100 + (control.instrument[control.instrumentmanagerview + k].palette * 10));
-						fillrect(2+25, linesize + 2 + (k * patternheight), 136-25, 12, 101 + (control.instrument[control.instrumentmanagerview + k].palette * 10));
-						print(6, linesize + 3 + (k * patternheight), String(control.instrumentmanagerview + k + 1), 0, false, true);
-						print(28, linesize + 3 + (k * patternheight), control.instrument[control.instrumentmanagerview + k].name, 0, false, true);
+						fillrect(4, linesize + 4 + (k * patternheight), 272, 24, 100 + (control.instrument[control.instrumentmanagerview + k].palette * 10));
+						fillrect(4+50, linesize + 4 + (k * patternheight), 272-50, 24, 101 + (control.instrument[control.instrumentmanagerview + k].palette * 10));
+						print(12, linesize + 6 + (k * patternheight), String(control.instrumentmanagerview + k + 1), 0, false, true);
+						print(56, linesize + 6 + (k * patternheight), control.instrument[control.instrumentmanagerview + k].name, 0, false, true);
 					}
 				}
 			}
 			//Draw the cursor
 			if (control.instrumentcury > -1) {
-			  drawbox(2, linesize + 2 + (control.instrumentcury * patternheight), 136, patternheight, 0);
+			  drawbox(4, linesize + 4 + (control.instrumentcury * patternheight), 272, patternheight, 0);
 			}
 		}
 		
 		public static function drawinstrument():void {
-			fillrect(140, linesize, screenwidth - 140, pianorollposition, 101 + (control.instrument[control.currentinstrument].palette * 10));
-			print(145, linesize + 3, "INSTRUMENT " + String(control.currentinstrument + 1), 0, false, true);
+			fillrect(280, linesize, screenwidth - 280, pianorollposition, 101 + (control.instrument[control.currentinstrument].palette * 10));
+			print(290, linesize + 6, "INSTRUMENT " + String(control.currentinstrument + 1), 0, false, true);
 			
-			fillrect(143, (linesize * 2)+3, 80, linesize, 100 + (control.instrument[control.currentinstrument].palette * 10));
-			drawicon(145, (linesize*2) + 2, 0);
-			print(160, (linesize * 2) + 3, control.instrument[control.currentinstrument].category, 0, false, true);
+			fillrect(286, (linesize * 2) + 6, 160, linesize, 100 + (control.instrument[control.currentinstrument].palette * 10));
+			drawicon(290, (linesize * 2) + 4, 0);
+			print(320, (linesize * 2) + 6, control.instrument[control.currentinstrument].category, 0, false, true);
 			
-			fillrect(143+90, (linesize * 2)+3, 140, linesize, 100 + (control.instrument[control.currentinstrument].palette * 10));
-			drawicon(145+90, (linesize*2) + 2, 0);
-			print(160 + 90, (linesize * 2) + 3, control.instrument[control.currentinstrument].name, 0, false, true);
+			fillrect(286+180, (linesize * 2)+6, 280, linesize, 100 + (control.instrument[control.currentinstrument].palette * 10));
+			drawicon(290+180, (linesize * 2) + 4, 0);
+			print(320 + 180, (linesize * 2) + 6, control.instrument[control.currentinstrument].name, 0, false, true);
 			
 			//Filter pad and volume bar
 			i = 0;
@@ -562,20 +562,21 @@
 				}
 			}
 			if (i == 1) {
-				fillrect(143, (linesize * 4), screenwidth - 174, 55, 8);
-				fillrect(screenwidth - 21, (linesize * 4), 10, 55, 8);
+				fillrect(286, (linesize * 4), screenwidth - 348, 110, 8);
+				fillrect(screenwidth - 42, (linesize * 4), 20, 110, 8);
 				
-				for (i = 0; i < 55; i++) {
-					if (i % 2 == 0) {
-						drawline(143, (linesize * 4) + i, screenwidth - 31, (linesize * 4) + i, 12);
-						drawline(screenwidth - 21, (linesize * 4) + i, screenwidth - 11, (linesize * 4) + i, 12);
+				for (i = 0; i < 110; i++) {
+					if ((i / 2) % 2 == 0) {
+						drawline(286, (linesize * 4) + i, screenwidth - 62, (linesize * 4) + i, 12);
+						drawline(screenwidth - 42, (linesize * 4) + i, screenwidth - 22, (linesize * 4) + i, 12);
 					}
 				}
 				if ((help.slowsine % 32) < 16) {
-				  print(143 + 40, (linesize * 4) + 57, "! RECORDING FOR PATTERN " + String(control.currentbox + 1) + "!", 15, false, true);
+				  print(286 + 80, (linesize * 4) + 114, "! RECORDING FOR PATTERN " + String(control.currentbox + 1) + "!", 15, false, true);
 				}
 				
 				//Move over recording
+				// VV NOT CONVERTED
 				j = int(((256-control.musicbox[control.currentbox].volumegraph[control.looptime%control.boxcount]) * 45) / 256);
 				fillrect(screenwidth - 21, (linesize * 4) + j, 10, 10, 101 + (control.instrument[control.currentinstrument].palette * 10));
 				fillrect(screenwidth - 21 + 1, (linesize * 4) + j + 1, 8, 8, 100 + (control.instrument[control.currentinstrument].palette * 10));		
@@ -584,20 +585,22 @@
 			  j = int((control.musicbox[control.currentbox].resonancegraph[control.looptime%control.boxcount] * 45) / 9);
 			  fillrect(143 + i, (linesize * 4) + j, 10, 10, 101 + (control.instrument[control.currentinstrument].palette * 10));
 				fillrect(143 + i + 1, (linesize * 4) + j + 1, 8, 8, 100 + (control.instrument[control.currentinstrument].palette * 10));		
+				// ^^ NOT CONVERTED
 			}else {
-				fillrect(143, (linesize * 4), screenwidth - 174, 55, 102 + (control.instrument[control.currentinstrument].palette * 10));
-				fillrect(screenwidth - 21, (linesize * 4), 10, 55, 102 + (control.instrument[control.currentinstrument].palette * 10));
-			
+				fillrect(286, (linesize * 4), screenwidth - 348, 110, 102 + (control.instrument[control.currentinstrument].palette * 10));
+				fillrect(screenwidth - 42, (linesize * 4), 20, 110, 102 + (control.instrument[control.currentinstrument].palette * 10));
+				
 				for (i = 0; i < 55; i++) {
-					if (i % 2 == 0) {
-						drawline(143, (linesize * 4) + i, screenwidth - 31, (linesize * 4) + i, 103 + (control.instrument[control.currentinstrument].palette * 10));
-						drawline(screenwidth - 21, (linesize * 4) + i, screenwidth - 11, (linesize * 4)+i, 103 + (control.instrument[control.currentinstrument].palette * 10));
+					if ((i / 2) % 2 == 0) {
+						drawline(286, (linesize * 4) + i, screenwidth - 62, (linesize * 4) + i, 103 + (control.instrument[control.currentinstrument].palette * 10));
+						drawline(screenwidth - 42, (linesize * 4) + i, screenwidth - 22, (linesize * 4) + i, 103 + (control.instrument[control.currentinstrument].palette * 10));
 					}
 				}
 				
-				print(143 + 50, (linesize * 4) + 57, "LOW PASS FILTER PAD", 103 + (control.instrument[control.currentinstrument].palette * 10));
-			  print(screenwidth - 26, (linesize * 4) + 57, "VOL", 103 + (control.instrument[control.currentinstrument].palette * 10));				
+				print(286 + 100, (linesize * 4) + 114, "LOW PASS FILTER PAD", 103 + (control.instrument[control.currentinstrument].palette * 10));
+			  print(screenwidth - 52, (linesize * 4) + 114, "VOL", 103 + (control.instrument[control.currentinstrument].palette * 10));				
 				
+				// VV NOT CONVERTED
 				//Default values
 				j = 0;
 				fillrect(screenwidth - 21, (linesize * 4) + j, 10, 10, 6);
@@ -616,6 +619,8 @@
 				j = int(control.instrument[control.currentinstrument].resonance * 45 / 9);
 				fillrect(143 + i, (linesize * 4) + j, 10, 10, 101 + (control.instrument[control.currentinstrument].palette * 10));
 				fillrect(143 + i + 1, (linesize * 4) + j + 1, 8, 8, 100 + (control.instrument[control.currentinstrument].palette * 10));
+				
+				// ^^ NOT CONVERTED
 			}
 		}
 		

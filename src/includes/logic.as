@@ -5,6 +5,19 @@
   if (control.doubleclickcheck > 0) control.doubleclickcheck--;
 	if (gfx.buttonpress > 0) gfx.buttonpress--;
 	
+	if (control.minresizecountdown > 0) {
+		control.minresizecountdown--;
+		if (control.minresizecountdown == 0) {
+			if (gfx.windowwidth < 768 && gfx.windowheight < 480) {
+				gfx.changewindowsize(768, 480);
+			}else if (gfx.windowwidth < 768) {
+				gfx.changewindowsize(768, gfx.windowheight);
+			}else if (gfx.windowheight < 480) {
+				gfx.changewindowsize(gfx.windowwidth, 480);
+			}
+		}
+	}
+	
 	if (control.savescreencountdown > 0) {
 		control.savescreencountdown--;
 		if (control.savescreencountdown <= 0) control.savescreensettings();

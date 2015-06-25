@@ -1608,5 +1608,6 @@
 		
 		public static var versionnumber:String;
 		public static var savescreencountdown:int;
+		public static var minresizecountdown:int;
 	}
 }

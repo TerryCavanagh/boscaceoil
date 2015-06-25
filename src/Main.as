@@ -130,6 +130,7 @@ package{
 				//trace(e);
 				e.preventDefault();
 				control.savescreencountdown = 30; //Half a second after a resize, save the settings
+				control.minresizecountdown = 10; //Force a minimum screensize
 			  gfx.changewindowsize(e.target.stageWidth, e.target.stageHeight);
 				
 				gfx.patterneditorheight = (gfx.windowheight - (gfx.pianorollposition - (gfx.linesize + 2))) / 12;
