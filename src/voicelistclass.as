@@ -399,7 +399,7 @@ package {
 		public function fixlengths():void {
 			//Fix the lengths of the names
 			for (var i:int = 0; i < listsize; i++) {
-				while (gfx.len(name[i]) > 95) {
+				while (gfx.len(name[i]) > 190) {
 					name[i] = help.Left(name[i], name[i].length - 1)					
 				}
 			}

@@ -40,39 +40,39 @@ package {
 		}
 		
 		public static function addleftarrow(x:int, y:int, action:String):void {
-			addguipart(x, y, 32, 32, "", action, "leftarrow");
+			addguipart(x, y, 16, 16, "", action, "leftarrow");
 		}
 		
 		public static function addrightarrow(x:int, y:int, action:String):void {
-			addguipart(x, y, 32, 32, "", action, "rightarrow");
+			addguipart(x, y, 16, 16, "", action, "rightarrow");
 		}
 		
 		public static function addplayarrow(x:int, y:int, action:String):void {
-			addguipart(x, y, 32, 32, "", action, "playarrow");
+			addguipart(x, y, 16, 16, "", action, "playarrow");
 		}
 		
 		public static function addpausebutton(x:int, y:int, action:String):void {
-			addguipart(x, y, 32, 32, "", action, "pause");
+			addguipart(x, y, 16, 16, "", action, "pause");
 		}
 		
 		public static function addstopbutton(x:int, y:int, action:String):void {
-			addguipart(x, y, 32, 32, "", action, "stop");
+			addguipart(x, y, 16, 16, "", action, "stop");
 		}
 		
 		public static function addplusbutton(x:int, y:int, action:String):void {
-			addguipart(x, y, 32, 32, "", action, "plus");
+			addguipart(x, y, 16, 16, "", action, "plus");
 		}
 		
 		public static function addminusbutton(x:int, y:int, action:String):void {
-			addguipart(x, y, 32, 32, "", action, "minus");
+			addguipart(x, y, 16, 16, "", action, "minus");
 		}
 		
 		public static function adddownarrow(x:int, y:int, action:String):void {
-			addguipart(x, y, 32, 32, "", action, "downarrow");
+			addguipart(x, y, 16, 16, "", action, "downarrow");
 		}
 			
 		public static function adduparrow(x:int, y:int, action:String):void {
-			addguipart(x, y, 32, 32, "", action, "uparrow");
+			addguipart(x, y, 16, 16, "", action, "uparrow");
 		}
 		
 		public static function addvariable(x:int, y:int, variable:String, col:int = 0):void {
@@ -503,12 +503,12 @@ package {
 					addbutton(gfx.screenwidth - 164, (gfx.linespacing * 9) + 8, 150, "BACK", "filetab");
 				break;
 			  case control.MENUTAB_ARRANGEMENTS:
-				  addbutton((gfx.patterncount * 6) + 10, gfx.linespacing + gfx.pianorollposition - 28, gfx.screenwidth - (gfx.patterncount * 6) - 8, "ADD NEW", "addnewpattern");
+				  addbutton(gfx.patternmanagerx + 10, gfx.linespacing + gfx.pianorollposition - 28, gfx.screenwidth - (gfx.patternmanagerx) - 16, "ADD NEW", "addnewpattern");
 			  break;
 			  case control.MENUTAB_INSTRUMENTS:
-				  addbutton(10, gfx.linespacing + gfx.pianorollposition - 28, 132, "ADD NEW INSTRUMENT", "addnewinstrument");
-					addminusbutton(gfx.screenwidth - 66, (gfx.linespacing * 2) + 6, "previousinstrument");
-					addplusbutton(gfx.screenwidth - 42, (gfx.linespacing * 2) + 6, "nextinstrument");
+				  addbutton(10, gfx.linespacing + gfx.pianorollposition - 28, 264, "ADD NEW INSTRUMENT", "addnewinstrument");
+					addminusbutton(706, (gfx.linespacing * 2) + 6, "previousinstrument");
+					addplusbutton(726, (gfx.linespacing * 2) + 6, "nextinstrument");
 				break;
 			  case control.MENUTAB_ADVANCED:
 				  addcontrol(40, (gfx.linespacing * 3) + 4, "changesoundbuffer");

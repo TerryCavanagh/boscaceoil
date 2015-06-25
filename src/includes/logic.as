@@ -8,12 +8,12 @@
 	if (control.minresizecountdown > 0) {
 		control.minresizecountdown--;
 		if (control.minresizecountdown == 0) {
-			if (gfx.windowwidth < 768 && gfx.windowheight < 480) {
-				gfx.changewindowsize(768, 480);
-			}else if (gfx.windowwidth < 768) {
-				gfx.changewindowsize(768, gfx.windowheight);
-			}else if (gfx.windowheight < 480) {
-				gfx.changewindowsize(gfx.windowwidth, 480);
+			if (gfx.windowwidth < gfx.min_windowwidth && gfx.windowheight < gfx.min_windowheight) {
+				gfx.changewindowsize(gfx.min_windowwidth, gfx.min_windowheight);
+			}else if (gfx.windowwidth < gfx.min_windowwidth) {
+				gfx.changewindowsize(gfx.min_windowwidth, gfx.windowheight);
+			}else if (gfx.windowheight < gfx.min_windowheight) {
+				gfx.changewindowsize(gfx.windowwidth, gfx.min_windowheight);
 			}
 		}
 	}

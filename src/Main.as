@@ -61,6 +61,8 @@ package{
   	include "includes/input.as";
   	include "includes/render.as";
 		
+		public var profiler:Boolean = false;
+		
 		public function Main():void {
 			control.versionnumber = "v2.0"; // Version number displayed beside logo
 			control.version = 3;            // Version number used by file
@@ -96,7 +98,7 @@ package{
 			control.voicelist.fixlengths();
 			stage.fullScreenSourceRect = null;
 			addChild(gfx.screen);
-			addChild(new TheMiner()); //Profiler
+			if (profiler) addChild(new TheMiner()); //Profiler
 			
 			control.loadscreensettings();
 			updategraphicsmode();
@@ -135,6 +137,7 @@ package{
 				control.minresizecountdown = 5; //Force a minimum screensize
 			  gfx.changewindowsize(e.target.stageWidth, e.target.stageHeight);
 				
+				gfx.patternmanagerx = gfx.screenwidth - 116;
 				gfx.patterneditorheight = (gfx.windowheight - (gfx.pianorollposition - (gfx.linesize + 2))) / 12;
 				gfx.tf_1.width = gfx.windowwidth;
 				

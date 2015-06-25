@@ -396,6 +396,8 @@
 		public static function savescreensettings():void {
 			programsettings = SharedObject.getLocal("boscaceoil_settings");		
 			
+			fullscreen = 0; // Force window mode until I figure out why fullscreen is broken
+			
 			if (!fullscreen){
 				programsettings.data.fullscreen = 0;
 			}else {
