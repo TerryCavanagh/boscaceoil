@@ -19,6 +19,18 @@
 			stage = _stage;
     }
 		
+		public static function changescalemode(t:int):void {
+			//Set new minimum screensize
+			control.minresizecountdown = 5;
+			if (t == 0) {
+				stage.nativeWindow.minSize = new Point(768 + windowboundsx, 400 + windowboundsy);
+			}else {
+				stage.nativeWindow.minSize = new Point(1152 + windowboundsx, 600 + windowboundsy);
+			}
+			
+			scalemode = t;
+		}
+		
 		public static function initpal():void {
 			//Initalise all the program's palettes here
 			pal[0].setto(255, 255, 255);      //Pure White
@@ -694,10 +706,14 @@
 					}
 				}
 				
+				if (gfx.scalemode == 1) {
+					screenwidth = w/1.5; screenheight = h/1.5;	
+				}else {
+					screenwidth = w; screenheight = h;	
+				}
 				
-				screenwidth = w; screenheight = h;
 				screenwidthmid = screenwidth / 2; screenheightmid = screenheight / 2;
-				screenviewwidth = screenwidth; screenviewheight = screenheight;			
+				screenviewwidth = screenwidth; screenviewheight = screenheight;		
 			}
 		}
 
@@ -1006,5 +1022,6 @@
 		public static var windowwidth:int, windowheight:int;
 		public static var min_windowwidth:int, min_windowheight:int;
 		public static var windowboundsx:int, windowboundsy:int;
+		public static var scalemode:int;
 	}
 }

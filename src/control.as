@@ -379,6 +379,12 @@
 				fullscreen = true;
 			}
 			
+			if (programsettings.data.scalemode == null) {
+				gfx.changescalemode(0);
+			}else{
+				gfx.changescalemode(programsettings.data.scalemode);
+			}
+			
 			if (programsettings.data.windowwidth == null) {
 				gfx.windowwidth = 768;
 				gfx.windowheight = 560;
@@ -396,14 +402,13 @@
 		public static function savescreensettings():void {
 			programsettings = SharedObject.getLocal("boscaceoil_settings");		
 			
-			fullscreen = 0; // Force window mode until I figure out why fullscreen is broken
-			
 			if (!fullscreen){
 				programsettings.data.fullscreen = 0;
 			}else {
 				programsettings.data.fullscreen = 1;
 			}
 			
+			programsettings.data.scalemode = gfx.scalemode;
 			programsettings.data.windowwidth = gfx.windowwidth;
 			programsettings.data.windowheight = gfx.windowheight;
 			
@@ -1611,5 +1616,6 @@
 		public static var versionnumber:String;
 		public static var savescreencountdown:int;
 		public static var minresizecountdown:int;
+		public static var forceresize:Boolean = false;
 	}
 }

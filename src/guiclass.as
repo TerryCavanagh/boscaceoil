@@ -24,7 +24,7 @@ package {
 		}
 		
 		public static function addlogo(x:int, y:int):void {
-			addguipart(x, y, gfx.images[0].width, gfx.images[0].height, "BOSCA CEOIL", "logo", "logo");
+			addguipart(x, y, 356, 44, "BOSCA CEOIL", "logo", "logo");
 		}
 		
 		public static function addtextlabel(x:int, y:int, text:String, col:int = 2):void {
@@ -518,8 +518,13 @@ package {
 					addcontrol(40 + tx, (gfx.linespacing * 7) + 4, "swingcontrol");
 					addcontrol(gfx.screenwidth - 240 - tx,  (gfx.linespacing * 3) + 4, "globaleffects");
 					
+					if (gfx.scalemode == 0) {
+						addbutton(gfx.screenwidth - 340 - tx, gfx.linespacing * 7, 150, "SCALE UP", "changescale");
+					}else {
+						addbutton(gfx.screenwidth - 340 - tx, gfx.linespacing * 7, 150, "SCALE DOWN", "changescale");
+					}
 					CONFIG::desktop {
-						addbutton(gfx.screenwidth - 168 - tx, gfx.linespacing * 7, 150, "IMPORT .mid", "loadmidi");
+						addbutton(gfx.screenwidth - 170 - tx, gfx.linespacing * 7, 150, "IMPORT .mid", "loadmidi");
 					}
 				break;
 			}
@@ -658,6 +663,10 @@ package {
 				CONFIG::desktop {
 					midicontrol.openfile();
 				}
+			}else if (currentbutton == "changescale") {
+				gfx.changescalemode(1 - gfx.scalemode);
+				control.forceresize = true;
+				changetab(control.MENUTAB_ADVANCED);
 			}
 		}
 		

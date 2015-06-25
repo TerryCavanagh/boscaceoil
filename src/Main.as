@@ -71,7 +71,7 @@ package{
 				NativeApplication.nativeApplication.setAsDefaultApplication("ceol");
 				NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvokeEvent);
 				
-				stage.nativeWindow.minSize = new Point(768+18, 400+45);
+				stage.nativeWindow.minSize = new Point(768 + 18, 400 + 45);
 			}
 			
 			key = new KeyPoll(stage);
@@ -81,7 +81,6 @@ package{
 			gfx.init(stage);
 			
 			stage.addEventListener(Event.RESIZE, handleResize);
-			handleResize(null);
 			
 			var tempbmp:Bitmap;
 			tempbmp = new im_icons();	gfx.buffer = tempbmp.bitmapData;	gfx.makeiconarray();
@@ -132,27 +131,37 @@ package{
 		
 		private function handleResize(e:Event):void {
 			// adjust the gui to fit the new device resolution
+			var tempwidth:int, tempheight:int;
 			if (e != null) {
-				//trace(e);
 				e.preventDefault();
-				control.savescreencountdown = 30; //Half a second after a resize, save the settings
-				control.minresizecountdown = 5; //Force a minimum screensize
-			  gfx.changewindowsize(e.target.stageWidth, e.target.stageHeight);
-				
-				gfx.patternmanagerx = gfx.screenwidth - 116;
-				gfx.patterneditorheight = (gfx.windowheight - (gfx.pianorollposition - (gfx.linesize + 2))) / 12;
-				gfx.tf_1.width = gfx.windowwidth;
-				
-				guiclass.changetab(control.currenttab);
-				
-				var temp:BitmapData = new BitmapData(gfx.windowwidth, gfx.windowheight, false, 0x000000);
-				temp.copyPixels(gfx.backbuffer, gfx.backbuffer.rect, gfx.tl);
-				gfx.backbuffer = temp;
-				//gfx.screen.bitmapData.dispose();
-				gfx.screen.bitmapData = gfx.backbuffer;
+				tempwidth = e.target.stageWidth;
+				tempheight = e.target.stageHeight;
 			}else {
-				//trace(e);
-				//Init
+				tempwidth = gfx.windowwidth;
+				tempheight = gfx.windowheight;
+			}
+			
+			control.savescreencountdown = 30; //Half a second after a resize, save the settings
+			control.minresizecountdown = 5; //Force a minimum screensize
+			gfx.changewindowsize(tempwidth, tempheight);
+			
+			gfx.patternmanagerx = gfx.screenwidth - 116;
+			gfx.patterneditorheight = (gfx.windowheight - (gfx.pianorollposition - (gfx.linesize + 2))) / 12;
+			gfx.tf_1.width = gfx.windowwidth;
+			
+			guiclass.changetab(control.currenttab);
+			
+			var temp:BitmapData = new BitmapData(gfx.windowwidth, gfx.windowheight, false, 0x000000);
+			temp.copyPixels(gfx.backbuffer, gfx.backbuffer.rect, gfx.tl);
+			gfx.backbuffer = temp;
+			//gfx.screen.bitmapData.dispose();
+			gfx.screen.bitmapData = gfx.backbuffer;
+			if (gfx.scalemode == 1) {
+				gfx.screen.scaleX = 1.5;
+				gfx.screen.scaleY = 1.5;
+			}else {
+				gfx.screen.scaleX = 1;
+				gfx.screen.scaleY = 1;
 			}
 		}
 		
@@ -193,8 +202,13 @@ package{
 		}
 			
 		public function _input():void {
-			control.mx = mouseX;
-			control.my = mouseY;
+			if (gfx.scalemode == 1) {
+				control.mx = mouseX / 1.5;
+				control.my = mouseY / 1.5;
+			}else{
+				control.mx = mouseX;
+				control.my = mouseY;
+			}
 				
 			input(key);
 		}
@@ -202,6 +216,10 @@ package{
     public function _logic():void {
 			logic(key);
 			help.updateglow();
+			if (control.forceresize) {
+				control.forceresize = false;
+				handleResize(null);
+			}
 		}
 		
 		public function _render():void {
