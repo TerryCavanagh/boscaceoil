@@ -46,6 +46,7 @@ package{
 	import flash.utils.getTimer;
 	import flash.utils.Timer;
 	import flash.events.InvokeEvent;
+	import com.sociodox.theminer.TheMiner; //Profiler
 	
 	CONFIG::desktop {
 		import flash.desktop.NativeApplication;
@@ -95,6 +96,7 @@ package{
 			control.voicelist.fixlengths();
 			stage.fullScreenSourceRect = null;
 			addChild(gfx.screen);
+			addChild(new TheMiner()); //Profiler
 			
 			control.loadscreensettings();
 			updategraphicsmode();
@@ -130,7 +132,7 @@ package{
 				//trace(e);
 				e.preventDefault();
 				control.savescreencountdown = 30; //Half a second after a resize, save the settings
-				control.minresizecountdown = 10; //Force a minimum screensize
+				control.minresizecountdown = 5; //Force a minimum screensize
 			  gfx.changewindowsize(e.target.stageWidth, e.target.stageHeight);
 				
 				gfx.patterneditorheight = (gfx.windowheight - (gfx.pianorollposition - (gfx.linesize + 2))) / 12;

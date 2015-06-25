@@ -53,6 +53,7 @@
   <!-- SWC Libraries -->
   <libraryPaths>
     <element path="lib\sion065.swc" />
+    <element path="lib\TheMiner_en.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>
