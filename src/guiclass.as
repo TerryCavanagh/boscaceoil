@@ -451,29 +451,30 @@ package {
 			
 		  switch(t) {
 				case control.MENUTAB_FILE:
-					addlogo(24, (gfx.linespacing * 2));
-					addtextlabel(330, (gfx.linespacing * 5), control.versionnumber);
+					tx = (gfx.screenwidth - 768) / 4;
+					addlogo(24 + tx, (gfx.linespacing * 2));
+					addtextlabel(330 + tx, (gfx.linespacing * 5), control.versionnumber);
 					
-					addtextlabel(20, (gfx.linespacing * 6) + 2, "Created by Terry Cavanagh");
-					addtextlabel(20, (gfx.linespacing * 7) + 2, "http://www.distractionware.com");
+					addtextlabel(20 + tx, (gfx.linespacing * 6) + 2, "Created by Terry Cavanagh");
+					addtextlabel(20 + tx, (gfx.linespacing * 7) + 2, "http://www.distractionware.com");
 					
-					addbutton(20, (gfx.linespacing * 9)-6, 120, "CREDITS", "creditstab");
-					addbutton(154, (gfx.linespacing * 9)-6, 120, "HELP", "helptab");
+					addbutton(20 + tx, (gfx.linespacing * 9)-6, 120, "CREDITS", "creditstab");
+					addbutton(154 + tx, (gfx.linespacing * 9)-6, 120, "HELP", "helptab");
 					
 					CONFIG::desktop {
-						addbutton(gfx.screenwidth - 340, gfx.linespacing * 2, 150, "NEW SONG", "newsong");
-						addbutton(gfx.screenwidth - 170, gfx.linespacing * 2, 150, "EXPORT...", "exportlist");
-						addbutton(gfx.screenwidth - 340, (gfx.linespacing * 4) + 10, 150, "LOAD .ceol", "loadceol");
-						addbutton(gfx.screenwidth - 170, (gfx.linespacing * 4) + 10, 150, "SAVE .ceol", "saveceol");
+						addbutton(gfx.screenwidth - 340 - tx, gfx.linespacing * 2, 150, "NEW SONG", "newsong");
+						addbutton(gfx.screenwidth - 170 - tx, gfx.linespacing * 2, 150, "EXPORT...", "exportlist");
+						addbutton(gfx.screenwidth - 340 - tx, (gfx.linespacing * 4) + 10, 150, "LOAD .ceol", "loadceol");
+						addbutton(gfx.screenwidth - 170 - tx, (gfx.linespacing * 4) + 10, 150, "SAVE .ceol", "saveceol");
 					}
 					
-					addcontrol(gfx.screenwidth - 340, (gfx.linespacing * 7) - 2, "changepatternlength");
-					addcontrol(gfx.screenwidth - 340, (gfx.linespacing * 9) - 2, "changebpm");
+					addcontrol(gfx.screenwidth - 340 - tx, (gfx.linespacing * 7) - 2, "changepatternlength");
+					addcontrol(gfx.screenwidth - 340 - tx, (gfx.linespacing * 9) - 2, "changebpm");
 					
-				  addrect(290, (gfx.linespacing * 9) - 6, 100, 26);
-					addplayarrow(300, (gfx.linespacing * 9) - 2, "play");
-					addpausebutton(330, (gfx.linespacing * 9) - 2, "pause");
-					addstopbutton(360, (gfx.linespacing * 9) - 2, "stop");
+				  addrect(290 + tx, (gfx.linespacing * 9) - 6, 100, 26);
+					addplayarrow(300 + tx, (gfx.linespacing * 9) - 2, "play");
+					addpausebutton(330 + tx, (gfx.linespacing * 9) - 2, "pause");
+					addstopbutton(360 + tx, (gfx.linespacing * 9) - 2, "stop");
 				break;
 			  case control.MENUTAB_CREDITS:
 				  addtextlabel(20, (gfx.linespacing * 1)+10, "SiON softsynth library by Kei Mesuda", 0);
@@ -510,13 +511,14 @@ package {
 					addminusbutton(706, (gfx.linespacing * 2) + 6, "previousinstrument");
 					addplusbutton(726, (gfx.linespacing * 2) + 6, "nextinstrument");
 				break;
-			  case control.MENUTAB_ADVANCED:
-				  addcontrol(40, (gfx.linespacing * 3) + 4, "changesoundbuffer");
-					addcontrol(40, (gfx.linespacing * 6) + 4, "swingcontrol");
-					addcontrol(gfx.screenwidth - 240,  (gfx.linespacing * 3) + 4, "globaleffects");
+				case control.MENUTAB_ADVANCED:
+					tx = (gfx.screenwidth - 768) / 4;
+				  addcontrol(40 + tx, (gfx.linespacing * 3) + 4, "changesoundbuffer");
+					addcontrol(40 + tx, (gfx.linespacing * 7) + 4, "swingcontrol");
+					addcontrol(gfx.screenwidth - 240 - tx,  (gfx.linespacing * 3) + 4, "globaleffects");
 					
 					CONFIG::desktop {
-						addbutton(gfx.screenwidth - 168, gfx.linespacing * 6, 150, "IMPORT .mid", "loadmidi");
+						addbutton(gfx.screenwidth - 168 - tx, gfx.linespacing * 7, 150, "IMPORT .mid", "loadmidi");
 					}
 				break;
 			}

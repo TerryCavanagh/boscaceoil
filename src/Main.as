@@ -70,6 +70,8 @@ package{
 			CONFIG::desktop {
 				NativeApplication.nativeApplication.setAsDefaultApplication("ceol");
 				NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvokeEvent);
+				
+				stage.nativeWindow.minSize = new Point(768+18, 400+45);
 			}
 			
 			key = new KeyPoll(stage);
