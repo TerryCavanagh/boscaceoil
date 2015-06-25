@@ -158,10 +158,10 @@
 			
 			//Draw bars
 			for (i = 0; i < control.boxcount; i++) {
-				drawline(40 + (i * control.boxsize), pianorollposition + linesize, 40 + (i * control.boxsize), pianorollposition + (linesize * (patterneditorheight+1)), 102+(control.musicbox[control.currentbox].palette*10));
+				fillrect(40 + (i * control.boxsize), pianorollposition + linesize, 2, (linesize * patterneditorheight), 102+(control.musicbox[control.currentbox].palette*10));
 			}
 			for (i = 0; i <= (control.boxcount / control.barcount) + 1; i++) {
-				drawline(40 + (i * control.barsize)+1, pianorollposition + linesize, 40 + (i * control.barsize)+2, pianorollposition + (linesize * (patterneditorheight+1)), 103+(control.musicbox[control.currentbox].palette*10));
+				fillrect(40 + (i * control.barsize)+2, pianorollposition + linesize, 2,  (linesize * patterneditorheight), 103+(control.musicbox[control.currentbox].palette*10));
 			}
 			
 			//Reduced patternsize? Just draw over it!
@@ -444,7 +444,7 @@
 			//Draw bars
 			temp = int(screenwidth / patternwidth);
 			for (i = 0; i < temp; i++) {
-				drawline((i * patternwidth), linesize, i * patternwidth, pianorollposition + 10, 6);
+				fillrect((i * patternwidth), linesize, 2, pianorollposition + 10 - linesize, 6);
 			}
 			
 			//Draw patterns
@@ -486,7 +486,7 @@
 			
 			temp = int(screenwidth / patternwidth);
 			for (i = 0; i < temp; i++) {
-				drawline((i * patternwidth), pianorollposition + 8, i * patternwidth, pianorollposition + 20, 14);
+				fillrect((i * patternwidth), pianorollposition + 8, 2, 12, 14);
 			}
 			
 			if (control.dragaction == 3) {
@@ -789,10 +789,10 @@
 		}
 
 		public static function drawbox(x1:int, y1:int, w1:int, h1:int, col:int):void {
-			settrect(x1, y1, w1, 1); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
-			settrect(x1, y1 + h1 - 1, w1, 1); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
-			settrect(x1, y1, 1, h1); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
-			settrect(x1 + w1 - 1, y1, 1, h1); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
+			settrect(x1, y1, w1, 2); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
+			settrect(x1, y1 + h1 - 2, w1, 2); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
+			settrect(x1, y1, 2, h1); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
+			settrect(x1 + w1 - 2, y1, 2, h1); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
 		}
 		
 		public static function cls():void {
@@ -849,6 +849,7 @@
 		
 		public static var cachedtextindex:Dictionary = new Dictionary;
 		public static var cachedtext:Vector.<BitmapData> = new Vector.<BitmapData>;
+		public static var cachedrect:Vector.<Rectangle> = new Vector.<Rectangle>;
 		public static var cacheindex:int;
 		
 		public static function print(x:int, y:int, t:String, col:int, cen:Boolean = false, shadow:Boolean = false):void {
@@ -857,13 +858,14 @@
 				cacheindex = cachedtext.length;
 				cachedtextindex[t] = cacheindex;
 				cachedtext.push(new BitmapData(len(t), 20, true, 0));
+				cachedrect.push(new Rectangle(0, 0, len(t), 20));
 				
 				printoncache(0, 0, t, col, false, shadow);
 			}
 			
 			cacheindex = cachedtextindex[t];
 			settpoint(x, y);
-			backbuffer.copyPixels(cachedtext[cacheindex], cachedtext[cacheindex].rect, tpoint);
+			backbuffer.copyPixels(cachedtext[cacheindex], cachedrect[cacheindex], tpoint);
 		}
 		
 		public static function printoncache(x:int, y:int, t:String, col:int, cen:Boolean = false, shadow:Boolean=false):void {
