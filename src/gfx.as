@@ -21,14 +21,29 @@
 		
 		public static function changescalemode(t:int):void {
 			//Set new minimum screensize
-			control.minresizecountdown = 5;
 			if (t == 0) {
-				stage.nativeWindow.minSize = new Point(768 + windowboundsx, 400 + windowboundsy);
+				min_windowwidth = 768;
+				min_windowheight = 540;
+				stage.nativeWindow.minSize = new Point(768 + windowboundsx, 540 + windowboundsy);
 			}else {
-				stage.nativeWindow.minSize = new Point(1152 + windowboundsx, 600 + windowboundsy);
+				min_windowwidth = 1152;
+				min_windowheight = 690;
+				stage.nativeWindow.minSize = new Point(1152 + windowboundsx, 690 + windowboundsy);
 			}
 			
 			scalemode = t;
+			control.forceresize = true;
+			control.clicklist = true; // Stops from placing a note on resize
+		}
+		
+		public static function forceminimumsize():void {
+			if (windowwidth < min_windowwidth && windowheight < min_windowheight) {
+				changewindowsize(min_windowwidth, min_windowheight);
+			}else if (windowwidth < min_windowwidth) {
+				changewindowsize(min_windowwidth, windowheight);
+			}else if (windowheight < min_windowheight) {
+				changewindowsize(windowwidth, min_windowheight);
+			}
 		}
 		
 		public static function initpal():void {
@@ -692,9 +707,8 @@
 			public static function changewindowsize(w:int, h:int):void {
 				//if (w < 768) w = 768;
 				//if (h < 480) h = 480;
-				
-				windowboundsx = stage.nativeWindow.bounds.width - w;
-				windowboundsy = stage.nativeWindow.bounds.height - h;
+				windowboundsx = stage.nativeWindow.bounds.width - stage.stageWidth;
+				windowboundsy = stage.nativeWindow.bounds.height - stage.stageHeight;
 				windowwidth = w;
 				windowheight = h;
 				if (control.fullscreen) {

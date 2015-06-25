@@ -665,7 +665,6 @@ package {
 				}
 			}else if (currentbutton == "changescale") {
 				gfx.changescalemode(1 - gfx.scalemode);
-				control.forceresize = true;
 				changetab(control.MENUTAB_ADVANCED);
 			}
 		}
