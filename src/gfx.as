@@ -680,12 +680,21 @@
 			public static function changewindowsize(w:int, h:int):void {
 				//if (w < 768) w = 768;
 				//if (h < 480) h = 480;
+				
+				windowboundsx = stage.nativeWindow.bounds.width - w;
+				windowboundsy = stage.nativeWindow.bounds.height - h;
 				windowwidth = w;
 				windowheight = h;
-				if (stage && stage.nativeWindow) {
-					stage.nativeWindow.width = w + 18;
-					stage.nativeWindow.height = h + 45;
+				if (control.fullscreen) {
+					
+				}else{
+					if (stage && stage.nativeWindow) {
+						stage.nativeWindow.width = w + windowboundsx;
+						stage.nativeWindow.height = h + windowboundsy;
+					}
 				}
+				
+				
 				screenwidth = w; screenheight = h;
 				screenwidthmid = screenwidth / 2; screenheightmid = screenheight / 2;
 				screenviewwidth = screenwidth; screenviewheight = screenheight;			
@@ -996,5 +1005,6 @@
 		
 		public static var windowwidth:int, windowheight:int;
 		public static var min_windowwidth:int, min_windowheight:int;
+		public static var windowboundsx:int, windowboundsy:int;
 	}
 }

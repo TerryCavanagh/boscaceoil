@@ -30,8 +30,23 @@
 	}
 	
 	gfx.fillrect(0, gfx.linesize, gfx.screenwidth, gfx.linesize * 10, 5);
+	for (j = 0; j < gfx.linesize * 10; j++) {
+		if (j % 4 == 0) {
+			gfx.fillrect(0, gfx.linesize + j, gfx.screenwidth, 2, 1);
+		}
+	}
 	
 	switch(control.currenttab) {
+		case control.MENUTAB_FILE:
+			guiclass.tx = (gfx.screenwidth - 768) / 4;
+			gfx.fillrect(guiclass.tx, gfx.linesize, 408, gfx.linesize * 10, 5);
+			gfx.fillrect(gfx.screenwidth - guiclass.tx - 408+24, gfx.linesize, 408, gfx.linesize * 10, 5);
+		break;
+		case control.MENUTAB_CREDITS:
+			guiclass.tx = (gfx.screenwidth - 768) / 4;
+			gfx.fillrect(guiclass.tx, gfx.linesize, 408, gfx.linesize * 10, 5);
+			gfx.fillrect(gfx.screenwidth - guiclass.tx - 408+24, gfx.linesize, 408, gfx.linesize * 10, 5);
+		break;
 		case control.MENUTAB_ARRANGEMENTS:
 			gfx.drawarrangementeditor();
 			gfx.drawtimeline();
@@ -40,6 +55,11 @@
 	  case control.MENUTAB_INSTRUMENTS:
 		  gfx.drawinstrumentlist();
 			gfx.drawinstrument();
+		break;
+		case control.MENUTAB_ADVANCED:
+			guiclass.tx = (gfx.screenwidth - 768) / 4;
+			gfx.fillrect(guiclass.tx, gfx.linesize, 408, gfx.linesize * 10, 5);
+			gfx.fillrect(gfx.screenwidth - guiclass.tx - 408+24, gfx.linesize, 408, gfx.linesize * 10, 5);
 		break;
 	}
 	

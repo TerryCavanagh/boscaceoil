@@ -476,28 +476,29 @@ package {
 					addpausebutton(330 + tx, (gfx.linespacing * 9) - 2, "pause");
 					addstopbutton(360 + tx, (gfx.linespacing * 9) - 2, "stop");
 				break;
-			  case control.MENUTAB_CREDITS:
-				  addtextlabel(20, (gfx.linespacing * 1)+10, "SiON softsynth library by Kei Mesuda", 0);
-					addtextlabel(20, (gfx.linespacing * 2)+10, "sites.google.com/site/sioncenter/");
+				case control.MENUTAB_CREDITS:
+					tx = (gfx.screenwidth - 768) / 4;
+				  addtextlabel(tx + 20, (gfx.linespacing * 1)+10, "SiON softsynth library by Kei Mesuda", 0);
+					addtextlabel(tx + 20, (gfx.linespacing * 2)+10, "sites.google.com/site/sioncenter/");
 					
-					addrighttextlabel(gfx.screenwidth - 20, (gfx.linespacing * 1)+10, "Midias library by Efishocean", 0);
-					addrighttextlabel(gfx.screenwidth - 20, (gfx.linespacing * 2)+10, "code.google.com/p/midas3/");
+					addrighttextlabel(gfx.screenwidth - 20 - tx, (gfx.linespacing * 1)+10, "Midias library by Efishocean", 0);
+					addrighttextlabel(gfx.screenwidth - 20 - tx, (gfx.linespacing * 2)+10, "code.google.com/p/midas3/");
 					
-					addtextlabel(20, (gfx.linespacing * 4), "XM, MML Exporters by Rob Hunter",0);
-					addtextlabel(20, (gfx.linespacing * 5), "about.me/rjhunter/");
+					addtextlabel(tx + 20, (gfx.linespacing * 4), "XM, MML Exporters by Rob Hunter",0);
+					addtextlabel(tx + 20, (gfx.linespacing * 5), "about.me/rjhunter/");
 					
-					addrighttextlabel(gfx.screenwidth-20, (gfx.linespacing * 4), "Linux port by Damien L",0);
-					addrighttextlabel(gfx.screenwidth - 20, (gfx.linespacing * 5), "uncovergame.com/");
+					addrighttextlabel(gfx.screenwidth - 20 - tx, (gfx.linespacing * 4), "Linux port by Damien L",0);
+					addrighttextlabel(gfx.screenwidth - 20 - tx, (gfx.linespacing * 5), "uncovergame.com/");
 					
-					addtextlabel(20, (gfx.linespacing * 7) - 10, "Swing function by Stephen Lavelle", 0);
-					addtextlabel(20, (gfx.linespacing * 8) - 10, "increpare.com/");
+					addtextlabel(tx + 20, (gfx.linespacing * 7) - 10, "Swing function by Stephen Lavelle", 0);
+					addtextlabel(tx + 20, (gfx.linespacing * 8) - 10, "increpare.com/");
 					
-					addtextlabel(20, (gfx.linespacing * 9) + 8, "Available under FreeBSD Licence", 0);
+					addtextlabel(tx + 20, (gfx.linespacing * 9) + 8, "Available under FreeBSD Licence", 0);
 					
-					addrighttextlabel(gfx.screenwidth - 20, (gfx.linespacing * 7) - 10, "Online version by Chris Kim", 0);
-				  addrighttextlabel(gfx.screenwidth - 20, (gfx.linespacing * 8) - 10, "dy-dx.com/");
+					addrighttextlabel(gfx.screenwidth - 20 - tx, (gfx.linespacing * 7) - 10, "Online version by Chris Kim", 0);
+				  addrighttextlabel(gfx.screenwidth - 20 - tx, (gfx.linespacing * 8) - 10, "dy-dx.com/");
 					
-					addbutton(gfx.screenwidth - 164, (gfx.linespacing * 9) + 8, 150, "BACK", "filetab");
+					addbutton(gfx.screenwidth - 164 - tx, (gfx.linespacing * 9) + 8, 150, "BACK", "filetab");
 				break;
 			  case control.MENUTAB_HELP:
 				  addtextlabel(20, (gfx.linespacing * 2), "To do: Help system", 0);
