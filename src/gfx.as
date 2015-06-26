@@ -858,19 +858,21 @@
 		public static var cachedtext:Vector.<BitmapData> = new Vector.<BitmapData>;
 		public static var cachedrect:Vector.<Rectangle> = new Vector.<Rectangle>;
 		public static var cacheindex:int;
+		public static var cachelabel:String;
 		
 		public static function print(x:int, y:int, t:String, col:int, cen:Boolean = false, shadow:Boolean = false):void {
-			if (cachedtextindex[t] == null) {
+			cachelabel = t + "_" + String(col);
+			if (cachedtextindex[cachelabel] == null) {
 				//Cache the text
 				cacheindex = cachedtext.length;
-				cachedtextindex[t] = cacheindex;
+				cachedtextindex[cachelabel] = cacheindex;
 				cachedtext.push(new BitmapData(len(t), 20, true, 0));
 				cachedrect.push(new Rectangle(0, 0, len(t), 20));
 				
 				printoncache(0, 0, t, col, false, shadow);
 			}
 			
-			cacheindex = cachedtextindex[t];
+			cacheindex = cachedtextindex[cachelabel];
 			settpoint(x, y);
 			backbuffer.copyPixels(cachedtext[cacheindex], cachedrect[cacheindex], tpoint);
 		}
