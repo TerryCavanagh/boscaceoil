@@ -118,10 +118,10 @@ package {
 				addvariable(x + 200, y, "swing");
 				addrightarrow(x + 260, y, "swingup");
 			}else if (type == "globaleffects") {
-				addrect(x, y - 4, 220, gfx.buttonheight, 6);
-				adddownarrow(x - 30, y, "effectslist");
-				addvariable(x - 40, y, "currenteffect");
-				addhorizontalslider(x, y - 4, 200, "currenteffect");
+				addrect(x + 40, y - 4, 150, gfx.buttonheight, 6);
+				adddownarrow(x + 10, y, "effectslist");
+				addvariable(x, y, "currenteffect");
+				addhorizontalslider(x + 40, y - 4, 130, "currenteffect");
 			}else if (type == "footer_instrumentlist") {
 				addrect(x, y, 280, gfx.linesize, 1, "footer_instrumentlist");
 				adduparrow(x + 10, y + 4, "footer_instrumentlist");
@@ -516,7 +516,7 @@ package {
 					tx = (gfx.screenwidth - 768) / 4;
 				  addcontrol(40 + tx, (gfx.linespacing * 3) + 4, "changesoundbuffer");
 					addcontrol(40 + tx, (gfx.linespacing * 7) + 4, "swingcontrol");
-					addcontrol(gfx.screenwidth - 240 - tx,  (gfx.linespacing * 3) + 4, "globaleffects");
+					addcontrol(gfx.screenwidth - 210 - tx,  (gfx.linespacing * 3) + 4, "globaleffects");
 					
 					if (gfx.scalemode == 0) {
 						addbutton(gfx.screenwidth - 340 - tx, gfx.linespacing * 7, 150, "SCALE UP", "changescale");
@@ -571,8 +571,9 @@ package {
 				}
 			}else if (currentbutton == "exportlist") {
 				CONFIG::desktop {
+					tx = (gfx.screenwidth - 768) / 4;
 					control.filllist(control.LIST_EXPORTS);
-					control.list.init(gfx.screenwidth - 80, (gfx.linespacing * 4) - 7);
+					control.list.init(gfx.screenwidth - 170 - tx, (gfx.linespacing * 4) - 14);
 				}
 				
 				CONFIG::web {
@@ -622,7 +623,7 @@ package {
 				control._driver.bpm = control.bpm;
 			}else if (currentbutton == "bufferlist") {
 				control.filllist(control.LIST_BUFFERSIZE);
-				control.list.init(105, (gfx.linespacing * 4) - 3);
+				control.list.init(210, (gfx.linespacing * 4) + 4);
 			}else if (currentbutton == "swingup") {
 				control.swing ++;
 				if (control.swing > 10) control.swing = 10;
@@ -630,8 +631,9 @@ package {
 				control.swing --;
 				if (control.swing < -10) control.swing = -10;
 			}else if (currentbutton == "effectslist") {
+				tx = (gfx.screenwidth - 768) / 4;
 				control.filllist(control.LIST_EFFECTS);
-				control.list.init(gfx.screenwidth - 150, (gfx.linespacing * 4) - 3);
+				control.list.init(gfx.screenwidth - 280 - tx, (gfx.linespacing * 4) - 3);
 			}else if (currentbutton == "addnewinstrument") {
 				if (control.numinstrument < 16) {
 					control.numinstrument++;
@@ -644,13 +646,13 @@ package {
 				if (control.patternmanagerview < 0) control.patternmanagerview = 0;
 			}else if (currentbutton == "footer_instrumentlist") {
 				control.filllist(control.LIST_SELECTINSTRUMENT);
-				control.list.init(10, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
+				control.list.init(20, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
 			}else if (currentbutton == "footer_scalelist") {
 				control.filllist(control.LIST_SCALE);
-				control.list.init(220, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
+				control.list.init(gfx.screenwidth - 360, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
 			}else if (currentbutton == "footer_keylist") {
 				control.filllist(control.LIST_KEY);
-				control.list.init(gfx.screenwidth - 35, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
+				control.list.init(gfx.screenwidth - 60, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
 			}else if (currentbutton == "transposeup") {
 				control.musicbox[control.currentbox].transpose(1);
 			}else if (currentbutton == "transposedown") {

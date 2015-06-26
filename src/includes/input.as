@@ -255,7 +255,7 @@
 							}
 						}else if (control.list.selection == 2) {
 							control.filllist(control.LIST_MOREEXPORTS);
-							control.list.init(gfx.screenwidth - 220, (gfx.linespacing * 4) - 14);
+							control.list.init(gfx.screenwidth - 170 - ((gfx.screenwidth - 768) / 4), (gfx.linespacing * 4) - 14);
 						}
 					}
 				}else {
