@@ -13,6 +13,7 @@
 		public static function init(_stage:Stage):void {
 			min_windowwidth = 768;
 			min_windowheight = 400;
+			updatebackground = true;
 			initgfx();
 			initfont();
 			initpal();
@@ -274,7 +275,9 @@
 					}
 				}
 			}
-			
+		}
+		
+		public static function drawpatterneditor_cursor():void {
 			//Bar position
 			control.seekposition(control.boxsize * control.looptime);
 			if (control.musicbox[control.currentbox].isplayed) {
@@ -457,7 +460,9 @@
 					}
 				}
 			}
-			
+		}
+		
+		public static function drawarrangementcursor():void {
 			//Position bar
 			i = ((control.looptime * patternwidth) / control.boxcount) + ((control.arrange.currentbar-control.arrange.viewstart) * patternwidth);
 			fillrect(i, linesize, 4, pianorollposition, 10);
@@ -466,12 +471,6 @@
 			//Draw the cursor
 			if (control.arrangecurx > -1 && control.arrangecury > -1) {
 				if (control.arrangecurx == 0 && control.arrange.viewstart == -1) {
-					/* not using this anymore
-					if(control.mx<patternwidth/2){
-					  drawbox(0, linesize +(control.arrangecury * patternheight), patternwidth / 2, patternheight, 0);
-					}else {
-						drawbox(patternwidth/2, linesize +(control.arrangecury * patternheight), patternwidth / 2, patternheight, 0);
-					}*/
 					drawbox(0, linesize, patternwidth, pianorollposition-12, 0);	
 				}else {
 				  drawbox(control.arrangecurx * patternwidth, linesize +(control.arrangecury * patternheight), patternwidth, patternheight, 0);	
@@ -687,6 +686,7 @@
 			tempicon = new BitmapData(32, 32, false, 0x000000);
 			
 			backbuffer = new BitmapData(1, 1, false, 0x000000);
+			backbuffercache = new BitmapData(1, 1, false, 0x000000);
 			
 			for (i = 0; i < 400; i++) {
 				pal.push(new paletteclass());
@@ -1056,6 +1056,8 @@
 		//Actual backgrounds
 		public static var drawto:BitmapData;
 		public static var backbuffer:BitmapData;
+		public static var backbuffercache:BitmapData;
+		public static var updatebackground:Boolean;
 		public static var screenbuffer:BitmapData;
 		public static var screen:Bitmap;
 		//Tempshape

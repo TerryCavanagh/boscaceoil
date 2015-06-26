@@ -2,6 +2,13 @@
 	var i:int, j:int, k:int;
 	
 	generickeypoll();
+	if (key.click || key.press 
+	 || key.rightpress || key.rightclick 
+	 || key.middlepress || key.middleclick
+	 || key.mousewheel != 0) {
+		//Update screen when you click the mouse
+		gfx.updatebackground = true;
+	}
 	if (control.fixmouseclicks) {
 		control.fixmouseclicks = false;
 		key.releaseall();
@@ -535,6 +542,7 @@
 	if (key.hasreleased || key.hasmiddlereleased) {
 		//Check for click releases: deal with immediately
 		key.hasreleased = false; key.hasmiddlereleased = false;
+		gfx.updatebackground = true; //Update the background on input
 		
 		if (control.dragaction == 1 || control.dragaction == 2) {
 			control.dragaction = 0;
