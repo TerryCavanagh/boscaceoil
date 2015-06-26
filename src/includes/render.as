@@ -1,7 +1,8 @@
 ﻿public function render(key:KeyPoll):void {
 	var i:int, j:int, k:int;
 	
-	if(gfx.updatebackground > 0){
+	if (gfx.updatebackground > 0) {
+		gfx.changeframerate(30);
 		//Background
 		gfx.fillrect(0, 0, gfx.screenwidth, gfx.screenheight, 1);
 		
@@ -93,6 +94,7 @@
 			gfx.backbuffercache.copyPixels(gfx.backbuffer, gfx.trect, gfx.tl);
 		}
 	}else {
+		gfx.changeframerate(15);
 		//Draw from cache
 		gfx.settrect(gfx.backbuffercache.rect.x, gfx.backbuffercache.rect.y, gfx.backbuffercache.rect.width, gfx.backbuffercache.rect.height);
 		gfx.backbuffer.copyPixels(gfx.backbuffercache, gfx.trect, gfx.tl);

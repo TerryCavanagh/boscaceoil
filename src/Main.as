@@ -182,11 +182,11 @@ package{
 		}
 		
 		private function __activate__($event:Event):void {
-			stage.frameRate = 30;
+			gfx.changeframerate(30);
 		}
 		
 		private function __deactivate__($event:Event):void {
-		  stage.frameRate = 1;
+		  gfx.changeframerate(1);
 		}
 
 		CONFIG::web {

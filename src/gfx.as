@@ -21,6 +21,13 @@
 			stage = _stage;
     }
 		
+		public static function changeframerate(t:int):void {
+			if (t != boscaframerate) {
+				stage.frameRate = t;
+				boscaframerate = t;
+			}
+		}
+		
 		public static function changescalemode(t:int):void {
 			//Set new minimum screensize
 			if (t == 0) {
@@ -1083,5 +1090,7 @@
 		public static var min_windowwidth:int, min_windowheight:int;
 		public static var windowboundsx:int, windowboundsy:int;
 		public static var scalemode:int;
+		
+		public static var boscaframerate:int = -1;
 	}
 }
