@@ -54,7 +54,7 @@
 		}else if(control.currentbox>-1){
 			gfx.drawpatterneditor();
 		}else {
-			gfx.fillrect(0, gfx.pianorollposition + gfx.linesize, gfx.screenwidth, gfx.linesize * 13, 14);
+			gfx.fillrect(0, gfx.pianorollposition + gfx.linesize, gfx.screenwidth, gfx.screenheight - gfx.pianorollposition, 14);
 		}
 		
 		//Draw menu area

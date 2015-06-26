@@ -610,15 +610,12 @@
 			updatepianoroll();
 			
 			if (instrument[musicbox[t].instr].type == 0) {
-				/*
 				if (musicbox[t].bottomnote < 250) {
 					musicbox[t].start = invertpianoroll[musicbox[t].bottomnote] - 2;
 					if (musicbox[t].start < 0) musicbox[t].start = 0;
 				}else{
 					musicbox[t].start = scalesize * 3;
 				}
-				*/
-				musicbox[t].start = 0;
 			}else {
 				musicbox[t].start = 0;
 			}

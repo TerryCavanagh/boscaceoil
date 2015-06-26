@@ -335,7 +335,9 @@ package {
 						}else if (button[i].action == "currenteffect") {
 							gfx.rprint(button[i].position.x, button[i].position.y, control.effectname[control.effecttype], button[i].position.width, true);
 						}else if (button[i].action == "currentinstrument") {
-							gfx.print(button[i].position.x, button[i].position.y, String(control.musicbox[control.currentbox].instr + 1) + "  " + control.instrument[control.musicbox[control.currentbox].instr].name, 0, false, true);
+							if (control.currentbox > -1) {
+								gfx.print(button[i].position.x, button[i].position.y, String(control.musicbox[control.currentbox].instr + 1) + "  " + control.instrument[control.musicbox[control.currentbox].instr].name, 0, false, true);
+							}
 						}else if (button[i].action == "currentkey") {
 							gfx.print(button[i].position.x, button[i].position.y, control.notename[control.key], 0, false, true);
 						}else if (button[i].action == "currentscale") {
@@ -438,14 +440,16 @@ package {
 			
 			//Some gui stuff is on every tab: add it back here:
 			//Footer
-			addrect(0, gfx.screenheight - (gfx.linesize), gfx.screenwidth, gfx.linesize, 4);
 			if (control.currentbox > -1) {
-				addcontrol(10, gfx.screenheight - (gfx.linesize), "footer_instrumentlist");
-				if (control.instrument[control.musicbox[control.currentbox].instr].type == 0) {
-					addplusbutton(gfx.screenwidth - 460, gfx.screenheight - (gfx.linesize), "transposeup");
-					addminusbutton(gfx.screenwidth - 420, gfx.screenheight - (gfx.linesize), "transposedown");
-					addcontrol(gfx.screenwidth - 380, gfx.screenheight - (gfx.linesize), "footer_scalelist");
-				  addcontrol(gfx.screenwidth - 80, gfx.screenheight - (gfx.linesize), "footer_keylist");
+				addrect(0, gfx.screenheight - (gfx.linesize), gfx.screenwidth, gfx.linesize, 4);
+				if (control.currentbox > -1) {
+					addcontrol(10, gfx.screenheight - (gfx.linesize), "footer_instrumentlist");
+					if (control.instrument[control.musicbox[control.currentbox].instr].type == 0) {
+						addplusbutton(gfx.screenwidth - 460, gfx.screenheight - (gfx.linesize), "transposeup");
+						addminusbutton(gfx.screenwidth - 420, gfx.screenheight - (gfx.linesize), "transposedown");
+						addcontrol(gfx.screenwidth - 380, gfx.screenheight - (gfx.linesize), "footer_scalelist");
+						addcontrol(gfx.screenwidth - 80, gfx.screenheight - (gfx.linesize), "footer_keylist");
+					}
 				}
 			}
 			

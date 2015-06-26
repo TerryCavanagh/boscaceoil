@@ -572,6 +572,7 @@
 			}else {
 				if (control.mx > gfx.screenwidth - 120 && control.my > gfx.screenheight - 40) {
 					control.deletemusicbox(control.dragpattern);
+					guiclass.changetab(control.currenttab);
 				}
 			}
 		}else if (control.dragaction == 3) {

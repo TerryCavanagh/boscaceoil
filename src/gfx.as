@@ -144,8 +144,6 @@
 		}
 		
 		public static function drawpatterneditor():void {
-			var notesonscreen:int = ((screenheight - pianorollposition - linesize) / linesize) + 1;
-			
 			//Pattern editor
 			if (control.doublesize) {
 				control.boxsize = (screenwidth - 60) / 32;
@@ -521,9 +519,9 @@
 			
 			//Special trash button!
 			if (control.trashbutton > 0) {
-				fillrect(screenwidth - 50-2, screenheight - control.trashbutton-2, 54, control.trashbutton+4, 12);
-				fillrect(screenwidth - 50, screenheight - control.trashbutton, 50, control.trashbutton, 13);
-				print(screenwidth - 50 + 2, screenheight - control.trashbutton, "DELETE?", 0, false, true);
+				fillrect(screenwidth - 100-4, screenheight - (control.trashbutton*2)-4, 108, (control.trashbutton*2)+8, 12);
+				fillrect(screenwidth - 100, screenheight - (control.trashbutton*2), 100, (control.trashbutton*2), 13);
+				print(screenwidth - 100 + 4, screenheight - (control.trashbutton*2), "DELETE?", 0, false, true);
 			}			
 		}
 		
@@ -1209,6 +1207,7 @@
 		public static var patterneditorheight:int;
 		public static var buttonheight:int;
 		public static var pianorollposition:int;
+		public static var notesonscreen:int;
 		
 		public static var temp:int, temp2:int, temp3:int;
 		public static var alphamult:uint;
