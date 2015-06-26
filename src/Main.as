@@ -182,7 +182,7 @@ package{
 		}
 		
 		private function __activate__($event:Event):void {
-			stage.frameRate = 50;
+			stage.frameRate = 30;
 		}
 		
 		private function __deactivate__($event:Event):void {
