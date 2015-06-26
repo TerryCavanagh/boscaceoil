@@ -151,8 +151,8 @@
 			voicelist = new voicelistclass();
 			
 			//Setup drumkits
-			drumkit.push(new drumkitclass()); //Midi Drums
-			drumkit.push(new drumkitclass()); //Midi Drums
+			drumkit.push(new drumkitclass());
+			drumkit.push(new drumkitclass());
 			drumkit.push(new drumkitclass()); //Midi Drums
 			createdrumkit(0);
 			createdrumkit(1);
@@ -507,11 +507,11 @@
 				case 2:
 					//MIDI DRUMS
 					drumkit[2].kitname = "Midi Drumkit";
-					adddrumkitnote(2, "Seq Click H", "midi.drum24");
-					adddrumkitnote(2, "Brush Tap", "midi.drum25");
-					adddrumkitnote(2, "Brush Swirl", "midi.drum26");
-					adddrumkitnote(2, "Brush Slap", "midi.drum27");
-					adddrumkitnote(2, "Brush Tap Swirl", "midi.drum28");
+					adddrumkitnote(2, "Seq Click H", "midi.drum24", 24);
+					adddrumkitnote(2, "Brush Tap", "midi.drum25", 25);
+					adddrumkitnote(2, "Brush Swirl", "midi.drum26", 26);
+					adddrumkitnote(2, "Brush Slap", "midi.drum27", 27);
+					adddrumkitnote(2, "Brush Tap Swirl", "midi.drum28", 28);
 					adddrumkitnote(2, "Snare Roll", "midi.drum29");
 					adddrumkitnote(2, "Castanet", "midi.drum32");
 					adddrumkitnote(2, "Snare L", "midi.drum31");
@@ -610,12 +610,15 @@
 			updatepianoroll();
 			
 			if (instrument[musicbox[t].instr].type == 0) {
+				/*
 				if (musicbox[t].bottomnote < 250) {
 					musicbox[t].start = invertpianoroll[musicbox[t].bottomnote] - 2;
 					if (musicbox[t].start < 0) musicbox[t].start = 0;
 				}else{
 					musicbox[t].start = scalesize * 3;
 				}
+				*/
+				musicbox[t].start = 0;
 			}else {
 				musicbox[t].start = 0;
 			}

@@ -662,10 +662,12 @@ package {
 			}else if (currentbutton == "previousinstrument") {
 				control.previousinstrument();
 			}else if (currentbutton == "loadmidi") {
+			  button[i].press();
 				CONFIG::desktop {
 					midicontrol.openfile();
 				}
 			}else if (currentbutton == "changescale") {
+			  button[i].press();
 				gfx.changescalemode(1 - gfx.scalemode);
 				changetab(control.MENUTAB_ADVANCED);
 			}

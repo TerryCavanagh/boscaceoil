@@ -53,10 +53,14 @@
 			if (control.my > gfx.pianorollposition + gfx.linesize && control.my < gfx.pianorollposition + (gfx.linesize * (gfx.patterneditorheight + 1))) {
 				control.cursorx = (control.mx - 40);
 				control.cursorx = (control.cursorx - (control.cursorx % control.boxsize)) / control.boxsize;
+				/* OLD
 				control.cursory = (control.my - gfx.linesize - gfx.pianorollposition);
 				control.cursory = (control.cursory - (control.cursory % gfx.linesize)) / gfx.linesize;
-				
+				*/
+				control.cursory = (gfx.screenheight - gfx.linesize) - control.my;
+				control.cursory = 1+ ((control.cursory - (control.cursory % gfx.linesize)) / gfx.linesize);
 				if (control.cursorx >= control.boxcount) control.cursorx = control.boxcount - 1;
+				if (control.my >= gfx.screenheight - (gfx.linesize)) control.cursory = -1;
 			}
 		}else if (control.mx <= 40) {
 			if (control.my > gfx.pianorollposition + gfx.linesize && control.my < gfx.pianorollposition + (gfx.linesize * (gfx.patterneditorheight + 1))) {
@@ -121,11 +125,12 @@
 	if (control.cursorx > -1 && control.cursory > -1 && control.currentbox > -1 && !control.clicklist) {
 		if (key.press && control.dragaction == 0) {
 			//Add note 
-			if (control.musicbox[control.currentbox].start + ((gfx.patterneditorheight - 1) - control.cursory) == -1) {
+			if (control.musicbox[control.currentbox].start + control.cursory - 1 == -1) {
 				if (key.click) {
 					control.musicbox[control.currentbox].recordfilter = 1 - control.musicbox[control.currentbox].recordfilter;
 				}
-			}else{
+			}else {
+				/* OLD
 				control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + ((gfx.patterneditorheight - 1) - control.cursory)];
 				if (control.musicbox[control.currentbox].noteat(control.cursorx, control.currentnote)) {
 					control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + ((gfx.patterneditorheight - 1) - control.cursory)];
@@ -134,13 +139,29 @@
 				}else{
 					control.musicbox[control.currentbox].addnote(control.cursorx, control.currentnote, control.notelength);
 				}
+				*/
+				
+				//New
+				if(control.musicbox[control.currentbox].start + control.cursory - 1 > -1){
+					control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + control.cursory - 1];
+					if (control.musicbox[control.currentbox].noteat(control.cursorx, control.currentnote)) {
+						control.musicbox[control.currentbox].removenote(control.cursorx, control.currentnote);
+						control.musicbox[control.currentbox].addnote(control.cursorx, control.currentnote, control.notelength);
+					}else{
+						control.musicbox[control.currentbox].addnote(control.cursorx, control.currentnote, control.notelength);
+					}
+				}
 			}
 		}
 		
 		if (key.rightpress) {
-			//For the moment, just remove any note in this position
+			//Remove any note in this position
 			if (control.musicbox[control.currentbox].start + ((gfx.patterneditorheight - 1) - control.cursory) > -1) {
-				control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + ((gfx.patterneditorheight - 1) - control.cursory)];
+				//OLD
+				//control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + ((gfx.patterneditorheight - 1) - control.cursory)];
+				if(control.musicbox[control.currentbox].start + control.cursory - 1 > -1){
+					control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + control.cursory - 1];
+				}
 				
 				control.musicbox[control.currentbox].removenote(control.cursorx, control.currentnote);
 			}
@@ -599,11 +620,17 @@
 					control.keydelay = 2;
 				}else if (control.press_up) {
 					control.musicbox[control.currentbox].start++;
-					if (control.musicbox[control.currentbox].start > control.pianorollsize-12) control.musicbox[control.currentbox].start =  control.pianorollsize-12;
+					if (control.musicbox[control.currentbox].start > control.pianorollsize - 12) {
+						control.musicbox[control.currentbox].start =  control.pianorollsize - 12;
+					}
 					if (control.instrument[control.musicbox[control.currentbox].instr].type > 0) {
 						//Also check for drumkit ranges
-						if (control.musicbox[control.currentbox].start > control.drumkit[control.instrument[control.musicbox[control.currentbox].instr].type-1].size-12) control.musicbox[control.currentbox].start = control.drumkit[control.instrument[control.musicbox[control.currentbox].instr].type-1].size-12;
-						if (control.musicbox[control.currentbox].start < 0) control.musicbox[control.currentbox].start = 0;
+						if (control.musicbox[control.currentbox].start > control.drumkit[control.instrument[control.musicbox[control.currentbox].instr].type-1].size-12) {
+							control.musicbox[control.currentbox].start = control.drumkit[control.instrument[control.musicbox[control.currentbox].instr].type-1].size - 12;
+						}
+						if (control.musicbox[control.currentbox].start < 0) {
+							control.musicbox[control.currentbox].start = 0;
+						}
 					}
 					control.keydelay = 2;
 				}

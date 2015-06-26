@@ -144,6 +144,150 @@
 		}
 		
 		public static function drawpatterneditor():void {
+			var notesonscreen:int = ((screenheight - pianorollposition - linesize) / linesize) + 1;
+			
+			//Pattern editor
+			if (control.doublesize) {
+				control.boxsize = (screenwidth - 60) / 32;
+				control.barsize = control.boxsize * control.barcount;
+			}else{
+				control.boxsize = (screenwidth - 60) / 16;
+				control.barsize = control.boxsize * control.barcount;
+			}
+			
+			//Background alternating colour rows
+			for (i = 0; i < notesonscreen; i++){
+				if (i % 2 == 0) {
+					fillrect(0, screenheight - linesize - (i * linesize), screenwidth, linesize, 100 + (control.musicbox[control.currentbox].palette * 10));
+					fillrect(0, screenheight - linesize - (i * linesize), screenwidth, 2, 103+(control.musicbox[control.currentbox].palette*10));
+				}else{
+					fillrect(0, screenheight - linesize - (i * linesize), screenwidth, linesize, 101 + (control.musicbox[control.currentbox].palette * 10));
+					fillrect(0, screenheight - linesize - (i * linesize), screenwidth, 2, 103+(control.musicbox[control.currentbox].palette*10));
+				}
+			}
+			
+			//Draw bars
+			for (i = 0; i < control.boxcount; i++) {
+				fillrect(40 + (i * control.boxsize), pianorollposition + linesize, 2, (linesize * patterneditorheight), 102+(control.musicbox[control.currentbox].palette*10));
+			}
+			for (i = 0; i <= (control.boxcount / control.barcount) + 1; i++) {
+				fillrect(40 + (i * control.barsize)+2, pianorollposition + linesize, 2,  (linesize * patterneditorheight), 103+(control.musicbox[control.currentbox].palette*10));
+			}
+			
+			//Reduced patternsize? Just draw over it!
+			if (control.doublesize) {
+				if (control.boxcount < 32) {
+					fillrect(42 + (control.boxcount * control.boxsize), pianorollposition + linesize, screenwidth, linesize*patterneditorheight, 103 + (control.musicbox[control.currentbox].palette * 10));
+				}
+			}else{
+				if (control.boxcount < 16) {
+					fillrect(42 + (control.boxcount * control.boxsize), pianorollposition + linesize, screenwidth, linesize*patterneditorheight, 103 + (control.musicbox[control.currentbox].palette * 10));
+				}
+			}
+			
+			//Note names
+			fillrect(0, pianorollposition + linesize, 40, linesize * patterneditorheight, 4);
+			if (control.notey > -1) {
+				fillrect(0,  screenheight - linesize - (control.notey * linesize), 40, linesize, 6);
+			}
+			
+			//Print note names
+			j = control.instrument[control.musicbox[control.currentbox].instr].type;
+			if (j >= 1) {
+				//Drumkit!
+				j--;
+				for (i = 0; i < notesonscreen; i++) {
+					if (control.musicbox[control.currentbox].start + i - 1 < control.drumkit[j].size) {
+						if (control.musicbox[control.currentbox].start + i - 1 > -1) {
+						  print(3, screenheight - linesize - (i * linesize), control.drumkit[j].voicename[control.musicbox[control.currentbox].start + i - 1], 0, false, true);
+						}else {
+							if (control.musicbox[control.currentbox].recordfilter == 1) {
+								fillrect(0, screenheight - linesize - (i * linesize), screenwidth, linesize, 13);
+								print(gfx.screenwidthmid - (gfx.len("! ADVANCED FILTER EDITING ON !") / 2), screenheight - linesize - (i * linesize) + 1, "! ADVANCED FILTER EDITING ON !", 15, false);
+							}else{	
+								fillrect(0, screenheight - linesize - (i * linesize), screenwidth, linesize, 12);
+								print(gfx.screenwidthmid - (gfx.len("ADVANCED FILTER EDITING OFF") / 2), screenheight - linesize - (i * linesize) + 1, "ADVANCED FILTER EDITING OFF", 0);
+							}
+						}
+					}
+				}
+			}else {
+				for (i = 0; i < notesonscreen; i++) {
+					if (control.musicbox[control.currentbox].start + i - 1> -1) {
+					  print(3, screenheight - linesize - (i * linesize), control.notename[control.pianoroll[control.musicbox[control.currentbox].start + i - 1]], 0);
+					}else {
+						if (control.musicbox[control.currentbox].recordfilter == 1) {
+							fillrect(0, screenheight - linesize - (i * linesize), screenwidth, linesize, 13);
+							print(gfx.screenwidthmid - (gfx.len("! ADVANCED FILTER EDITING ON !") / 2), screenheight - linesize - (i * linesize) + 1, "! ADVANCED FILTER EDITING ON !", 15);
+						}else{	
+							fillrect(0, screenheight - linesize - (i * linesize), screenwidth, linesize, 12);
+							print(gfx.screenwidthmid - (gfx.len("ADVANCED FILTER EDITING OFF") / 2), screenheight - linesize - (i * linesize) + 1, "ADVANCED FILTER EDITING OFF", 0, true);
+						}
+					}
+				}
+			}
+			
+			//Scroll bar
+			if (control.musicbox[control.currentbox].recordfilter == 1) {				
+			  fillrect((42 + (16 * control.boxsize)), pianorollposition + linesize, 40, linesize * patterneditorheight, 9);
+			}else {
+				fillrect((42 + (16 * control.boxsize)), pianorollposition + linesize, 40, linesize * patterneditorheight, 4);
+			}
+			
+			//Octave bars
+			j = control.instrument[control.musicbox[control.currentbox].instr].type;
+			if (j == 0) {				
+				j = control.musicbox[control.currentbox].start;
+				for (i = 0; i < notesonscreen; i++) {
+					if ((j + i) % control.scalesize == 0) {
+						fillrect(30, screenheight - linesize - (i * linesize), screenwidth, 3, 106 + (control.musicbox[control.currentbox].palette * 10));
+						fillrect(30, screenheight - linesize - (i * linesize) + 3, screenwidth, 1, 107 + (control.musicbox[control.currentbox].palette * 10));
+						tempstring = String(int(j + i) / control.scalesize);
+						print(screenwidth - 20, screenheight - linesize - (i * linesize) + 4, tempstring, 0, false, true);
+					}
+				}
+			}
+			
+			//DRAW THE NOTES HERE
+			for (j = 0; j < control.musicbox[control.currentbox].numnotes; j++) {
+				i = control.musicbox[control.currentbox].notes[j].width;
+				if (i < control.boxcount) {
+					control.drawnoteposition = control.invertpianoroll[control.musicbox[control.currentbox].notes[j].x + 1];
+					control.drawnotelength = control.musicbox[control.currentbox].notes[j].y * control.boxsize;
+					if (control.drawnoteposition > -1) {			
+						control.drawnoteposition -= control.musicbox[control.currentbox].start;
+						if (control.drawnoteposition <= 0) {
+							fillrect(42 + (i * control.boxsize), screenheight - linesize - 4, control.drawnotelength, 4, 104+(control.musicbox[control.currentbox].palette*10));
+							fillrect(42 + (i * control.boxsize), screenheight - linesize - 2, control.drawnotelength, 2, 105+(control.musicbox[control.currentbox].palette*10));
+							fillrect(42 + (i * control.boxsize), screenheight - linesize - 8, 2, 8, 105+(control.musicbox[control.currentbox].palette*10));
+							fillrect(42 + (i * control.boxsize) + control.drawnotelength - 2, screenheight - linesize - 8, 2, 8, 105 + (control.musicbox[control.currentbox].palette * 10));
+						}else if (control.drawnoteposition >= notesonscreen) {
+							fillrect(42 + (i * control.boxsize), pianorollposition + linesize, control.drawnotelength, 4, 104+(control.musicbox[control.currentbox].palette*10));
+							fillrect(42 + (i * control.boxsize), pianorollposition + linesize, control.drawnotelength, 2, 105+(control.musicbox[control.currentbox].palette*10));
+							fillrect(42 + (i * control.boxsize), pianorollposition + linesize, 2, 8, 105+(control.musicbox[control.currentbox].palette*10));
+							fillrect(42 + (i * control.boxsize) + control.drawnotelength - 2, pianorollposition + linesize, 2, 8, 105+(control.musicbox[control.currentbox].palette*10));
+						}else {
+							fillrect(42 + (i * control.boxsize), screenheight - linesize - (control.drawnoteposition * linesize), control.drawnotelength, linesize, 105+(control.musicbox[control.currentbox].palette*10));
+							fillrect(42 + (i * control.boxsize), screenheight - linesize - (control.drawnoteposition * linesize) + 16, control.drawnotelength, 4, 104+(control.musicbox[control.currentbox].palette*10));
+							fillrect(42 + (i * control.boxsize) + control.drawnotelength - 4,  screenheight - linesize - (control.drawnoteposition * linesize), 4, linesize, 104 + (control.musicbox[control.currentbox].palette * 10));
+							
+							tempstring = String(int(control.musicbox[control.currentbox].notes[j].y))
+							if (control.doublesize) {
+								if (control.musicbox[control.currentbox].notes[j].y + control.musicbox[control.currentbox].notes[j].width > 32) {
+									print(42 + (i * control.boxsize), screenheight - linesize - (control.drawnoteposition * linesize), tempstring, 12);
+								}
+							}else {
+								if (control.musicbox[control.currentbox].notes[j].y + control.musicbox[control.currentbox].notes[j].width > 16) {
+									print(42 + (i * control.boxsize), screenheight - linesize - (control.drawnoteposition * linesize), tempstring, 12);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		public static function olddrawpatterneditor():void {
 			//Pattern editor
 			if (control.doublesize) {
 				control.boxsize = (screenwidth - 60) / 32;
@@ -209,7 +353,7 @@
 						}
 					}
 				}
-			}else{
+			}else {
 				for (i = 0; i < patterneditorheight; i++) {
 					if (control.musicbox[control.currentbox].start + i > -1) {
 					  print(3, pianorollposition + (linesize * patterneditorheight) - (i * linesize), control.notename[control.pianoroll[control.musicbox[control.currentbox].start + i]], 0);
@@ -294,6 +438,7 @@
 			}
 			
 			//Draw the cursor
+			/* OLD
 			if (control.cursorx > -1 && control.cursory > -1) {
 				if (control.musicbox[control.currentbox].start + ((patterneditorheight - 1) - control.cursory) == -1) {
 					drawbox(40 + (2 * control.boxsize), pianorollposition + linesize +(control.cursory * linesize), control.boxsize * 24, linesize, 0);
@@ -304,6 +449,12 @@
 						print(40 + (control.cursorx * control.boxsize), pianorollposition + linesize +(control.cursory * linesize) - linesize, tempstring, 0);
 					}
 				}
+			}
+			*/
+			
+			//New
+			if (control.cursorx > -1 && control.cursory > -1) {
+				drawbox(40 + (control.cursorx * control.boxsize), gfx.screenheight - linesize  - (control.cursory * linesize), control.boxsize * control.notelength, linesize, 0);
 			}
 		}
 		
@@ -863,7 +1014,11 @@
 		public static var cachelabel:String;
 		
 		public static function print(x:int, y:int, t:String, col:int, cen:Boolean = false, shadow:Boolean = false):void {
-			cachelabel = t + "_" + String(col);
+			if(shadow){
+				cachelabel = t + "_" + String(col) + "_shadow";
+			}else {
+				cachelabel = t + "_" + String(col) + "_noshadow";
+			}
 			if (cachedtextindex[cachelabel] == null) {
 				//Cache the text
 				cacheindex = cachedtext.length;

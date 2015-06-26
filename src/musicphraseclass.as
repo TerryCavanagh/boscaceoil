@@ -75,7 +75,7 @@ package {
 			
 			if (note > topnote) topnote = note;
 			if (note < bottomnote) bottomnote = note;
-			notespan = topnote-bottomnote;
+			notespan = topnote - bottomnote;
 			
 			hash = (hash + (note * time)) % 2147483647;
 		}
