@@ -66,13 +66,16 @@
 		}
 		
 		if (control.nowexporting) {
-			gfx.fillrect(0, gfx.pianorollposition + gfx.linesize, gfx.screenwidth, gfx.linesize * 13, 14);
+			gfx.updatebackground = 5;
+			gfx.fillrect(0, gfx.pianorollposition + gfx.linesize, gfx.screenwidth, gfx.screenheight - (gfx.pianorollposition + gfx.linesize), 14);
 			if (control.arrange.currentbar % 2 == 0) {
-				for (i = -1; i < 10; i++) {
-					gfx.fillrect((i * 64) + help.slowsine, gfx.pianorollposition + gfx.linesize, 32, gfx.linesize * 13, 1);
+				guiclass.tx = int(gfx.screenwidth / 64) + 1;
+				for (i = -1; i < guiclass.tx; i++) {
+					gfx.fillrect((i * 64) + help.slowsine, gfx.pianorollposition + gfx.linesize, 32,  gfx.screenheight - (gfx.pianorollposition + gfx.linesize), 1);
 				}
 			}else {
-				for (i = 0; i < 10; i++) {
+				guiclass.tx = int(gfx.screenheight - (gfx.pianorollposition + gfx.linesize) / 64) + 1;
+				for (i = 0; i < guiclass.tx; i++) {
 					gfx.fillrect(0, gfx.pianorollposition + gfx.linesize + (i * 64) + help.slowsine, gfx.screenwidth, 32, 1);
 				}
 				if (help.slowsine >= 32) {
@@ -80,7 +83,7 @@
 				}
 			}
 			if (help.slowsine < 32) {
-				gfx.print(0, 170, "NOW EXPORTING AS WAV, PLEASE WAIT", 0, true, true);
+				gfx.print(gfx.screenwidthmid - (gfx.len("NOW EXPORTING AS WAV, PLEASE WAIT") / 2), (gfx.pianorollposition + gfx.linesize)+ (gfx.screenheight - gfx.hig("WAV") - (gfx.pianorollposition + gfx.linesize))/2, "NOW EXPORTING AS WAV, PLEASE WAIT", 0, false, true);
 			}
 		}else if(control.currentbox>-1){
 			gfx.drawpatterneditor();

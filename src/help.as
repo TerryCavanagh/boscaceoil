@@ -26,14 +26,14 @@
 		}
 		
 		public static function updateglow():void {
-			slowsine++;
+			slowsine+=2;
 			if (slowsine >= 64) slowsine = 0;
 			
 		  if (glowdir == 0) {
-			  glow++; 
+			  glow+=2; 
 				if (glow >= 63) glowdir = 1;
 			}else {
-			  glow--;
+			  glow-=2;
 				if (glow < 1) glowdir = 0;
 			}
 		}
