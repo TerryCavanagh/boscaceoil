@@ -99,7 +99,7 @@
 			gfx.backbuffercache.copyPixels(gfx.backbuffer, gfx.trect, gfx.tl);
 		}
 	}else {
-		gfx.changeframerate(15);
+		if(!control.musicplaying) gfx.changeframerate(15); //If there's no music playing, drop the framerate!
 		//Draw from cache
 		gfx.settrect(gfx.backbuffercache.rect.x, gfx.backbuffercache.rect.y, gfx.backbuffercache.rect.width, gfx.backbuffercache.rect.height);
 		gfx.backbuffer.copyPixels(gfx.backbuffercache, gfx.trect, gfx.tl);
