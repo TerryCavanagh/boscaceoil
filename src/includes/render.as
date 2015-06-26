@@ -105,6 +105,10 @@
 	
 	if (control.currenttab == control.MENUTAB_ARRANGEMENTS) {
 		gfx.drawarrangementcursor();
+		if (control.mx > gfx.patternmanagerx - 44) {
+			gfx.drawpatternmanager();
+		}
+		gfx.drawpatternmanager_cursor();
 	}
 	
 	if (!control.nowexporting) {

@@ -554,7 +554,9 @@
 					}
 				}
 			}
-			
+		}
+		
+		public static function drawpatternmanager_cursor():void {
 			//Draw the cursor
 			if (control.patterncury > -1) {
 			  drawbox(patternmanagerx + 3, linesize + 2 + (control.patterncury * patternheight), 108, patternheight, 0);
