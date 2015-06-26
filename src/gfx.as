@@ -771,9 +771,7 @@
 					}
 				}
 				
-				if ((help.slowsine % 32) < 16) {
-				  print(286 + 80, (linesize * 4) + 114, "! RECORDING FOR PATTERN " + String(control.currentbox + 1) + "!", 15, false, true);
-				}
+				print(286 + ((screenwidth - 348)/2) - (len("! RECORDING FOR PATTERN " + String(control.currentbox + 1) + "!") / 2), (linesize * 4) + 114, "! RECORDING FOR PATTERN " + String(control.currentbox + 1) + "!", 15, false, true);
 				
 				//Move over recording
 				j = int(((256-control.musicbox[control.currentbox].volumegraph[control.looptime%control.boxcount]) * 90) / 256);
@@ -795,8 +793,8 @@
 					}
 				}
 				
-				print(286 + 100, (linesize * 4) + 114, "LOW PASS FILTER PAD", 103 + (control.instrument[control.currentinstrument].palette * 10));
-			  print(screenwidth - 52, (linesize * 4) + 114, "VOL", 103 + (control.instrument[control.currentinstrument].palette * 10));				
+				print(286 + ((screenwidth - 348)/2) - (len("LOW PASS FILTER PAD") / 2), (linesize * 4) + 114, "LOW PASS FILTER PAD", 103 + (control.instrument[control.currentinstrument].palette * 10));
+				print(screenwidth - 52, (linesize * 4) + 114, "VOL", 103 + (control.instrument[control.currentinstrument].palette * 10));				
 				
 				//Default values
 				j = 0;
