@@ -46,7 +46,6 @@ package{
 	import flash.utils.getTimer;
 	import flash.utils.Timer;
 	import flash.events.InvokeEvent;
-	import com.sociodox.theminer.TheMiner; //Profiler
 	
 	CONFIG::desktop {
 		import flash.desktop.NativeApplication;
@@ -60,8 +59,6 @@ package{
   	include "includes/logic.as";
   	include "includes/input.as";
   	include "includes/render.as";
-		
-		public var profiler:Boolean = false;
 		
 		public function Main():void {
 			control.versionnumber = "v2.0"; // Version number displayed beside logo
@@ -97,7 +94,6 @@ package{
 			control.voicelist.fixlengths();
 			stage.fullScreenSourceRect = null;
 			addChild(gfx.screen);
-			if (profiler) addChild(new TheMiner()); //Profiler
 			
 			control.loadscreensettings();
 			updategraphicsmode();

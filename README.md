@@ -1,6 +1,5 @@
 ![logo](boscalogo.png "Bosca Ceoil")
 
-[![TravisCI Build Status](https://travis-ci.org/TerryCavanagh/boscaceoil.svg?branch=master)](https://travis-ci.org/TerryCavanagh/boscaceoil)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/TerryCavanagh/boscaceoil?branch=master&svg=true)](https://ci.appveyor.com/project/TerryCavanagh/boscaceoil)
 
 A simple music making program.
@@ -16,12 +15,11 @@ Bosca Ceoil is currently under active development for version 2.0. Here's the ro
  - *[DONE]* Online version
  - *[DONE]* Midi Importer 
  - *[DONE]* Midi Exporter
+ - *[DONE]* XM Exporter
+ - *[DONE]* Resolution independance
  - *[Partially done]* New gui controls: transpose, instrument next/prev, scrollbars
- - *[Partially done]* XM Exporter
  - Built in Tutorial, General Reference guide
  - Built in Tutorial, Interactive make-your-first-song guide
- - Resolution independance
- - Expore posibility of better instrument control
  - Linux fork updated to 2.0 to match
  
 ## Contributing to Bosca Ceoil
