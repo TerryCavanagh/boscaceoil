@@ -451,7 +451,7 @@
 			}
 			
 			//Draw patterns
-			for (k = 12; k >= 0; k--) {
+			for (k = temp; k >= 0; k--) {
 				for (j = 0; j < 8; j++) {
 					if (k + control.arrange.viewstart > -1) {
 						if (control.arrange.bar[k + control.arrange.viewstart].channel[j] > -1) {
