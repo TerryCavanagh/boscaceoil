@@ -596,7 +596,7 @@
 				if (control.press_down) {
 					control.musicbox[control.currentbox].start--;
 					if (control.musicbox[control.currentbox].start < -1) control.musicbox[control.currentbox].start = -1;
-					control.keydelay = 4;
+					control.keydelay = 2;
 				}else if (control.press_up) {
 					control.musicbox[control.currentbox].start++;
 					if (control.musicbox[control.currentbox].start > control.pianorollsize-12) control.musicbox[control.currentbox].start =  control.pianorollsize-12;
@@ -605,16 +605,16 @@
 						if (control.musicbox[control.currentbox].start > control.drumkit[control.instrument[control.musicbox[control.currentbox].instr].type-1].size-12) control.musicbox[control.currentbox].start = control.drumkit[control.instrument[control.musicbox[control.currentbox].instr].type-1].size-12;
 						if (control.musicbox[control.currentbox].start < 0) control.musicbox[control.currentbox].start = 0;
 					}
-					control.keydelay = 4;
+					control.keydelay = 2;
 				}
 			}else {
 				if (control.press_down || control.press_left) {
 					control.notelength--;
 					if (control.notelength < 1) control.notelength = 1;
-					control.keydelay = 4;
+					control.keydelay = 2;
 				}else if (control.press_up || control.press_right) {
 					control.notelength++;
-					control.keydelay = 4;
+					control.keydelay = 2;
 				}
 			}
 		}
@@ -623,11 +623,11 @@
 			if (control.press_left) {
 				control.arrange.viewstart--;
 				if (control.arrange.viewstart < 0) control.arrange.viewstart = 0;
-				control.keydelay = 4;
+				control.keydelay = 2;
 			}else if (control.press_right) {
 				control.arrange.viewstart++;
 				if (control.arrange.viewstart > 1000) control.arrange.viewstart = 1000;
-				control.keydelay = 4;
+				control.keydelay = 2;
 			}
 		}
 	}else {

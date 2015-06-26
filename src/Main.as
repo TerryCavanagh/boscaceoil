@@ -280,7 +280,7 @@ package{
 		public var key:KeyPoll;
 		
 		// Timer information (a shout out to ChevyRay for the implementation)
-		public static const TARGET_FPS:Number = 50; // the fixed-FPS we want the control to run at
+		public static const TARGET_FPS:Number = 30; // the fixed-FPS we want the control to run at
 		private var	_rate:Number = 1000 / TARGET_FPS; // how long (in seconds) each frame is
 		private var	_skip:Number = _rate * 10; // this tells us to allow a maximum of 10 frame skips
 		private var	_last:Number = -1;

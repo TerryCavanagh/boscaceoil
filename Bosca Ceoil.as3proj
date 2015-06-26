@@ -5,7 +5,7 @@
     <movie outputType="Application" />
     <movie input="" />
     <movie path="bin\BoscaCeoil.swf" />
-    <movie fps="50" />
+    <movie fps="30" />
     <movie width="768" />
     <movie height="560" />
     <movie version="17" />
