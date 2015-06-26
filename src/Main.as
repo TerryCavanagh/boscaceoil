@@ -152,7 +152,7 @@ package{
 			guiclass.changetab(control.currenttab);
 			
 			var temp:BitmapData = new BitmapData(gfx.windowwidth, gfx.windowheight, false, 0x000000);
-			gfx.updatebackground = true;
+			gfx.updatebackground = 5;
 			gfx.backbuffercache = new BitmapData(gfx.windowwidth, gfx.windowheight, false, 0x000000);
 			temp.copyPixels(gfx.backbuffer, gfx.backbuffer.rect, gfx.tl);
 			gfx.backbuffer = temp;

@@ -13,7 +13,7 @@
 		public static function init(_stage:Stage):void {
 			min_windowwidth = 768;
 			min_windowheight = 400;
-			updatebackground = true;
+			updatebackground = 5;
 			initgfx();
 			initfont();
 			initpal();
@@ -1057,7 +1057,7 @@
 		public static var drawto:BitmapData;
 		public static var backbuffer:BitmapData;
 		public static var backbuffercache:BitmapData;
-		public static var updatebackground:Boolean;
+		public static var updatebackground:int;
 		public static var screenbuffer:BitmapData;
 		public static var screen:Bitmap;
 		//Tempshape

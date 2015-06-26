@@ -1,7 +1,7 @@
 ﻿public function render(key:KeyPoll):void {
 	var i:int, j:int, k:int;
 	
-	if(gfx.updatebackground){
+	if(gfx.updatebackground > 0){
 		//Background
 		gfx.fillrect(0, 0, gfx.screenwidth, gfx.screenheight, 1);
 		
@@ -87,9 +87,11 @@
 			gfx.fillrect(0, gfx.pianorollposition + gfx.linesize, gfx.screenwidth, gfx.linesize * 13, 14);
 		}
 		//Cache bitmap at this point
-		gfx.settrect(gfx.backbuffer.rect.x, gfx.backbuffer.rect.y, gfx.backbuffer.rect.width, gfx.backbuffer.rect.height);
-		gfx.backbuffercache.copyPixels(gfx.backbuffer, gfx.trect, gfx.tl);
-		gfx.updatebackground = false;
+		gfx.updatebackground--;
+		if (gfx.updatebackground == 0) {
+			gfx.settrect(gfx.backbuffer.rect.x, gfx.backbuffer.rect.y, gfx.backbuffer.rect.width, gfx.backbuffer.rect.height);
+			gfx.backbuffercache.copyPixels(gfx.backbuffer, gfx.trect, gfx.tl);
+		}
 	}else {
 		//Draw from cache
 		gfx.settrect(gfx.backbuffercache.rect.x, gfx.backbuffercache.rect.y, gfx.backbuffercache.rect.width, gfx.backbuffercache.rect.height);

@@ -7,7 +7,7 @@
 	 || key.middlepress || key.middleclick
 	 || key.mousewheel != 0) {
 		//Update screen when you click the mouse
-		gfx.updatebackground = true;
+		gfx.updatebackground = 5;
 	}
 	if (control.fixmouseclicks) {
 		control.fixmouseclicks = false;
@@ -542,7 +542,7 @@
 	if (key.hasreleased || key.hasmiddlereleased) {
 		//Check for click releases: deal with immediately
 		key.hasreleased = false; key.hasmiddlereleased = false;
-		gfx.updatebackground = true; //Update the background on input
+		gfx.updatebackground = 5; //Update the background on input
 		
 		if (control.dragaction == 1 || control.dragaction == 2) {
 			control.dragaction = 0;
