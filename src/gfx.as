@@ -489,9 +489,11 @@
 		
 		public static function drawarrangementcursor():void {
 			//Position bar
-			i = ((control.looptime * patternwidth) / control.boxcount) + ((control.arrange.currentbar-control.arrange.viewstart) * patternwidth);
-			fillrect(i, linesize, 4, pianorollposition, 10);
-			fillrect(i + 4, linesize, 4, pianorollposition, 11);
+			i = ((control.looptime * patternwidth) / control.boxcount) + ((control.arrange.currentbar - control.arrange.viewstart) * patternwidth);
+			if (i < gfx.patternmanagerx) {
+				fillrect(i, linesize, 4, pianorollposition, 10);
+				fillrect(i + 4, linesize, 4, pianorollposition, 11);
+			}
 			
 			//Draw the cursor
 			if (control.arrangecurx > -1 && control.arrangecury > -1) {
