@@ -110,6 +110,7 @@
 		if (control.mx > gfx.patternmanagerx - 44) {
 			gfx.drawpatternmanager();
 		}
+		gfx.drawtimeline_cursor();
 		gfx.drawpatternmanager_cursor();
 	}
 	

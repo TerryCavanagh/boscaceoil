@@ -536,7 +536,9 @@
 			if (control.arrange.viewstart == -1) {
 				fillrect(0, pianorollposition + 8, patternwidth, 12, 16);
 			}
-			
+		}
+		
+		public static function drawtimeline_cursor():void {
 			//Draw the cursor
 			if (control.timelinecurx > -1) {
 				if (control.arrange.viewstart == -1 && control.timelinecurx == 0) {
