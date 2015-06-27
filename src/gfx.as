@@ -311,10 +311,15 @@
 						drawbox(40 + (2 * control.boxsize), gfx.screenheight - linesize - (control.cursory * linesize), control.boxsize * 12, linesize, 0);
 					}
 				}else {
-					drawbox(40 + (control.cursorx * control.boxsize), gfx.screenheight - linesize - (control.cursory * linesize), control.boxsize * control.notelength, linesize, 0);
-					if (control.notelength > control.boxcount) {
-						tempstring = String(control.notelength);
-						print(40 + (control.cursorx * control.boxsize), gfx.screenheight - linesize  - (control.cursory * linesize), tempstring, 0);
+					if (control.cursory == notesonscreen - 1) {
+						//draw partial cursor
+						drawpartialbox(40 + (control.cursorx * control.boxsize), gfx.screenheight - linesize - (control.cursory * linesize), control.boxsize * control.notelength, linesize, 0, pianorollposition + linesize);
+					}else {
+						drawbox(40 + (control.cursorx * control.boxsize), gfx.screenheight - linesize - (control.cursory * linesize), control.boxsize * control.notelength, linesize, 0);
+						if (control.notelength > control.boxcount) {
+							tempstring = String(control.notelength);
+							print(40 + (control.cursorx * control.boxsize), gfx.screenheight - linesize  - (control.cursory * linesize), tempstring, 0);
+						}
 					}
 				}
 			}
@@ -809,7 +814,26 @@
 				shapematrix.translate(-x1, -y1);
 			}
 		}
-
+		
+		public static function drawpartialbox(x1:int, y1:int, w1:int, h1:int, col:int, cutoff:int):void {
+			if (y1 > cutoff) {
+				settrect(x1, y1, w1, 2); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
+			}
+			if (y1 + h1 - 2 > cutoff){
+				settrect(x1, y1 + h1 - 2, w1, 2); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
+			}
+			if (y1 > cutoff) {
+				settrect(x1, y1, 2, h1); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
+			}else {
+				settrect(x1, cutoff, 2, h1 - (cutoff - y1)); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
+			}
+			if (y1 > cutoff) {
+				settrect(x1 + w1 - 2, y1, 2, h1); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
+			}else {
+				settrect(x1 + w1 - 2, cutoff, 2, h1 - (cutoff - y1)); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
+			}
+		}
+		
 		public static function drawbox(x1:int, y1:int, w1:int, h1:int, col:int):void {
 			settrect(x1, y1, w1, 2); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
 			settrect(x1, y1 + h1 - 2, w1, 2); backbuffer.fillRect(trect, RGB(pal[col].r, pal[col].g, pal[col].b));
