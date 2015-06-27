@@ -64,8 +64,9 @@
 			}
 		}else if (control.mx <= 40) {
 			if (control.my > gfx.pianorollposition + gfx.linesize && control.my < gfx.pianorollposition + (gfx.linesize * (gfx.patterneditorheight + 1))) {
-				control.notey = (control.my - gfx.linesize - gfx.pianorollposition);
-				control.notey = (control.notey - (control.notey % gfx.linesize)) / gfx.linesize;
+				control.notey = (gfx.screenheight - gfx.linesize) - control.my;
+				control.notey = 1+ ((control.notey - (control.notey % gfx.linesize)) / gfx.linesize);
+				if (control.my >= gfx.screenheight - (gfx.linesize)) control.notey = -1;
 			}
 		}
 		
@@ -424,11 +425,11 @@
 				if (control.currentbox > -1) {
 				  if (control.instrument[control.musicbox[control.currentbox].instr].type == 0) {	
 						//Normal instrument
-						j = control.musicbox[control.currentbox].start + (11 - control.notey);
+						j = control.musicbox[control.currentbox].start + control.notey - 1;
 						if (j >= 0 && j < 128) control._driver.noteOn(control.pianoroll[j], control.instrument[control.musicbox[control.currentbox].instr].voice, control.notelength);
 					}else {
 						//Drumkit
-						j = control.musicbox[control.currentbox].start + (11 - control.notey);
+						j = control.musicbox[control.currentbox].start + control.notey - 1;
 						if (j >= 0 && j < 128) control._driver.noteOn(control.drumkit[control.instrument[control.musicbox[control.currentbox].instr].type-1].voicenote[j], control.drumkit[control.instrument[control.musicbox[control.currentbox].instr].type-1].voicelist[j], control.notelength);
 					}
 				}
