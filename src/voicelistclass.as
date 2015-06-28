@@ -171,7 +171,7 @@ package {
 			create("BASS", "Elec.Chopper Bass", "valsound.bass8", 2 % 6, 39);
 			create("BASS", "Effect Bass 1", "valsound.bass9", 2 % 6, 32);
 			create("BASS", "Effect Bass 2 to UP", "valsound.bass10", 2 % 6, 33);
-			create("BASS", "Effect Bass 1", "valsound.bass11", 2 % 6, 34);
+			create("BASS", "Effect Bass 3", "valsound.bass11", 2 % 6, 34);
 			create("BASS", "Mohaaa", "valsound.bass12", 2 % 6, 35);
 			create("BASS", "Effect FB Bass #5", "valsound.bass13", 2 % 6, 36);
 			create("BASS", "Magical bass", "valsound.bass14", 2 % 6, 37);
