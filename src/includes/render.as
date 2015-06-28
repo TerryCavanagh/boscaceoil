@@ -107,7 +107,7 @@
 	
 	if (control.currenttab == control.MENUTAB_ARRANGEMENTS) {
 		gfx.drawarrangementcursor();
-		if (control.mx > gfx.patternmanagerx - 44) {
+		if (control.mx > gfx.patternmanagerx - 108) {
 			gfx.drawpatternmanager();
 		}
 		gfx.drawtimeline_cursor();

@@ -494,20 +494,57 @@
 		public static function drawarrangementcursor():void {
 			//Position bar
 			i = ((control.looptime * patternwidth) / control.boxcount) + ((control.arrange.currentbar - control.arrange.viewstart) * patternwidth);
-			if (i < gfx.patternmanagerx) {
+			if (i < patternmanagerx) {
 				fillrect(i, linesize, 4, pianorollposition, 10);
 				fillrect(i + 4, linesize, 4, pianorollposition, 11);
 			}
 			
-			//Draw the cursor
-			if (control.arrangecurx > -1 && control.arrangecury > -1) {
-				if (control.arrangecurx == 0 && control.arrange.viewstart == -1) {
-					drawbox(0, linesize, patternwidth, pianorollposition-12, 0);	
-				}else {
-				  drawbox(control.arrangecurx * patternwidth, linesize +(control.arrangecury * patternheight), patternwidth, patternheight, 0);	
+			if (control.mx < 20 && control.my > linesize && control.my < linesize + pianorollposition && control.arrange.viewstart > 0) {
+				if (arrangementscrollleft < 20) {
+					arrangementscrollleft += 4;
+					if (arrangementscrollleft >= 20) arrangementscrollleft = 20;
+				}
+				
+				fillrect(-20 + arrangementscrollleft, linesize, 20, pianorollposition, 12);
+				fillrect(-20 + 2 + arrangementscrollleft, linesize + 2, 16, pianorollposition - 4, 5);
+				drawicon(-20 + 4 + arrangementscrollleft, linesize + (pianorollposition / 2) - 12, 12);
+			}else if (control.mx > patternmanagerx - 20 && control.mx < patternmanagerx && control.my > linesize && control.my < linesize + pianorollposition) {
+				if (arrangementscrollright < 20) {
+					arrangementscrollright += 4;
+					if (arrangementscrollright >= 20) arrangementscrollright = 20;
+				}
+				
+				fillrect(patternmanagerx - arrangementscrollright, linesize, 20, pianorollposition, 12);
+				fillrect(patternmanagerx - arrangementscrollright + 2, linesize + 2, 16, pianorollposition - 4, 5);
+				drawicon(patternmanagerx - arrangementscrollright + 5, linesize + (pianorollposition / 2) - 12, 13);
+			}else {
+				//Draw the cursor
+				if (control.arrangecurx > -1 && control.arrangecury > -1) {
+					if (control.arrangecurx == 0 && control.arrange.viewstart == -1) {
+						drawbox(0, linesize, patternwidth, pianorollposition-12, 0);	
+					}else {
+						drawbox(control.arrangecurx * patternwidth, linesize +(control.arrangecury * patternheight), patternwidth, patternheight, 0);	
+					}
+				}
+				
+				if (arrangementscrollleft > 0) {
+					arrangementscrollleft -= 4;
+					if (arrangementscrollleft <= 0) arrangementscrollleft = 0;
+					
+					fillrect(-20 + arrangementscrollleft, linesize, 20, pianorollposition, 12);
+					fillrect(-20 + 2 + arrangementscrollleft, linesize + 2, 16, pianorollposition - 4, 5);
+					drawicon(-20 + 4 + arrangementscrollleft, linesize + (pianorollposition / 2) - 12, 12);
+				}
+				if (arrangementscrollright > 0) {
+					arrangementscrollright -= 4;
+					if (arrangementscrollright <= 0) arrangementscrollright = 0;
+					
+					fillrect(patternmanagerx - arrangementscrollright, linesize, 20, pianorollposition, 12);
+					fillrect(patternmanagerx - arrangementscrollright + 2, linesize + 2, 16, pianorollposition - 4, 5);
+					drawicon(patternmanagerx - arrangementscrollright + 5, linesize + (pianorollposition / 2) - 12, 13);
+					drawpatternmanager();
 				}
 			}
-			
 		}
 		
 		public static function drawtimeline():void {
@@ -1144,5 +1181,8 @@
 		public static var scalemode:int;
 		
 		public static var boscaframerate:int = -1;
+		
+		public static var arrangementscrollleft:int = 0;
+		public static var arrangementscrollright:int = 0;
 	}
 }

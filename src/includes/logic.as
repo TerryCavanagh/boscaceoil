@@ -1,6 +1,10 @@
 ﻿public function logic(key:KeyPoll):void {
 	var i:int, j:int, k:int;
 	
+	if (control.arrangescrolldelay > 0) {
+		control.arrangescrolldelay--;
+	}
+	
 	if (control.messagedelay > 0) {
 		control.messagedelay -= 2;
 		if (control.messagedelay < 0) control.messagedelay = 0;

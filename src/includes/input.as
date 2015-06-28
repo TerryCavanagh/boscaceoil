@@ -356,28 +356,30 @@
 					}
 					//Arrangements
 					if (control.arrangecurx > -1 && control.arrangecury > -1) {
-						//Change, start drag
-						if (control.dragaction == 0) {
-							if(control.arrangecurx + control.arrange.viewstart>-1){
-								j = control.arrange.bar[control.arrangecurx + control.arrange.viewstart].channel[control.arrangecury];
-								if (j > -1) {
-									control.changemusicbox(j);
-									control.dragaction = 1;
-									control.dragpattern = j;
-									control.dragx = control.mx; control.dragy = control.my;
-								}
-							}else {
-								//Clicked the control panel
-								if (control.arrange.viewstart == -1 && control.arrangecurx == 0) {
-									/* Not doing this stuff anymore
-									if (control.mx < gfx.patternwidth / 2) {
-										control.arrange.channelon[control.arrangecury] = true;
-									}else {
-										control.arrange.channelon[control.arrangecury] = false;
-									}*/
-									//Set loop to entire song!
-									control.arrange.loopstart = 0;
-									control.arrange.loopend = control.arrange.lastbar;
+						if (gfx.arrangementscrollleft == 0 && gfx.arrangementscrollright == 0) {
+							//Change, start drag
+							if (control.dragaction == 0) {
+								if(control.arrangecurx + control.arrange.viewstart>-1){
+									j = control.arrange.bar[control.arrangecurx + control.arrange.viewstart].channel[control.arrangecury];
+									if (j > -1) {
+										control.changemusicbox(j);
+										control.dragaction = 1;
+										control.dragpattern = j;
+										control.dragx = control.mx; control.dragy = control.my;
+									}
+								}else {
+									//Clicked the control panel
+									if (control.arrange.viewstart == -1 && control.arrangecurx == 0) {
+										/* Not doing this stuff anymore
+										if (control.mx < gfx.patternwidth / 2) {
+											control.arrange.channelon[control.arrangecury] = true;
+										}else {
+											control.arrange.channelon[control.arrangecury] = false;
+										}*/
+										//Set loop to entire song!
+										control.arrange.loopstart = 0;
+										control.arrange.loopend = control.arrange.lastbar;
+									}
 								}
 							}
 						}
@@ -437,7 +439,19 @@
 		}
 		
 		if (key.press && (!control.clicklist && !control.clicksecondlist)) {
-			if (control.currenttab == control.MENUTAB_INSTRUMENTS) {
+			if (control.currenttab == control.MENUTAB_ARRANGEMENTS) {
+				if (control.arrangescrolldelay == 0) {
+					if (gfx.arrangementscrollleft > 0) {
+						control.arrange.viewstart--;
+						if (control.arrange.viewstart < 0) control.arrange.viewstart = 0;
+						control.arrangescrolldelay = 4;
+					}else if (gfx.arrangementscrollright > 0) {
+						control.arrange.viewstart++;
+						if (control.arrange.viewstart > 1000) control.arrange.viewstart = 1000;					
+						control.arrangescrolldelay = 4;
+					}
+				}
+			}else	if (control.currenttab == control.MENUTAB_INSTRUMENTS) {
 				if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 20) {				
 					if (control.mx >= 280 && control.my > 70 && control.mx < gfx.screenwidth - 50) {
 						i = control.mx - 280; j = control.my - 80;

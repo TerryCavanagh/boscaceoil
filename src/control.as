@@ -1552,6 +1552,7 @@
 		public static var barsize:int, barcount:int;
 		public static var notelength:int;
 		public static var doublesize:Boolean;
+		public static var arrangescrolldelay:int = 0;
 		
 		public static var barposition:Number = 0;
 		public static var drawnoteposition:int, drawnotelength:int;
