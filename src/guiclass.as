@@ -21,19 +21,22 @@ package {
 			helpwindow = "nothing";
 		}
 		
-		public static function changewindow(winname:String):void {
+		public static function changewindow(winname:String, initalise:Boolean = true):void {
 			helpwindow = winname;
 			if (winname == "nothing") return;
 			
 			switch(winname) {
 				case "help1":
-					windowx = 50;	windowy = 50;
-					windowwidth = 300; windowheight = 200;
-					windowtext = "HELP - Placing Notes";
+					if (initalise) {
+						windowx = 50;	windowy = 50;
+						windowwidth = 300; windowheight = 200;
+						windowtext = "HELP - Placing Notes";
+					}
 					
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
 					addtextlabel(windowx + 5, windowy + 25, "Hello!", 2, true);
+					addbutton(windowx + 5, windowy + 50, 150, "Credits", "creditstab", 0, true);
 				break;
 				default:
 				  helpwindow = "nothing";
@@ -243,7 +246,6 @@ package {
 		
 		public static function checkinput(key:KeyPoll):void {
 			//Do window stuff first
-			
 			overwindow = false;
 			for (var i:int = 0; i < numbuttons; i++) {
 				if (button[i].active && button[i].visable) {
@@ -257,7 +259,6 @@ package {
 							if (button[i].moveable) {
 								if (help.inboxw(control.mx, control.my, button[i].position.x - 20, button[i].position.y - 20, button[i].position.width + 40, button[i].position.height + 40)) {
 									dobuttonmoveaction(i);
-									key.click = false;
 								}
 							}
 						}
@@ -267,10 +268,12 @@ package {
 			
 			for (i = 0; i < numbuttons; i++) {
 				if (button[i].active && button[i].visable) {
-					if (help.inboxw(control.mx, control.my, button[i].position.x, button[i].position.y, button[i].position.width, button[i].position.height)) {
-						button[i].mouseover = true;
-					}else {
-						button[i].mouseover = false;
+					if (!overwindow || button[i].onwindow) {
+						if (help.inboxw(control.mx, control.my, button[i].position.x, button[i].position.y, button[i].position.width, button[i].position.height)) {
+							button[i].mouseover = true;
+						}else {
+							button[i].mouseover = false;
+						}
 					}
 					
 					if (button[i].action == "window" && windowdrag) {
@@ -300,19 +303,21 @@ package {
 								}
 							}
 						}
-					}else if (button[i].action != "" && !control.list.active) {
-						if (key.press && !control.clicklist) {
-							if (button[i].moveable) {
-								if (help.inboxw(control.mx, control.my, button[i].position.x - 20, button[i].position.y - 20, button[i].position.width + 40, button[i].position.height + 40)) {
-									dobuttonmoveaction(i);
+					}else if (button[i].action != "" && button[i].action != "window" && !control.list.active) {
+						if (!overwindow || button[i].onwindow) {
+							if (key.press && !control.clicklist) {
+								if (button[i].moveable) {
+									if (help.inboxw(control.mx, control.my, button[i].position.x - 20, button[i].position.y - 20, button[i].position.width + 40, button[i].position.height + 40)) {
+										dobuttonmoveaction(i);
+									}
 								}
 							}
-						}
-						
-						if (key.click) {
-							if (button[i].mouseover) {
-								dobuttonaction(i);
-								key.click = false;
+							
+							if (key.click) {
+								if (button[i].mouseover) {
+									dobuttonaction(i);
+									key.click = false;
+								}
 							}
 						}
 					}
@@ -686,7 +691,7 @@ package {
 				break;
 			}
 			
-			changewindow(helpwindow);
+			changewindow(helpwindow, false);
 		}
 		
 		public static function dobuttonmoveaction(i:int):void {
