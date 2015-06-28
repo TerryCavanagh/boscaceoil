@@ -21,6 +21,7 @@ package {
 			moveable = false;
 			visable = true;
 			active = true;
+			onwindow = false;
 			textoffset = 0;
 			pressed = 0;
 		}
@@ -39,6 +40,7 @@ package {
 		public var selected:Boolean;
 		public var active:Boolean;
 		public var moveable:Boolean;
+		public var onwindow:Boolean;
 		
 		public var pressed:int;
 		public var textoffset:int;

@@ -23,21 +23,22 @@ package {
 		
 		public static function changewindow(winname:String):void {
 			helpwindow = winname;
+			if (winname == "nothing") return;
 			
 			switch(winname) {
 				case "help1":
-					windowx = 50;
-					windowy = 50;
-					windowwidth = 300;
-					windowheight = 200;
+					windowx = 50;	windowy = 50;
+					windowwidth = 300; windowheight = 200;
 					windowtext = "HELP - Placing Notes";
+					
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					addtextlabel(windowx + 5, windowy + 25, "Hello!", 2, true);
 				break;
 				default:
 				  helpwindow = "nothing";
 				break;
 			}
-			
-			changetab(control.currenttab);
 		}
 		
 		public static function addwindow(x:int, y:int, w:int, h:int, text:String):void {
@@ -46,76 +47,94 @@ package {
 			}
 		}
 		
-		public static function addbutton(x:int, y:int, w:int, text:String, action:String, textoffset:int = 0):void {
+		public static function addbutton(x:int, y:int, w:int, text:String, action:String, textoffset:int = 0, towindow:Boolean = false):void {
 			addguipart(x, y, w, gfx.buttonheight, text, action, "normal", textoffset);
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addlogo(x:int, y:int):void {
+		public static function addlogo(x:int, y:int, towindow:Boolean = false):void {
 			addguipart(x, y, 356, 44, "BOSCA CEOIL", "logo", "logo");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addtextlabel(x:int, y:int, text:String, col:int = 2):void {
+		public static function addtextlabel(x:int, y:int, text:String, col:int = 2, towindow:Boolean = false):void {
 			addguipart(x, y, col, 0, text, "", "textlabel");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addrighttextlabel(x:int, y:int, text:String, col:int = 2):void {
+		public static function addrighttextlabel(x:int, y:int, text:String, col:int = 2, towindow:Boolean = false):void {
 			addguipart(x, y, col, 0, text, "", "righttextlabel");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addrect(x:int, y:int, w:int, h:int, col:int = 1, action:String = ""):void {
+		public static function addrect(x:int, y:int, w:int, h:int, col:int = 1, action:String = "", towindow:Boolean = false):void {
 			addguipart(x, y, w, h, "", action, "fillrect", col);
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addleftarrow(x:int, y:int, action:String):void {
+		public static function addleftarrow(x:int, y:int, action:String, towindow:Boolean = false):void {
 			addguipart(x, y, 16, 16, "", action, "leftarrow");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addrightarrow(x:int, y:int, action:String):void {
+		public static function addrightarrow(x:int, y:int, action:String, towindow:Boolean = false):void {
 			addguipart(x, y, 16, 16, "", action, "rightarrow");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addplayarrow(x:int, y:int, action:String):void {
+		public static function addplayarrow(x:int, y:int, action:String, towindow:Boolean = false):void {
 			addguipart(x, y, 16, 16, "", action, "playarrow");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addpausebutton(x:int, y:int, action:String):void {
+		public static function addpausebutton(x:int, y:int, action:String, towindow:Boolean = false):void {
 			addguipart(x, y, 16, 16, "", action, "pause");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addstopbutton(x:int, y:int, action:String):void {
+		public static function addstopbutton(x:int, y:int, action:String, towindow:Boolean = false):void {
 			addguipart(x, y, 16, 16, "", action, "stop");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addplusbutton(x:int, y:int, action:String):void {
+		public static function addplusbutton(x:int, y:int, action:String, towindow:Boolean = false):void {
 			addguipart(x, y, 16, 16, "", action, "plus");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addminusbutton(x:int, y:int, action:String):void {
+		public static function addminusbutton(x:int, y:int, action:String, towindow:Boolean = false):void {
 			addguipart(x, y, 16, 16, "", action, "minus");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function adddownarrow(x:int, y:int, action:String):void {
+		public static function adddownarrow(x:int, y:int, action:String, towindow:Boolean = false):void {
 			addguipart(x, y, 16, 16, "", action, "downarrow");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 			
-		public static function adduparrow(x:int, y:int, action:String):void {
+		public static function adduparrow(x:int, y:int, action:String, towindow:Boolean = false):void {
 			addguipart(x, y, 16, 16, "", action, "uparrow");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addscrollupbutton(x:int, y:int, w:int, action:String):void {
+		public static function addscrollupbutton(x:int, y:int, w:int, action:String, towindow:Boolean = false):void {
 			addguipart(x, y, w, 21, "", action, "scrollup");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addscrolldownbutton(x:int, y:int, w:int,action:String):void {
+		public static function addscrolldownbutton(x:int, y:int, w:int,action:String, towindow:Boolean = false):void {
 			addguipart(x, y, w, 21, "", action, "scrolldown");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addvariable(x:int, y:int, variable:String, col:int = 0):void {
+		public static function addvariable(x:int, y:int, variable:String, col:int = 0, towindow:Boolean = false):void {
 			addguipart(x, y, col, 0, "", variable, "variable");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
-		public static function addhorizontalslider(x:int, y:int, w:int, variable:String):void {
+		public static function addhorizontalslider(x:int, y:int, w:int, variable:String, towindow:Boolean = false):void {
 			addguipart(x, y, w, 26, "", variable, "horizontalslider");
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
 		public static function addcontrol(x:int, y:int, type:String):void {
@@ -198,6 +217,7 @@ package {
 			 || sty == "window") {
 				button[z].moveable = true;
 			}
+			lastbutton = z;
 			numbuttons++;
 		}
 		
@@ -254,19 +274,31 @@ package {
 					}
 					
 					if (button[i].action == "window" && windowdrag) {
-						button[i].position.x = control.mx - windowdx;
-						button[i].position.y = control.my - windowdy;
-						if (button[i].position.x < 0) button[i].position.x = 0;
-						if (button[i].position.y < 0) button[i].position.y = 0;
-						
-						if (button[i].position.x > gfx.screenwidth - button[i].position.width) button[i].position.x = gfx.screenwidth - button[i].position.width;
-						if (button[i].position.y > gfx.screenheight - button[i].position.height) button[i].position.y = gfx.screenheight - button[i].position.height;
-						
-						windowx = button[i].position.x;
-						windowy = button[i].position.y;
-						
 						if (key.hasreleased) {
 							windowdrag = false;
+						}else {
+							button[i].position.x = control.mx - windowdx;
+							button[i].position.y = control.my - windowdy;
+							if (button[i].position.x < 0) button[i].position.x = 0;
+							if (button[i].position.y < 0) button[i].position.y = 0;
+							
+							if (button[i].position.x > gfx.screenwidth - button[i].position.width) button[i].position.x = gfx.screenwidth - button[i].position.width;
+							if (button[i].position.y > gfx.screenheight - button[i].position.height) button[i].position.y = gfx.screenheight - button[i].position.height;
+							
+							windowddx = windowx - button[i].position.x;
+							windowddy = windowy - button[i].position.y;
+							
+							windowx = button[i].position.x;
+							windowy = button[i].position.y;
+							
+							for (var j:int = 0; j < numbuttons; j++) {
+								if (button[j].active && button[j].visable) {
+									if (button[j].onwindow) {
+										button[j].position.x -= windowddx;
+										button[j].position.y -= windowddy;
+									}
+								}
+							}
 						}
 					}else if (button[i].action != "" && !control.list.active) {
 						if (key.press && !control.clicklist) {
@@ -654,7 +686,7 @@ package {
 				break;
 			}
 			
-			addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+			changewindow(helpwindow);
 		}
 		
 		public static function dobuttonmoveaction(i:int):void {
@@ -669,6 +701,7 @@ package {
 						if (control.mx >= button[i].position.x + button[i].position.width - 20) {
 							//close the window
 							changewindow("nothing");
+							changetab(control.currenttab);
 							control.clicklist = true;
 						}else{
 							windowdrag = true;
@@ -847,10 +880,12 @@ package {
 		public static var tx:int, ty:int, timage:int;
 		public static var tw:int, th:int;
 		public static var currentbutton:String;
+		public static var lastbutton:int;
 		
 		public static var windowcheck:Boolean;
 		public static var windowdrag:Boolean = false;
 		public static var overwindow:Boolean = false;
+		public static var windowddx:int, windowddy:int;
 		public static var windowdx:int, windowdy:int;
 		public static var windowx:int, windowy:int;
 		public static var windowwidth:int, windowheight:int;
