@@ -622,8 +622,8 @@
 					control.keydelay = 2;
 				}else if (control.press_up) {
 					control.musicbox[control.currentbox].start++;
-					if (control.musicbox[control.currentbox].start > control.pianorollsize - 12) {
-						control.musicbox[control.currentbox].start =  control.pianorollsize - 12;
+					if (control.musicbox[control.currentbox].start > 120 - gfx.notesonscreen) {
+						control.musicbox[control.currentbox].start = 120 - gfx.notesonscreen;
 					}
 					if (control.instrument[control.musicbox[control.currentbox].instr].type > 0) {
 						//Also check for drumkit ranges

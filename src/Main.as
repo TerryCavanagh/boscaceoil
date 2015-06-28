@@ -145,6 +145,7 @@ package{
 			gfx.patterneditorheight = (gfx.windowheight - (gfx.pianorollposition - (gfx.linesize + 2))) / 12;
 			gfx.notesonscreen = ((gfx.screenheight - gfx.pianorollposition - gfx.linesize) / gfx.linesize) + 1;
 			gfx.tf_1.width = gfx.windowwidth;
+			gfx.updateboxsize();
 			
 			guiclass.changetab(control.currenttab);
 			

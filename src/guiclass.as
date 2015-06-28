@@ -75,12 +75,20 @@ package {
 			addguipart(x, y, 16, 16, "", action, "uparrow");
 		}
 		
+		public static function addscrollupbutton(x:int, y:int, w:int, action:String):void {
+			addguipart(x, y, w, 21, "", action, "scrollup");
+		}
+		
+		public static function addscrolldownbutton(x:int, y:int, w:int,action:String):void {
+			addguipart(x, y, w, 21, "", action, "scrolldown");
+		}
+		
 		public static function addvariable(x:int, y:int, variable:String, col:int = 0):void {
 			addguipart(x, y, col, 0, "", variable, "variable");
 		}
 		
 		public static function addhorizontalslider(x:int, y:int, w:int, variable:String):void {
-			addguipart(x, y, w, 0, "", variable, "horizontalslider");
+			addguipart(x, y, w, 26, "", variable, "horizontalslider");
 		}
 		
 		public static function addcontrol(x:int, y:int, type:String):void {
@@ -159,7 +167,7 @@ package {
 			//trace("addguipart(", x, y, w, h, contents, act, sty, ")", numbuttons);
 			button[z].init(x, y, w, h, contents, act, sty);
 			button[z].textoffset = toffset;
-			if (sty == "horizontalslider") {
+			if (sty == "horizontalslider" || sty == "scrollup" || sty == "scrolldown") {
 				button[z].moveable = true;
 			}
 			numbuttons++;
@@ -197,7 +205,9 @@ package {
 					if (button[i].action != "" && !control.list.active) {
 						if (key.press && !control.clicklist) {
 							if (button[i].moveable) {
-								dobuttonmoveaction(i);
+								if (help.inboxw(control.mx, control.my, button[i].position.x - 20, button[i].position.y - 20, button[i].position.width + 40, button[i].position.height + 40)) {
+									dobuttonmoveaction(i);
+								}
 							}
 						}
 						
@@ -245,6 +255,28 @@ package {
 						ty = button[i].position.y + 2 - timage;
 						
 						gfx.print(tx, ty, button[i].text, 0, false, true);
+					}else if (button[i].style == "scrollup") {
+						if (button[i].pressed > 0) {
+							button[i].pressed--;
+							gfx.fillrect(button[i].position.x, button[i].position.y, button[i].position.width, 20, 12);
+							gfx.fillrect(button[i].position.x + 2, button[i].position.y + 2, button[i].position.width - 4, 16, 6);
+							gfx.drawicon(button[i].position.x + ((button[i].position.width - 16)/2), button[i].position.y + 4, 10);
+						}else {
+							gfx.fillrect(button[i].position.x, button[i].position.y, button[i].position.width, 20, 12);
+							gfx.fillrect(button[i].position.x + 2, button[i].position.y + 2, button[i].position.width - 4, 16, 5);
+							gfx.drawicon(button[i].position.x + ((button[i].position.width - 16)/2), button[i].position.y + 4, 10);
+						}
+					}else if (button[i].style == "scrolldown") {
+						if (button[i].pressed > 0) {
+							button[i].pressed--;
+							gfx.fillrect(button[i].position.x, button[i].position.y, button[i].position.width, 20, 12);
+							gfx.fillrect(button[i].position.x + 2, button[i].position.y + 2, button[i].position.width - 4, 16, 6);
+							gfx.drawicon(button[i].position.x + ((button[i].position.width - 16)/2), button[i].position.y + 4, 11);
+						}else {
+							gfx.fillrect(button[i].position.x, button[i].position.y, button[i].position.width, 20, 12);
+							gfx.fillrect(button[i].position.x + 2, button[i].position.y + 2, button[i].position.width - 4, 16, 5);
+							gfx.drawicon(button[i].position.x + ((button[i].position.width - 16)/2), button[i].position.y + 4, 11);
+						}
 					}else if (button[i].style == "textlabel") {
 						gfx.print(button[i].position.x, button[i].position.y, button[i].text, button[i].position.width, false, true);
 					}else if (button[i].style == "righttextlabel") {
@@ -451,6 +483,35 @@ package {
 						addcontrol(gfx.screenwidth - 80, gfx.screenheight - (gfx.linesize), "footer_keylist");
 					}
 				}
+				
+				/*
+				//Scroll bar
+				if(control.doublesize){
+					if (control.musicbox[control.currentbox].recordfilter == 1) {				
+						fillrect((42 + (32 * control.boxsize)), pianorollposition + linesize, 40, linesize * patterneditorheight, 9);
+					}else {
+						fillrect((42 + (32 * control.boxsize)), pianorollposition + linesize, 40, linesize * patterneditorheight, 4);
+					}
+				}else {
+					if (control.musicbox[control.currentbox].recordfilter == 1) {				
+						fillrect((42 + (16 * control.boxsize)), pianorollposition + linesize, 40, linesize * patterneditorheight, 9);
+					}else {
+						fillrect((42 + (16 * control.boxsize)), pianorollposition + linesize, 40, linesize * patterneditorheight, 4);
+					}
+				}
+				*/
+				
+				if (control.doublesize) {
+					addrect(42 + (32 * control.boxsize), gfx.pianorollposition + gfx.linesize, gfx.screenwidth - (42 + (32 * control.boxsize)), gfx.screenheight - gfx.linesize - 20 - gfx.pianorollposition - gfx.linesize, 12);
+					addrect(42 + (32 * control.boxsize)+ 2, gfx.pianorollposition + gfx.linesize, gfx.screenwidth - (42 + (32 * control.boxsize))- 4, gfx.screenheight - gfx.linesize - 20 - gfx.pianorollposition - gfx.linesize, 4);
+					addscrollupbutton(42 + (32 * control.boxsize), gfx.pianorollposition + gfx.linesize, gfx.screenwidth - (42 + (32 * control.boxsize)), "notescrollup");
+				  addscrolldownbutton(42 + (32 * control.boxsize), gfx.screenheight - gfx.linesize - 20, gfx.screenwidth - (42 + (32 * control.boxsize)), "notescrolldown");
+				}else {
+				  addrect(42 + (16 * control.boxsize), gfx.pianorollposition + gfx.linesize, gfx.screenwidth - (42 + (16 * control.boxsize)), gfx.screenheight - gfx.linesize - 20 - gfx.pianorollposition - gfx.linesize, 12);
+					addrect(42 + (16 * control.boxsize)+ 2, gfx.pianorollposition + gfx.linesize, gfx.screenwidth - (42 + (16 * control.boxsize))- 4, gfx.screenheight - gfx.linesize - 20 - gfx.pianorollposition - gfx.linesize, 4);
+					addscrollupbutton(42 + (16 * control.boxsize), gfx.pianorollposition + gfx.linesize, gfx.screenwidth - (42 + (16 * control.boxsize)), "notescrollup");
+				  addscrolldownbutton(42 + (16 * control.boxsize), gfx.screenheight - gfx.linesize - 20, gfx.screenwidth - (42 + (16 * control.boxsize)), "notescrolldown");
+				}
 			}
 			
 		  switch(t) {
@@ -539,13 +600,33 @@ package {
 			currentbutton = button[i].action;
 			
 			if (currentbutton == "currenteffect") {
-				if (control.mx >= button[i].position.x - 5 && control.my < button[i].position.x + button[i].position.width && control.my >= button[i].position.y -4&& control.my <= button[i].position.y + gfx.buttonheight  + 4) {
+				if (control.mx >= button[i].position.x - 5  - 20 && control.mx < button[i].position.x + button[i].position.width + 20 && control.my >= button[i].position.y - 4 - 20 && control.my <= button[i].position.y + gfx.buttonheight + 4 + 20) {
 					var barposition:int = control.mx - (button[i].position.x + 5);
 					if (barposition < 0) barposition = 0; 
 					if (barposition > button[i].position.width) barposition = button[i].position.width;
 					
 					control.effectvalue = barposition;
 					control.updateeffects();
+				}
+			}else if (currentbutton == "notescrollup") {
+				if (control.mx >= button[i].position.x && control.mx < button[i].position.x + button[i].position.width && control.my >= button[i].position.y && control.my <= button[i].position.y + button[i].position.width) {
+					button[i].pressed = 2;
+					if (control.currentbox > -1) {
+						control.musicbox[control.currentbox].start++;
+						if (control.musicbox[control.currentbox].start > 120 - gfx.notesonscreen) {
+							control.musicbox[control.currentbox].start = 120 - gfx.notesonscreen;
+						}
+					}
+				}
+			}else if (currentbutton == "notescrolldown") {
+				if (control.mx >= button[i].position.x && control.mx < button[i].position.x + button[i].position.width && control.my >= button[i].position.y && control.my <= button[i].position.y + button[i].position.width) {
+					button[i].pressed = 2;
+					if (control.currentbox > -1) {
+						control.musicbox[control.currentbox].start--;
+						if (control.musicbox[control.currentbox].start < 0) {
+							control.musicbox[control.currentbox].start = 0;
+						}
+					}
 				}
 			}
 		}
@@ -613,10 +694,14 @@ package {
 				control.boxcount--;
 				if (control.boxcount < 1) control.boxcount = 1;
 				control.doublesize = control.boxcount > 16;
+				gfx.updateboxsize();
+				changetab(control.currenttab);
 			}else if (currentbutton == "boxcountup") {
 				control.boxcount++;
 				if (control.boxcount > 32) control.boxcount = 32;
 				control.doublesize = control.boxcount > 16;
+				gfx.updateboxsize();
+				changetab(control.currenttab);
 			}else if (currentbutton == "bpmdown") {
 				control.bpm -= 5;
 				if (control.bpm < 10) control.bpm = 10;

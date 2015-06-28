@@ -143,8 +143,7 @@
 			pal[306].setto(227,227,227);     //Octave change
 		}
 		
-		public static function drawpatterneditor():void {
-			//Pattern editor
+		public static function updateboxsize():void {
 			if (control.doublesize) {
 				control.boxsize = (screenwidth - 60) / 32;
 				control.barsize = control.boxsize * control.barcount;
@@ -152,6 +151,11 @@
 				control.boxsize = (screenwidth - 60) / 16;
 				control.barsize = control.boxsize * control.barcount;
 			}
+		}
+		
+		public static function drawpatterneditor():void {
+			//Pattern editor
+			updateboxsize();
 			
 			//Background alternating colour rows
 			for (i = 0; i < notesonscreen; i++){
