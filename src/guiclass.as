@@ -17,6 +17,33 @@ package {
 			
 			numbuttons = 0;
 			maxbuttons = 250;
+			
+			helpwindow = "nothing";
+		}
+		
+		public static function changewindow(winname:String):void {
+			helpwindow = winname;
+			
+			switch(winname) {
+				case "help1":
+					windowx = 50;
+					windowy = 50;
+					windowwidth = 300;
+					windowheight = 200;
+					windowtext = "HELP - Placing Notes";
+				break;
+				default:
+				  helpwindow = "nothing";
+				break;
+			}
+			
+			changetab(control.currenttab);
+		}
+		
+		public static function addwindow(x:int, y:int, w:int, h:int, text:String):void {
+			if(helpwindow != "nothing"){
+				addguipart(x, y, w, h, windowtext, "window", "window");
+			}
 		}
 		
 		public static function addbutton(x:int, y:int, w:int, text:String, action:String, textoffset:int = 0):void {
@@ -167,7 +194,8 @@ package {
 			//trace("addguipart(", x, y, w, h, contents, act, sty, ")", numbuttons);
 			button[z].init(x, y, w, h, contents, act, sty);
 			button[z].textoffset = toffset;
-			if (sty == "horizontalslider" || sty == "scrollup" || sty == "scrolldown") {
+			if (sty == "horizontalslider" || sty == "scrollup" || sty == "scrolldown"
+			 || sty == "window") {
 				button[z].moveable = true;
 			}
 			numbuttons++;
@@ -194,7 +222,30 @@ package {
 		}
 		
 		public static function checkinput(key:KeyPoll):void {
+			//Do window stuff first
+			
+			overwindow = false;
 			for (var i:int = 0; i < numbuttons; i++) {
+				if (button[i].active && button[i].visable) {
+					if (button[i].action == "window") {
+						if (help.inboxw(control.mx, control.my, button[i].position.x, button[i].position.y, button[i].position.width, button[i].position.height)) {
+							button[i].mouseover = true;
+							overwindow = true;
+						}
+						
+						if (key.press && !control.clicklist) {
+							if (button[i].moveable) {
+								if (help.inboxw(control.mx, control.my, button[i].position.x - 20, button[i].position.y - 20, button[i].position.width + 40, button[i].position.height + 40)) {
+									dobuttonmoveaction(i);
+									key.click = false;
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			for (i = 0; i < numbuttons; i++) {
 				if (button[i].active && button[i].visable) {
 					if (help.inboxw(control.mx, control.my, button[i].position.x, button[i].position.y, button[i].position.width, button[i].position.height)) {
 						button[i].mouseover = true;
@@ -202,7 +253,22 @@ package {
 						button[i].mouseover = false;
 					}
 					
-					if (button[i].action != "" && !control.list.active) {
+					if (button[i].action == "window" && windowdrag) {
+						button[i].position.x = control.mx - windowdx;
+						button[i].position.y = control.my - windowdy;
+						if (button[i].position.x < 0) button[i].position.x = 0;
+						if (button[i].position.y < 0) button[i].position.y = 0;
+						
+						if (button[i].position.x > gfx.screenwidth - button[i].position.width) button[i].position.x = gfx.screenwidth - button[i].position.width;
+						if (button[i].position.y > gfx.screenheight - button[i].position.height) button[i].position.y = gfx.screenheight - button[i].position.height;
+						
+						windowx = button[i].position.x;
+						windowy = button[i].position.y;
+						
+						if (key.hasreleased) {
+							windowdrag = false;
+						}
+					}else if (button[i].action != "" && !control.list.active) {
 						if (key.press && !control.clicklist) {
 							if (button[i].moveable) {
 								if (help.inboxw(control.mx, control.my, button[i].position.x - 20, button[i].position.y - 20, button[i].position.width + 40, button[i].position.height + 40)) {
@@ -255,6 +321,17 @@ package {
 						ty = button[i].position.y + 2 - timage;
 						
 						gfx.print(tx, ty, button[i].text, 0, false, true);
+					}else if (button[i].style == "window") {
+						tx = button[i].position.x;
+						ty = button[i].position.y;
+						tw = button[i].position.width;
+						th = button[i].position.height;
+						gfx.fillrect(tx - 5, ty - 5, tw + 10, th + 10, 12);
+						gfx.fillrect(tx, ty, tw, th, 4);
+						gfx.fillrect(tx, ty, tw, 24, 5);
+						gfx.print(tx + 2, ty + 1, button[i].text, 0, false, true);
+						
+						gfx.drawicon(tx + tw - 20, ty + 4, 14);
 					}else if (button[i].style == "scrollup") {
 						if (button[i].pressed > 0) {
 							button[i].pressed--;
@@ -576,13 +653,30 @@ package {
 					}
 				break;
 			}
+			
+			addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 		}
-		
 		
 		public static function dobuttonmoveaction(i:int):void {
 			currentbutton = button[i].action;
 			
-			if (currentbutton == "currenteffect") {
+			if (currentbutton == "window") {
+				if (control.mx >= button[i].position.x && control.mx < button[i].position.x + button[i].position.width && control.my >= button[i].position.y && control.my <= button[i].position.y + 22) {
+					//if we're currently dragging, move the window
+					if (windowdrag) {
+					}else {
+						//otherwise start dragging from here
+						if (control.mx >= button[i].position.x + button[i].position.width - 20) {
+							//close the window
+							changewindow("nothing");
+							control.clicklist = true;
+						}else{
+							windowdrag = true;
+							windowdx = control.mx - button[i].position.x; windowdy = control.my - button[i].position.y;
+						}
+					}
+				}
+			}else	if (currentbutton == "currenteffect") {
 				if (control.mx >= button[i].position.x - 5  - 20 && control.mx < button[i].position.x + button[i].position.width + 20 && control.my >= button[i].position.y - 4 - 20 && control.my <= button[i].position.y + gfx.buttonheight + 4 + 20) {
 					var barposition:int = control.mx - (button[i].position.x + 5);
 					if (barposition < 0) barposition = 0; 
@@ -666,6 +760,7 @@ package {
 			}else if (currentbutton == "creditstab") {
 				control.changetab(control.MENUTAB_CREDITS);
 			}else if (currentbutton == "helptab") {
+				changewindow("help1");
 				control.changetab(control.MENUTAB_HELP);
 			}else if (currentbutton == "barcountdown") {
 				control.barcount--;
@@ -750,6 +845,17 @@ package {
 		public static var maxbuttons:int;
 		
 		public static var tx:int, ty:int, timage:int;
+		public static var tw:int, th:int;
 		public static var currentbutton:String;
+		
+		public static var windowcheck:Boolean;
+		public static var windowdrag:Boolean = false;
+		public static var overwindow:Boolean = false;
+		public static var windowdx:int, windowdy:int;
+		public static var windowx:int, windowy:int;
+		public static var windowwidth:int, windowheight:int;
+		public static var windowtext:String;
+		
+		public static var helpwindow:String;
 	}
 }

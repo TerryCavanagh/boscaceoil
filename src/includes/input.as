@@ -9,6 +9,7 @@
 		//Update screen when you click the mouse
 		gfx.updatebackground = 5;
 	}
+	
 	if (control.fixmouseclicks) {
 		control.fixmouseclicks = false;
 		key.releaseall();
@@ -35,66 +36,70 @@
 	
 	guiclass.checkinput(key);
 	
-	if (control.list.active || control.secondlist.active) {
-		if(control.secondlist.active){
-			if(control.mx > control.secondlist.x && control.mx < control.secondlist.x + control.secondlist.w && control.my > control.secondlist.y && control.my < control.secondlist.y + control.secondlist.h) {
-				control.secondlist.selection = control.my - control.secondlist.y;
-				control.secondlist.selection = (control.secondlist.selection - (control.secondlist.selection % gfx.linesize)) / gfx.linesize;
-			}
-		}
-		if (control.list.active){
-			if(control.mx > control.list.x && control.mx < control.list.x + control.list.w && control.my > control.list.y && control.my < control.list.y + control.list.h) {
-				control.list.selection = control.my - control.list.y;
-				control.list.selection = (control.list.selection - (control.list.selection % gfx.linesize)) / gfx.linesize;
-			}
-		}
-	}else {
-		if (control.mx > 40 && control.mx < gfx.screenwidth - 24) {
-			if (control.my > gfx.pianorollposition + gfx.linesize && control.my < gfx.pianorollposition + (gfx.linesize * (gfx.patterneditorheight + 1))) {
-				control.cursorx = (control.mx - 40);
-				control.cursorx = (control.cursorx - (control.cursorx % control.boxsize)) / control.boxsize;
-				/* OLD
-				control.cursory = (control.my - gfx.linesize - gfx.pianorollposition);
-				control.cursory = (control.cursory - (control.cursory % gfx.linesize)) / gfx.linesize;
-				*/
-				control.cursory = (gfx.screenheight - gfx.linesize) - control.my;
-				control.cursory = 1+ ((control.cursory - (control.cursory % gfx.linesize)) / gfx.linesize);
-				if (control.cursorx >= control.boxcount) control.cursorx = control.boxcount - 1;
-				if (control.my >= gfx.screenheight - (gfx.linesize)) control.cursory = -1;
-			}
-		}else if (control.mx <= 40) {
-			if (control.my > gfx.pianorollposition + gfx.linesize && control.my < gfx.pianorollposition + (gfx.linesize * (gfx.patterneditorheight + 1))) {
-				control.notey = (gfx.screenheight - gfx.linesize) - control.my;
-				control.notey = 1+ ((control.notey - (control.notey % gfx.linesize)) / gfx.linesize);
-				if (control.my >= gfx.screenheight - (gfx.linesize)) control.notey = -1;
-			}
-		}
-		
-		if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 20) {
-			if (control.currenttab == control.MENUTAB_ARRANGEMENTS) {
-				//Priority: Timeline, Pattern manager, arrangements
-				if (control.mx > gfx.patternmanagerx) {
-					//Pattern Manager
-					control.patterncury = control.my - gfx.linesize - 4;
-					control.patterncury = (control.patterncury - (control.patterncury % gfx.patternheight)) / gfx.patternheight;
-					if (control.patterncury > 6) control.patterncury = -1;
-				}else if (control.my >= gfx.pianorollposition + 8 || control.dragaction == 3) {
-					//Timeline
-					control.timelinecurx = control.mx;
-					control.timelinecurx = (control.timelinecurx - (control.timelinecurx % gfx.patternwidth)) / gfx.patternwidth;
-				}else{
-					//Arrangements
-					control.arrangecurx = control.mx;
-					control.arrangecurx = (control.arrangecurx - (control.arrangecurx % gfx.patternwidth)) / gfx.patternwidth;
-					control.arrangecury = (control.my - gfx.linesize);
-					control.arrangecury = (control.arrangecury - (control.arrangecury % gfx.patternheight)) / gfx.patternheight;
-					if (control.arrangecury > 7) control.arrangecury = 7;
+	if (guiclass.windowdrag) {
+	  key.click = false;
+		key.press = false;
+	}
+	
+	if (!guiclass.overwindow) {
+		if (control.list.active || control.secondlist.active) {
+			if(control.secondlist.active){
+				if(control.mx > control.secondlist.x && control.mx < control.secondlist.x + control.secondlist.w && control.my > control.secondlist.y && control.my < control.secondlist.y + control.secondlist.h) {
+					control.secondlist.selection = control.my - control.secondlist.y;
+					control.secondlist.selection = (control.secondlist.selection - (control.secondlist.selection % gfx.linesize)) / gfx.linesize;
 				}
-			}else if (control.currenttab == control.MENUTAB_INSTRUMENTS) {
-				if (control.mx < 280) {
-					control.instrumentcury = control.my - gfx.linesize;
-					control.instrumentcury = (control.instrumentcury - (control.instrumentcury % gfx.patternheight)) / gfx.patternheight;
-					if (control.instrumentcury > 6) control.instrumentcury = -1;
+			}
+			if (control.list.active){
+				if(control.mx > control.list.x && control.mx < control.list.x + control.list.w && control.my > control.list.y && control.my < control.list.y + control.list.h) {
+					control.list.selection = control.my - control.list.y;
+					control.list.selection = (control.list.selection - (control.list.selection % gfx.linesize)) / gfx.linesize;
+				}
+			}
+		}else {
+			if (control.mx > 40 && control.mx < gfx.screenwidth - 24) {
+				if (control.my > gfx.pianorollposition + gfx.linesize && control.my < gfx.pianorollposition + (gfx.linesize * (gfx.patterneditorheight + 1))) {
+					control.cursorx = (control.mx - 40);
+					control.cursorx = (control.cursorx - (control.cursorx % control.boxsize)) / control.boxsize;
+					
+					control.cursory = (gfx.screenheight - gfx.linesize) - control.my;
+					control.cursory = 1+ ((control.cursory - (control.cursory % gfx.linesize)) / gfx.linesize);
+					if (control.cursorx >= control.boxcount) control.cursorx = control.boxcount - 1;
+					if (control.my >= gfx.screenheight - (gfx.linesize)) control.cursory = -1;
+				}
+			}else if (control.mx <= 40) {
+				if (control.my > gfx.pianorollposition + gfx.linesize && control.my < gfx.pianorollposition + (gfx.linesize * (gfx.patterneditorheight + 1))) {
+					control.notey = (gfx.screenheight - gfx.linesize) - control.my;
+					control.notey = 1+ ((control.notey - (control.notey % gfx.linesize)) / gfx.linesize);
+					if (control.my >= gfx.screenheight - (gfx.linesize)) control.notey = -1;
+				}
+			}
+			
+			if (control.my > gfx.linesize && control.my < gfx.pianorollposition + 20) {
+				if (control.currenttab == control.MENUTAB_ARRANGEMENTS) {
+					//Priority: Timeline, Pattern manager, arrangements
+					if (control.mx > gfx.patternmanagerx) {
+						//Pattern Manager
+						control.patterncury = control.my - gfx.linesize - 4;
+						control.patterncury = (control.patterncury - (control.patterncury % gfx.patternheight)) / gfx.patternheight;
+						if (control.patterncury > 6) control.patterncury = -1;
+					}else if (control.my >= gfx.pianorollposition + 8 || control.dragaction == 3) {
+						//Timeline
+						control.timelinecurx = control.mx;
+						control.timelinecurx = (control.timelinecurx - (control.timelinecurx % gfx.patternwidth)) / gfx.patternwidth;
+					}else{
+						//Arrangements
+						control.arrangecurx = control.mx;
+						control.arrangecurx = (control.arrangecurx - (control.arrangecurx % gfx.patternwidth)) / gfx.patternwidth;
+						control.arrangecury = (control.my - gfx.linesize);
+						control.arrangecury = (control.arrangecury - (control.arrangecury % gfx.patternheight)) / gfx.patternheight;
+						if (control.arrangecury > 7) control.arrangecury = 7;
+					}
+				}else if (control.currenttab == control.MENUTAB_INSTRUMENTS) {
+					if (control.mx < 280) {
+						control.instrumentcury = control.my - gfx.linesize;
+						control.instrumentcury = (control.instrumentcury - (control.instrumentcury % gfx.patternheight)) / gfx.patternheight;
+						if (control.instrumentcury > 6) control.instrumentcury = -1;
+					}
 				}
 			}
 		}
@@ -131,18 +136,6 @@
 					control.musicbox[control.currentbox].recordfilter = 1 - control.musicbox[control.currentbox].recordfilter;
 				}
 			}else {
-				/* OLD
-				control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + ((gfx.patterneditorheight - 1) - control.cursory)];
-				if (control.musicbox[control.currentbox].noteat(control.cursorx, control.currentnote)) {
-					control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + ((gfx.patterneditorheight - 1) - control.cursory)];
-				  control.musicbox[control.currentbox].removenote(control.cursorx, control.currentnote);
-					control.musicbox[control.currentbox].addnote(control.cursorx, control.currentnote, control.notelength);
-				}else{
-					control.musicbox[control.currentbox].addnote(control.cursorx, control.currentnote, control.notelength);
-				}
-				*/
-				
-				//New
 				if(control.musicbox[control.currentbox].start + control.cursory - 1 > -1){
 					control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + control.cursory - 1];
 					if (control.musicbox[control.currentbox].noteat(control.cursorx, control.currentnote)) {
