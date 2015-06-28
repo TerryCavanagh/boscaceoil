@@ -76,6 +76,7 @@
 			pal[15].setto(255, 0, 0);         //Red
 			pal[16].setto(0, 132, 255);       //Cyan
 			pal[17].setto(0, 0, 140);         //Dark Blue
+			pal[18].setto(255, 255, 0);       //Yellow
 			
 			pal[20].setto(65, 82, 87);        //Background mouseover
 			

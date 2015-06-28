@@ -26,6 +26,24 @@ package {
 			if (winname == "nothing") return;
 			
 			switch(winname) {
+				case "firstrun":
+					if (initalise) {
+						windowwidth = 700; windowheight = (gfx.linesize * 6) + 35;
+						windowx = gfx.screenwidthmid - (windowwidth / 2); windowy = gfx.screenheightmid - (windowheight / 2);
+						windowtext = "Welcome!";
+					}
+					
+					addblackout();
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					addcentertextlabel(windowx, windowy + 30, windowwidth, "Looks like this is your first time using Bosca Ceoil!", 0, true);
+					addcentertextlabel(windowx, windowy + 30 + gfx.linesize, windowwidth, "Would you like a quick introduction?", 0, true);
+					
+					addbutton(windowx + (windowwidth / 3) - 75, windowy + 30 + (gfx.linesize * 3), 150, "YES", "help1", 0, true);
+					addbutton(windowx + (2*windowwidth/3) - 75, windowy + 30 + (gfx.linesize *3), 150, "NO", "closewindow", 0, true);
+					
+					addcentertextlabel(windowx, windowy + 30 + (gfx.linesize * 5), windowwidth, "(You can access this tour later by clicking HELP.)", 2, true);
+				break;
 				case "help1":
 					if (initalise) {
 						windowx = 50;	windowy = 50;
@@ -35,7 +53,7 @@ package {
 					
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
-					addtextlabel(windowx + 5, windowy + 25, "Hello!", 2, true);
+					addtextlabel(windowx + 5, windowy + 25, "testing", 2, true);
 					addbutton(windowx + 5, windowy + 50, 150, "Credits", "creditstab", 0, true);
 				break;
 				default:
@@ -65,8 +83,18 @@ package {
 			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
+		public static function addcentertextlabel(x:int, y:int, w:int, text:String, col:int = 2, towindow:Boolean = false):void {
+			addguipart(x + ((w / 2) - (gfx.len(text) / 2)), y, col, 0, text, "", "textlabel");
+			if (towindow) button[lastbutton].onwindow = true;
+		}
+		
 		public static function addrighttextlabel(x:int, y:int, text:String, col:int = 2, towindow:Boolean = false):void {
 			addguipart(x, y, col, 0, text, "", "righttextlabel");
+			if (towindow) button[lastbutton].onwindow = true;
+		}
+		
+		public static function addblackout(towindow:Boolean = false):void {
+			addguipart(0, 0, 0, 0, "", "", "blackout", 12);
 			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
@@ -358,11 +386,18 @@ package {
 						ty = button[i].position.y + 2 - timage;
 						
 						gfx.print(tx, ty, button[i].text, 0, false, true);
+					}else if (button[i].style == "blackout") {
+						for (var j:int = 0; j < gfx.screenheight; j++) {
+							if (j % 4 == 0) {
+								gfx.fillrect(0, j, gfx.screenwidth, 2, 12);
+							}
+						}
 					}else if (button[i].style == "window") {
 						tx = button[i].position.x;
 						ty = button[i].position.y;
 						tw = button[i].position.width;
 						th = button[i].position.height;
+						gfx.fillrect(tx - 5 + 15, ty - 5 + 15, tw + 10, th + 10, 12);
 						gfx.fillrect(tx - 5, ty - 5, tw + 10, th + 10, 12);
 						gfx.fillrect(tx, ty, tw, th, 4);
 						gfx.fillrect(tx, ty, tw, 24, 5);
@@ -691,7 +726,11 @@ package {
 				break;
 			}
 			
-			changewindow(helpwindow, false);
+			if (windowx >= gfx.screenwidth || windowy >= gfx.screenheight) {
+				changewindow(helpwindow);
+			}else{
+				changewindow(helpwindow, false);
+			}
 		}
 		
 		public static function dobuttonmoveaction(i:int):void {
@@ -798,7 +837,7 @@ package {
 			}else if (currentbutton == "creditstab") {
 				control.changetab(control.MENUTAB_CREDITS);
 			}else if (currentbutton == "helptab") {
-				changewindow("help1");
+				changewindow("firstrun");
 				control.changetab(control.MENUTAB_HELP);
 			}else if (currentbutton == "barcountdown") {
 				control.barcount--;
@@ -875,6 +914,14 @@ package {
 			  button[i].press();
 				gfx.changescalemode(1 - gfx.scalemode);
 				changetab(control.MENUTAB_ADVANCED);
+			}else if (currentbutton == "closewindow") {
+				changewindow("nothing");
+				control.changetab(control.currenttab);
+				control.clicklist = true;
+			}else if (currentbutton == "help1") {
+				changewindow("help1");
+				control.changetab(control.currenttab);
+				control.clicklist = true;
 			}
 		}
 		
