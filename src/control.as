@@ -1608,6 +1608,7 @@
 		public static var message:String;
 		public static var messagedelay:int = 0;
 		public static var startup:int = 0, invokefile:String = "null";
+		public static var ctrl:String;
 		
 		//Global effects
 		public static var effecttype:int;

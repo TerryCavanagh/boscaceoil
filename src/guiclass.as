@@ -24,6 +24,7 @@ package {
 		public static function changewindow(winname:String, initalise:Boolean = true):void {
 			helpwindow = winname;
 			if (winname == "nothing") return;
+			windowxoffset = 0; windowyoffset = 0;
 			
 			switch(winname) {
 				case "firstrun":
@@ -46,10 +47,105 @@ package {
 				break;
 				case "help1":
 					if (initalise) {
+						windowwidth = 400; windowheight = (gfx.linesize * 5) + (gfx.linesize * 2) + 35;
+						windowx = gfx.screenwidth - windowwidth - 25;	windowy = 47;
+						
+						windowtext = "HELP - Placing Notes";
+					}
+					
+					addhighlight(40, gfx.pianorollposition + gfx.linesize, gfx.screenwidth - 40, gfx.screenheight - gfx.pianorollposition - gfx.linesize - gfx.linesize, 18, "");
+					
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					windowline = 0;
+					addline("Let's start putting down some");
+					addline("notes right away!");
+					addline("");
+					addline("LEFT CLICK anywhere in the pattern", "LEFT CLICK");
+					addline("editor below to place a note.");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help2", 0, true);
+				break;
+				case "help2":
+					if (initalise) {
+						windowwidth = 400; windowheight =  (gfx.linesize * 2) + (gfx.linesize * 2) + 35;
+						windowx = gfx.screenwidth - windowwidth - 30;	windowy = 97;
+						
+						windowtext = "HELP - Placing Notes";
+					}
+					
+					addhighlight(40, gfx.pianorollposition + gfx.linesize, gfx.screenwidth - 40, gfx.screenheight - gfx.pianorollposition - gfx.linesize - gfx.linesize, 18, "");
+					highlightflash = 0;
+					
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					windowline = 0;
+					addline("You can delete notes with");
+					addline("RIGHT CLICK, or " +control.ctrl+" + LEFT CLICK.", "RIGHT CLICK");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help3", 0, true);
+					addbutton(windowx + 15, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "help1", 0, true);
+				break;
+				case "help3":
+					if (initalise) {
+						windowwidth = 360; windowheight =  (gfx.linesize * 3) + (gfx.linesize * 2) + 35;
+						windowx = gfx.screenwidth - windowwidth - 52;	windowy = 72;
+						
+						windowtext = "HELP - Placing Notes";
+					}
+					
+					//Scroll bar
+					if (control.doublesize) {
+						addhighlight((42 + (32 * control.boxsize)), gfx.pianorollposition + gfx.linesize, gfx.screenwidth - (42 + (32 * control.boxsize)), gfx.screenheight - gfx.pianorollposition - gfx.linesize - gfx.linesize, 18, "");
+					}else {
+						addhighlight((42 + (16 * control.boxsize)), gfx.pianorollposition + gfx.linesize, gfx.screenwidth - (42 + (16 * control.boxsize)), gfx.screenheight - gfx.pianorollposition - gfx.linesize - gfx.linesize, 18, "");
+					}
+					
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					windowline = 0;
+					addline("You can reach higher and lower");
+					addline("notes with the scrollbar, or by", "scrollbar");
+					addline("pressing the UP and DOWN keys.", "UP and DOWN");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help4", 0, true);
+					addbutton(windowx + 15, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "help2", 0, true);
+				break;
+				case "help4":
+					if (initalise) {
+						windowwidth = 700; windowheight =  (gfx.linesize * 5) + (gfx.linesize * 2) + 35;
+						windowx = gfx.screenwidth - windowwidth - 37;	windowy = 11;
+						
+						windowtext = "HELP - Placing Notes";
+					}
+					
+					//Scroll bar
+					if (control.doublesize) {
+						addhighlight((42 + (32 * control.boxsize)), gfx.pianorollposition + gfx.linesize, gfx.screenwidth - (42 + (32 * control.boxsize)), gfx.screenheight - gfx.pianorollposition - gfx.linesize - gfx.linesize, 18, "");
+					}else {
+						addhighlight((42 + (16 * control.boxsize)), gfx.pianorollposition + gfx.linesize, gfx.screenwidth - (42 + (16 * control.boxsize)), gfx.screenheight - gfx.pianorollposition - gfx.linesize - gfx.linesize, 18, "");
+					}
+					
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowxoffset = gfx.images[8 + 0].width + 5;
+					windowyoffset = 0;
+					addtutorialimage(windowx + 5, windowy + 30, 0, true);
+					
+					windowline = 0;
+					addline("Use the MOUSEWHEEL to change", "MOUSEWHEEL");
+					addline("the length of the note.");
+					addline("");
+					addline("(Or press SHIFT + ARROW keys.)", "SHIFT + ARROW");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help5", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "help3", 0, true);
+				break;
+				case "advancedhelp1":
+					if (initalise) {
 						windowx = 50;	windowy = 50;
 						windowwidth = 300; windowheight = 200;
 						windowtext = "HELP - Placing Notes";
 					}
+					
+					addhighlight(40, gfx.pianorollposition + gfx.linesize, gfx.screenwidth - 40, gfx.screenheight - gfx.pianorollposition - gfx.linesize - gfx.linesize, 18, "");
 					
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
@@ -62,10 +158,27 @@ package {
 			}
 		}
 		
+		public static function addline(line:String, high:String = ""):void {
+			if(line != ""){
+				addtextlabel(windowx + 10 + windowxoffset, windowy + 30 + windowyoffset + (gfx.linesize * windowline), line, 0, true);
+				if (high != "") {
+					tx = line.search(high);
+					tx = gfx.len(help.Left(line, tx));
+					addtextlabel(windowx + 10 + tx + windowxoffset, windowy + 30 + windowyoffset + (gfx.linesize * windowline), high, 18, true);
+				}
+			}
+			windowline++;
+		}
+		
 		public static function addwindow(x:int, y:int, w:int, h:int, text:String):void {
 			if(helpwindow != "nothing"){
 				addguipart(x, y, w, h, windowtext, "window", "window");
 			}
+		}
+		
+		public static function addtutorialimage(x:int, y:int, img:int, towindow:Boolean = false):void {
+			addguipart(x, y, 0, 0, "", "", "tutorialimage", img);
+			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
 		public static function addbutton(x:int, y:int, w:int, text:String, action:String, textoffset:int = 0, towindow:Boolean = false):void {
@@ -100,6 +213,12 @@ package {
 		
 		public static function addrect(x:int, y:int, w:int, h:int, col:int = 1, action:String = "", towindow:Boolean = false):void {
 			addguipart(x, y, w, h, "", action, "fillrect", col);
+			if (towindow) button[lastbutton].onwindow = true;
+		}
+		
+		public static function addhighlight(x:int, y:int, w:int, h:int, col:int = 1, action:String = "", towindow:Boolean = false):void {
+			highlightflash = 30;
+			addguipart(x, y, w, h, "", action, "highlight", col);
 			if (towindow) button[lastbutton].onwindow = true;
 		}
 		
@@ -273,6 +392,9 @@ package {
 		}
 		
 		public static function checkinput(key:KeyPoll):void {
+			if (highlightflash > 0) {
+				highlightflash--;
+			}
 			//Do window stuff first
 			overwindow = false;
 			for (var i:int = 0; i < numbuttons; i++) {
@@ -307,6 +429,8 @@ package {
 					if (button[i].action == "window" && windowdrag) {
 						if (key.hasreleased) {
 							windowdrag = false;
+							trace("From LEFT: " + String(windowx) + ", " + String(windowy));
+							trace("From RIGHT: gfx.screenwidth - windowwidth - " + String(gfx.screenwidth - windowwidth - windowx) + ", gfx.screenheight - " + String(gfx.screenheight - windowy));
 						}else {
 							button[i].position.x = control.mx - windowdx;
 							button[i].position.y = control.my - windowdy;
@@ -426,12 +550,19 @@ package {
 							gfx.fillrect(button[i].position.x + 2, button[i].position.y + 2, button[i].position.width - 4, 16, 5);
 							gfx.drawicon(button[i].position.x + ((button[i].position.width - 16)/2), button[i].position.y + 4, 11);
 						}
+					}else if (button[i].style == "tutorialimage") {
+						gfx.drawimage(button[i].textoffset + 8, button[i].position.x, button[i].position.y);
 					}else if (button[i].style == "textlabel") {
 						gfx.print(button[i].position.x, button[i].position.y, button[i].text, button[i].position.width, false, true);
 					}else if (button[i].style == "righttextlabel") {
 						gfx.rprint(button[i].position.x, button[i].position.y, button[i].text, button[i].position.width, true);
 					}else if (button[i].style == "fillrect") {
 						gfx.fillrect(button[i].position.x, button[i].position.y, button[i].position.width, button[i].position.height, button[i].textoffset);
+					}else if (button[i].style == "highlight") {
+						if (highlightflash % 8 < 4) {
+							gfx.drawbox(button[i].position.x, button[i].position.y, button[i].position.width, button[i].position.height, button[i].textoffset);
+							gfx.drawbox(button[i].position.x - 2, button[i].position.y - 2, button[i].position.width + 4, button[i].position.height + 4, 19);
+						}
 					}else if (button[i].style == "leftarrow") {
 						gfx.drawicon(button[i].position.x, button[i].position.y, 3);
 					}else if (button[i].style == "rightarrow") {
@@ -697,9 +828,15 @@ package {
 					
 					addbutton(gfx.screenwidth - 164 - tx, (gfx.linespacing * 9) + 8, 150, "BACK", "filetab");
 				break;
-			  case control.MENUTAB_HELP:
-				  addtextlabel(20, (gfx.linespacing * 2), "To do: Help system", 0);
-					addbutton(gfx.screenwidth - 164, (gfx.linespacing * 9) + 8, 150, "BACK", "filetab");
+				case control.MENUTAB_HELP:
+					tx = (gfx.screenwidth - 768) / 2;
+					addcentertextlabel(tx,  (gfx.linespacing * 2), 768, "Learn the basics of how to make a song in Bosca Ceoil:", 0);
+					addbutton(gfx.screenwidthmid - 126, (gfx.linespacing * 3)+10, 250, "BASIC GUIDE", "help1");
+					
+					addcentertextlabel(tx,  (gfx.linespacing * 6), 768, "Learn about some of the more advanced features:", 0);
+					addbutton(gfx.screenwidthmid - 125, (gfx.linespacing * 7)+10, 250, "TIPS AND TRICKS", "advancedhelp1");
+					
+					addbutton(gfx.screenwidth - 164 - tx, (gfx.linespacing * 9) + 8, 150, "BACK", "filetab");
 				break;
 			  case control.MENUTAB_ARRANGEMENTS:
 				  addbutton(gfx.patternmanagerx + 10, gfx.linespacing + gfx.pianorollposition - 28, gfx.screenwidth - (gfx.patternmanagerx) - 16, "ADD NEW", "addnewpattern");
@@ -837,7 +974,9 @@ package {
 			}else if (currentbutton == "creditstab") {
 				control.changetab(control.MENUTAB_CREDITS);
 			}else if (currentbutton == "helptab") {
+				/*
 				changewindow("firstrun");
+				*/
 				control.changetab(control.MENUTAB_HELP);
 			}else if (currentbutton == "barcountdown") {
 				control.barcount--;
@@ -919,9 +1058,37 @@ package {
 				control.changetab(control.currenttab);
 				control.clicklist = true;
 			}else if (currentbutton == "help1") {
+				if (control.currentbox == -1) {
+					control.currentbox = 0;
+					control.newsong();
+				}
+				
+				control.currenttab = control.MENUTAB_FILE;
 				changewindow("help1");
-				control.changetab(control.currenttab);
-				control.clicklist = true;
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help2") {
+				changewindow("help2");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help3") {
+				changewindow("help3");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help4") {
+				changewindow("help4");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help5") {
+				changewindow("help5");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help6") {
+				changewindow("help6");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help7") {
+				changewindow("help7");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "advancedhelp1") {
+				control.currenttab = control.MENUTAB_FILE;
+				
+				changewindow("advancedhelp1");
+				control.changetab(control.currenttab); control.clicklist = true;
 			}
 		}
 		
@@ -933,6 +1100,7 @@ package {
 		public static var tw:int, th:int;
 		public static var currentbutton:String;
 		public static var lastbutton:int;
+		public static var highlightflash:int;
 		
 		public static var windowcheck:Boolean;
 		public static var windowdrag:Boolean = false;
@@ -941,6 +1109,9 @@ package {
 		public static var windowdx:int, windowdy:int;
 		public static var windowx:int, windowy:int;
 		public static var windowwidth:int, windowheight:int;
+		public static var windowline:int;
+		public static var windowxoffset:int;
+		public static var windowyoffset:int;
 		public static var windowtext:String;
 		
 		public static var helpwindow:String;

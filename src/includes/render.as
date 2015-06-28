@@ -76,6 +76,10 @@
 				gfx.fillrect(guiclass.tx, gfx.linesize, 408, gfx.linesize * 10, 5);
 				gfx.fillrect(gfx.screenwidth - guiclass.tx - 408+24, gfx.linesize, 408, gfx.linesize * 10, 5);
 			break;
+			case control.MENUTAB_HELP:
+				guiclass.tx = (gfx.screenwidth - 768) / 2;
+				gfx.fillrect(guiclass.tx, gfx.linesize, 768, gfx.linesize * 10, 5);
+			break;
 			case control.MENUTAB_ARRANGEMENTS:
 				gfx.drawarrangementeditor();
 				gfx.drawtimeline();

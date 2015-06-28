@@ -63,6 +63,7 @@ package{
 		public function Main():void {
 			control.versionnumber = "v2.0"; // Version number displayed beside logo
 			control.version = 3;            // Version number used by file
+			control.ctrl = "Ctrl"; //Set this to Cmd on Mac so that the tutorial is correct
 			
 			CONFIG::desktop {
 				NativeApplication.nativeApplication.setAsDefaultApplication("ceol");
@@ -87,6 +88,8 @@ package{
 			tempbmp = new im_logo5();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			tempbmp = new im_logo6();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			tempbmp = new im_logo7();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
+			
+			tempbmp = new im_tutorialimage0();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			gfx.buffer = new BitmapData(1, 1, false, 0x000000);
 			
 			control.changetab(control.MENUTAB_FILE);
@@ -296,5 +299,6 @@ package{
 		[Embed(source = 'graphics/logo_cyan.png')]	private var im_logo5:Class;
 		[Embed(source = 'graphics/logo_gray.png')]	private var im_logo6:Class;
 		[Embed(source = 'graphics/logo_shadow.png')]	private var im_logo7:Class;
+		[Embed(source = 'graphics/tutorial_longnote.png')]	private var im_tutorialimage0:Class;
 	}
 }
