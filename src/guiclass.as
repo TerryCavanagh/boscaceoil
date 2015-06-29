@@ -444,31 +444,6 @@ package {
 				break;
 				case "advancedhelp1":
 					if (initalise) {
-						windowwidth = 420; windowheight = (gfx.linesize * 8) + (gfx.linesize * 2) + 35;
-						windowx = gfx.screenwidth - 460;	windowy = gfx.screenheight - windowheight - (gfx.linesize * 2) - 10;
-						
-						windowtext = "HELP - Tips and Tricks";
-					}
-					
-					addhighlight(gfx.screenwidth - 380, gfx.screenheight - (gfx.linesize), 380, (gfx.linesize), 18, "");
-					
-					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
-					
-					windowline = 0;
-					addline("You can change the SCALE and KEY of a", "SCALE", "KEY");
-					addline("pattern with this menu in the bottom");
-					addline("right. When you're using a SCALE, only", "SCALE");
-					addline("the notes in that scale are shown!");
-					addline("");
-					addline("Limiting yourself to a given scale is a");
-					addline("great way to make things sound good");
-					addline("when you're learning to write music!");
-					
-					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "advancedhelp3", 0, true);
-					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "advancedhelp1", 0, true);
-				break;
-				case "advancedhelp1x":
-					if (initalise) {
 						windowwidth = 530; windowheight =  (gfx.linesize * 5) + (gfx.linesize * 2) + 35;
 						windowx = gfx.screenwidthmid - (windowwidth / 2);	windowy = gfx.pianorollposition + (gfx.linesize * 2) - 5;
 						
@@ -509,6 +484,174 @@ package {
 					
 					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "advancedhelp3", 0, true);
 					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "advancedhelp1", 0, true);
+				break;
+				case "advancedhelp3":
+					if (initalise) {
+						windowwidth = 420; windowheight = (gfx.linesize * 8) + (gfx.linesize * 2) + 35;
+						windowx = gfx.screenwidth - 460;	windowy = gfx.screenheight - windowheight - (gfx.linesize * 2) - 10;
+						
+						windowtext = "HELP - Tips and Tricks";
+					}
+					
+					addhighlight(gfx.screenwidth - 380, gfx.screenheight - (gfx.linesize), 380, (gfx.linesize), 18, "");
+					
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowline = 0;
+					addline("You can change the SCALE and KEY of a", "SCALE", "KEY");
+					addline("pattern with this menu in the bottom");
+					addline("right. When you're using a SCALE, only", "SCALE");
+					addline("the notes in that scale are shown!");
+					addline("");
+					addline("Limiting yourself to a given scale is a");
+					addline("great way to make things sound good");
+					addline("when you're learning to write music!");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "advancedhelp4", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "advancedhelp2", 0, true);
+				break;
+				case "advancedhelp4":
+					if (initalise) {
+						windowwidth = 385; windowheight = (gfx.linesize * 5) + (gfx.linesize * 2) + 35;
+						windowx = 20;	windowy = gfx.pianorollposition + (gfx.linesize * 2) - 5;
+						
+						windowtext = "HELP - Tips and Tricks";
+					}
+					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					control.arrange.viewstart = 0;
+					addhighlight(0, gfx.pianorollposition + 8, gfx.patternmanagerx, 12, 18, "");
+					
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowline = 0;
+					addline("You can RIGHT CLICK on a timeline", "RIGHT CLICK");
+					addline("section to delete the entire column.");
+					addline("");
+					addline("You can MIDDLE CLICK on a timeline", "MIDDLE CLICK");
+					addline("to insert a blank section.");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "advancedhelp5", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "advancedhelp3", 0, true);
+				break;
+				case "advancedhelp5":
+					if (initalise) {
+						windowwidth = 465; windowheight = (gfx.linesize * 9) + (gfx.linesize * 2) + 35;
+						windowx = 20;	windowy = gfx.pianorollposition + (gfx.linesize * 2) - 5;
+						
+						windowtext = "HELP - Tips and Tricks";
+					}
+					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					control.arrange.viewstart = 0;
+					addhighlight(0, gfx.pianorollposition + 8, gfx.patternmanagerx, 12, 18, "");
+					
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowline = 0;
+					addline("You can COPY and PASTE timeline sections", "COPY", "PASTE");
+					addline("with " + control.ctrl + "+C and " + control.ctrl + "+V.", control.ctrl + "+C", control.ctrl + "+V");
+					addline("");
+					addline("Just select the sections of the timeline you");
+					addline("want, and press " + control.ctrl + "+C to copy.", control.ctrl + "+C");
+					addline("");
+					addline("To paste, hold the mouse over the timeline");
+					addline("section you want to insert from, and press");
+					addline(control.ctrl + "+V to insert and paste there.", control.ctrl + "+V");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "advancedhelp6", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "advancedhelp4", 0, true);
+				break;
+				case "advancedhelp6":
+					if (initalise) {
+						windowwidth = 450; windowheight = (gfx.linesize * 3) + (gfx.linesize * 2) + 35;
+						windowx = 286; windowy = gfx.pianorollposition + (gfx.linesize * 2) - 5;
+						
+						windowtext = "HELP - Tips and Tricks";
+					}
+					
+					control.changetab_ifdifferent(control.MENUTAB_INSTRUMENTS);
+					addhighlight(286, (gfx.linesize * 4), gfx.screenwidth - 348, 110, 18, "");
+					
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowline = 0;
+					addline("Tweak how your instrument sounds with");
+					addline("the filter pad! Move the dot around to");
+					addline("play with cutoff and resonance values.");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "advancedhelp7", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "advancedhelp5", 0, true);
+				break;
+				case "advancedhelp7":
+					if (initalise) {
+						windowwidth = 430; windowheight =  (gfx.linesize * 3) + (gfx.linesize * 2) + 35;
+						windowx = gfx.screenwidth - windowwidth - 144;	windowy = 60;
+						
+						windowtext = "HELP - Tips and Tricks";
+					}
+					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					addhighlight(gfx.patternmanagerx, gfx.linesize, gfx.screenwidth - (gfx.patternmanagerx), gfx.pianorollposition, 18, "");
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowline = 0;
+					addline("You can completly DELETE patterns you", "DELETE");
+					addline("don't want by dragging them to the");
+					addline("bottom right of the screen.");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "advancedhelp8", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "advancedhelp6", 0, true);
+				break;
+				case "advancedhelp8":
+					if (initalise) {
+						windowwidth = 500; windowheight =  (gfx.linesize * 13) + (gfx.linesize * 2) + 35;
+						windowx = gfx.screenwidthmid - (windowwidth / 2);	windowy = (gfx.linesize * 3) - 5;
+						
+						windowtext = "HELP - Tips and Tricks";
+					}
+					
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowxoffset = 0;
+					windowyoffset = gfx.tutorialimageheight(4) + 15;
+					addtutorialimage(windowx + 35, windowy + 30 + (gfx.linesize / 2), 4, true);
+					
+					windowline = 0;
+					addline("Alright, last one, but this one's really fancy!");
+					addline("");
+					addline("Scroll all the way down to the bottom of a");
+					addline("pattern. Hold DOWN. There's a secret button!", "DOWN");
+					addline("");
+					addline("This enables FILTER RECORDING on this pattern.", "FILTER RECORDING");
+					addline("When FILTER RECORDING is on, the filter values", "FILTER RECORDING");
+					addline("for this pattern can be changed over time!");
+					
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "advancedhelp9", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "advancedhelp7", 0, true);
+				break;
+				case "advancedhelp9":
+					if (initalise) {
+						windowwidth = 430; windowheight =  (gfx.linesize * 7) + (gfx.linesize * 2) + 35;
+						windowx = gfx.screenwidthmid - (windowwidth / 2);	windowy = gfx.pianorollposition + (gfx.linesize * 2) - 5;
+						
+						windowtext = "HELP - Tips and Tricks";
+					}
+					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowline = 0;
+					addline("I think that's everything! Thanks for");
+					addline("using Bosca Ceoil!");
+					addline("");
+					addline("This is a tool I made for myself, to try");
+					addline("to get better at composing music. I hope");
+					addline("it ends up being as useful for you as it");
+					addline("has been for me!                        - Terry", "- Terry");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "FINISH", "endhelp", 0, true);
 				break;
 				default:
 				  helpwindow = "nothing";
@@ -1237,7 +1380,7 @@ package {
 			currentbutton = button[i].action;
 			
 			if (currentbutton == "window") {
-				if (control.mx >= button[i].position.x && control.mx < button[i].position.x + button[i].position.width && control.my >= button[i].position.y && control.my <= button[i].position.y + 22) {
+				if (control.mx >= button[i].position.x && control.mx < button[i].position.x + button[i].position.width && control.my >= button[i].position.y && control.my <= button[i].position.y + 22 && control.dragaction == 0) {
 					//if we're currently dragging, move the window
 					if (windowdrag) {
 					}else {

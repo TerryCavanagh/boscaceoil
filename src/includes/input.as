@@ -114,6 +114,7 @@
 	if (control.timelinecurx > -1) {
 		if (key.ctrlheld && !control.copykeyheld) {
 		  if (key.isDown(Keyboard.V)) {
+				gfx.updatebackground = 5;
 				control.copykeyheld = true;
 				control.arrange.paste(control.arrange.viewstart + control.timelinecurx);
 			}

@@ -93,6 +93,7 @@ package{
 			tempbmp = new im_tutorialimage1();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			tempbmp = new im_tutorialimage2();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			tempbmp = new im_tutorialimage3();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
+			tempbmp = new im_tutorialimage4();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			gfx.buffer = new BitmapData(1, 1, false, 0x000000);
 			
 			control.changetab(control.MENUTAB_FILE);
@@ -307,5 +308,6 @@ package{
 		[Embed(source = 'graphics/tutorial_drag.png')]	private var im_tutorialimage1:Class;
 		[Embed(source = 'graphics/tutorial_timelinedrag.png')]	private var im_tutorialimage2:Class;
 		[Embed(source = 'graphics/tutorial_patterndrag.png')]	private var im_tutorialimage3:Class;
+		[Embed(source = 'graphics/tutorial_secret.png')]	private var im_tutorialimage4:Class;
 	}
 }
