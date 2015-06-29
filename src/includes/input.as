@@ -433,15 +433,17 @@
 		
 		if (key.press && (!control.clicklist && !control.clicksecondlist)) {
 			if (control.currenttab == control.MENUTAB_ARRANGEMENTS) {
-				if (control.arrangescrolldelay == 0) {
-					if (gfx.arrangementscrollleft > 0) {
-						control.arrange.viewstart--;
-						if (control.arrange.viewstart < 0) control.arrange.viewstart = 0;
-						control.arrangescrolldelay = 4;
-					}else if (gfx.arrangementscrollright > 0) {
-						control.arrange.viewstart++;
-						if (control.arrange.viewstart > 1000) control.arrange.viewstart = 1000;					
-						control.arrangescrolldelay = 4;
+				if(control.dragaction == 0 || control.dragaction == 3) {
+					if (control.arrangescrolldelay == 0) {
+						if (gfx.arrangementscrollleft > 0) {
+							control.arrange.viewstart--;
+							if (control.arrange.viewstart < 0) control.arrange.viewstart = 0;
+							control.arrangescrolldelay = 4;
+						}else if (gfx.arrangementscrollright > 0) {
+							control.arrange.viewstart++;
+							if (control.arrange.viewstart > 1000) control.arrange.viewstart = 1000;					
+							control.arrangescrolldelay = 4;
+						}
 					}
 				}
 			}else	if (control.currenttab == control.MENUTAB_INSTRUMENTS) {

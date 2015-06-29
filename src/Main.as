@@ -90,6 +90,8 @@ package{
 			tempbmp = new im_logo7();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			
 			tempbmp = new im_tutorialimage0();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
+			tempbmp = new im_tutorialimage1();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
+			tempbmp = new im_tutorialimage2();	gfx.buffer = tempbmp.bitmapData;	gfx.addimage();
 			gfx.buffer = new BitmapData(1, 1, false, 0x000000);
 			
 			control.changetab(control.MENUTAB_FILE);
@@ -299,6 +301,9 @@ package{
 		[Embed(source = 'graphics/logo_cyan.png')]	private var im_logo5:Class;
 		[Embed(source = 'graphics/logo_gray.png')]	private var im_logo6:Class;
 		[Embed(source = 'graphics/logo_shadow.png')]	private var im_logo7:Class;
+		
 		[Embed(source = 'graphics/tutorial_longnote.png')]	private var im_tutorialimage0:Class;
+		[Embed(source = 'graphics/tutorial_drag.png')]	private var im_tutorialimage1:Class;
+		[Embed(source = 'graphics/tutorial_timelinedrag.png')]	private var im_tutorialimage2:Class;
 	}
 }

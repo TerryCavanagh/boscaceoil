@@ -45,6 +45,14 @@
 			control.clicklist = true; // Stops from placing a note on resize
 		}
 		
+		public static function tutorialimagewidth(t:int):int {
+			return images[t + 8].width;
+		}
+		
+		public static function tutorialimageheight(t:int):int {
+			return images[t + 8].height;
+		}
+		
 		public static function forceminimumsize():void {
 			if (windowwidth < min_windowwidth && windowheight < min_windowheight) {
 				changewindowsize(min_windowwidth, min_windowheight);
