@@ -287,8 +287,10 @@
 						control.changetab(control.MENUTAB_FILE);
 					}else if (control.mx < (2 * (gfx.screenwidth - 40)) / 4) {
 						control.changetab(control.MENUTAB_ARRANGEMENTS);
+						guiclass.helpcondition_set = "changetab_arrangement"; //For interactive tutorial
 					}else if (control.mx < (3 * (gfx.screenwidth - 40)) / 4) {
 						control.changetab(control.MENUTAB_INSTRUMENTS);
+						guiclass.helpcondition_set = "changetab_instrument";  //For interactive tutorial
 					}else if (control.mx >= gfx.screenwidth - 40) {
 						if (control.fullscreen) {control.fullscreen = false;
 						}else {control.fullscreen = true;}
@@ -687,6 +689,26 @@
 			}
 			control.keyheld = true;
 		}
+	}
+	
+	//Hardcoding some interactive tutorial stuff here
+	if (guiclass.helpcondition_check != "nothing") {
+		if (guiclass.helpcondition_check == guiclass.helpcondition_set) {
+			if (guiclass.helpcondition_check == "changetab_arrangement") {
+				guiclass.changewindow("help6");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (guiclass.helpcondition_check == "addnew_pattern") {
+				guiclass.changewindow("help7");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (guiclass.helpcondition_check == "addnew_instrument") {
+				guiclass.changewindow("help15");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (guiclass.helpcondition_check == "changetab_instrument") {
+				guiclass.changewindow("help14");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}
+		}
+		guiclass.helpcondition_set = "nothing";
 	}
 	
 	CONFIG::desktop {

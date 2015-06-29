@@ -1508,6 +1508,13 @@
 			guiclass.changetab(newtab);
 		}
 		
+		public static function changetab_ifdifferent(newtab:int):void {
+			if(currenttab!=newtab){
+				currenttab = newtab;
+				guiclass.changetab(newtab);
+			}
+		}
+		
 		CONFIG::desktop {
 			public static var file:File, stream:FileStream;
 		}

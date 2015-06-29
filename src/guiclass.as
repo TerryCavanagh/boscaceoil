@@ -27,6 +27,7 @@ package {
 			helpwindow = winname;
 			if (winname == "nothing") return;
 			windowxoffset = 0; windowyoffset = 0;
+			helpcondition_check = "nothing";
 			
 			switch(winname) {
 				case "firstrun":
@@ -144,6 +145,7 @@ package {
 						windowtext = "HELP - Arrangements";
 					}
 					
+					helpcondition_check = "changetab_arrangement";
 					addhighlight((gfx.screenwidth - 40) / 4, 0, (gfx.screenwidth - 40) / 4, gfx.linesize, 18, "");
 					
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
@@ -162,6 +164,8 @@ package {
 						windowtext = "HELP - Arrangements";
 					}
 					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					helpcondition_check = "addnew_pattern";
 					addhighlight(gfx.patternmanagerx + 10 - 5, gfx.linespacing + gfx.pianorollposition - 28 - 5, gfx.screenwidth - (gfx.patternmanagerx) - 16 + 10, gfx.linesize+ 10, 18, "");
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
@@ -178,11 +182,12 @@ package {
 				case "help7":
 					if (initalise) {
 						windowwidth = 600; windowheight = (gfx.linesize * 6) + (gfx.linesize * 2) + 35;
-						windowx = 147;	windowy = gfx.pianorollposition + 10;
+						windowx = 23;	windowy = gfx.pianorollposition + (gfx.linesize * 2) - 5;
 						
 						windowtext = "HELP - Arrangements";
 					}
 					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
 					addhighlight(0, gfx.linesize, gfx.screenwidth, gfx.pianorollposition, 18, "");
 					highlightflash = 0;
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
@@ -214,7 +219,7 @@ package {
 					highlightflash = 0;
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
-					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
 					windowxoffset = 0;
 					windowyoffset = gfx.tutorialimageheight(3) + 15;
 					addtutorialimage(windowx + 25, windowy + 30 + (gfx.linesize / 2), 3, true);
@@ -237,6 +242,7 @@ package {
 					addhighlight(0, gfx.pianorollposition + 8, gfx.patternmanagerx, 12, 18, "");
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
 					windowline = 0;
 					addline("This thin line is called the TIMELINE.", "TIMELINE");
 					
@@ -254,6 +260,7 @@ package {
 					addhighlight((2 * gfx.patternwidth), gfx.pianorollposition + 8, gfx.patternwidth, 12, 18, "");
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
 					windowline = 0;
 					addline("If you CLICK on a section of the timeline,", "CLICK");
 					addline("the song will loop over that section.");
@@ -272,7 +279,7 @@ package {
 					addhighlight((2 * gfx.patternwidth), gfx.pianorollposition + 8, gfx.patternwidth * 3, 12, 18, "");
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
-					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
 					windowxoffset = 0;
 					windowyoffset = gfx.tutorialimageheight(2) + 15;
 					addtutorialimage(windowx + 25, windowy + 30 + (gfx.linesize / 2), 2, true);
@@ -291,6 +298,7 @@ package {
 						windowtext = "HELP - Timeline";
 					}
 					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
 					addhighlight(0, gfx.pianorollposition + 8, gfx.patternmanagerx, 12, 18, "");
 					highlightflash = 0;
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
@@ -310,6 +318,7 @@ package {
 						windowtext = "HELP - Instruments";
 					}
 					
+					helpcondition_check = "changetab_instrument";
 					addhighlight(((gfx.screenwidth - 40) / 4)*2, 0, (gfx.screenwidth - 40) / 4, gfx.linesize, 18, "");
 					
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
@@ -328,6 +337,8 @@ package {
 						windowtext = "HELP - Instruments";
 					}
 					
+					control.changetab_ifdifferent(control.MENUTAB_INSTRUMENTS);
+					helpcondition_check = "addnew_instrument";
 					addhighlight(10 - 5, gfx.linespacing + gfx.pianorollposition - 28 - 5, 264 + 10, gfx.linesize + 10, 18, "");
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
@@ -347,6 +358,7 @@ package {
 						windowtext = "HELP - Instruments";
 					}
 					
+					control.changetab_ifdifferent(control.MENUTAB_INSTRUMENTS);
 					addhighlight(286-5, ((gfx.linesize * 2) + 6)-5, 280+180+10, gfx.linesize + 10, 18, "");
 					
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
@@ -384,6 +396,7 @@ package {
 						windowtext = "HELP - Arrangements";
 					}
 					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
 					addhighlight(0, gfx.linesize, gfx.screenwidth, gfx.pianorollposition, 18, "");
 					highlightflash = 0;
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
@@ -1210,6 +1223,7 @@ package {
 		}
 		
 		public static function dobuttonaction(i:int):void {
+			helpcondition_set = "nothing";
 			currentbutton = button[i].action;
 			button[i].press();
 			
@@ -1309,11 +1323,15 @@ package {
 					control.numinstrument++;
 					control.instrumentmanagerview = control.numinstrument - 6;
 					if (control.instrumentmanagerview < 0) control.instrumentmanagerview = 0;
+					control.currentinstrument = control.numinstrument - 1;
+					
+					helpcondition_set = "addnew_instrument";  //For interactive tutorial
 				}
 			}else if (currentbutton == "addnewpattern") {
 				control.addmusicbox();
 				control.patternmanagerview = control.numboxes - 6;
 				if (control.patternmanagerview < 0) control.patternmanagerview = 0;
+				helpcondition_set = "addnew_pattern";  //For interactive tutorial
 			}else if (currentbutton == "footer_instrumentlist") {
 				control.filllist(control.LIST_SELECTINSTRUMENT);
 				control.list.init(20, (gfx.screenheight - gfx.linesize) - (control.list.numitems * gfx.linesize));
