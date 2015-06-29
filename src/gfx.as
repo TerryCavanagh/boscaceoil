@@ -962,8 +962,8 @@
 				//Cache the text
 				cacheindex = cachedtext.length;
 				cachedtextindex[cachelabel] = cacheindex;
-				cachedtext.push(new BitmapData(len(t), 20, true, 0));
-				cachedrect.push(new Rectangle(0, 0, len(t), 20));
+				cachedtext.push(new BitmapData(len(t), 22, true, 0));
+				cachedrect.push(new Rectangle(0, 0, len(t), 22));
 				
 				printoncache(0, 0, t, col, false, shadow);
 			}

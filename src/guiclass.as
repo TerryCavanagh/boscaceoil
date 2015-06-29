@@ -47,6 +47,25 @@ package {
 				break;
 				case "help1":
 					if (initalise) {
+						windowwidth = 450; windowheight =  (gfx.linesize * 3) + (gfx.linesize * 2) + 35;
+						windowx = 300;	windowy = gfx.linespacing + gfx.pianorollposition - 28 - 5 - (gfx.linesize * 1.5);
+						
+						windowtext = "HELP - Instruments";
+					}
+					
+					addhighlight(10 - 5, gfx.linespacing + gfx.pianorollposition - 28 - 5, 264 + 10, gfx.linesize + 10, 18, "");
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowline = 0;
+					addline("This is the INSTRUMENTS tab. Click on", "INSTRUMENTS");
+					addline("ADD NEW INSTRUMENT to be given a new", "ADD NEW INSTRUMENT");
+					addline("random instrument!");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help7", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "help5", 0, true);
+				break;
+				case "help1x":
+					if (initalise) {
 						windowwidth = 400; windowheight = (gfx.linesize * 5) + (gfx.linesize * 2) + 35;
 						windowx = gfx.screenwidth - windowwidth - 25;	windowy = 47;
 						
@@ -202,6 +221,30 @@ package {
 				break;
 				case "help8":
 					if (initalise) {
+						windowwidth = 450; windowheight = (gfx.linesize * 7) + (gfx.linesize * 2) + 35;
+						windowx = 20;	windowy = gfx.pianorollposition + (gfx.linesize * 2);
+						
+						windowtext = "HELP - Arrangements";
+					}
+					
+					addhighlight(0, gfx.linesize, gfx.screenwidth, gfx.pianorollposition, 18, "");
+					highlightflash = 0;
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					
+					windowxoffset = 0;
+					windowyoffset = gfx.tutorialimageheight(3) + 15;
+					addtutorialimage(windowx + 25, windowy + 30 + (gfx.linesize / 2), 3, true);
+					
+					windowline = 0;
+					addline("You can copy patterns by DRAGGING them,", "DRAGGING");
+					addline("and remove them with RIGHT CLICK.", "RIGHT CLICK");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help9", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "help7", 0, true);
+				break;
+				case "help9":
+					if (initalise) {
 						windowwidth = 500; windowheight = (gfx.linesize * 1) + (gfx.linesize * 2) + 35;
 						windowx = 20;	windowy = 85;
 						
@@ -214,10 +257,10 @@ package {
 					windowline = 0;
 					addline("This thin line is called the TIMELINE.", "TIMELINE");
 					
-					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help9", 0, true);
-					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "help7", 0, true);
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help10", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "help8", 0, true);
 				break;
-				case "help9":
+				case "help10":
 					if (initalise) {
 						windowwidth = 500; windowheight = (gfx.linesize * 2) + (gfx.linesize * 2) + 35;
 						windowx = 20;	windowy = gfx.pianorollposition + (gfx.linesize * 2);
@@ -232,10 +275,10 @@ package {
 					addline("If you CLICK on a section of the timeline,", "CLICK");
 					addline("the song will loop over that section.");
 					
-					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help10", 0, true);
-					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "help8", 0, true);
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help11", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "help9", 0, true);
 				break;
-				case "help10":
+				case "help11":
 					if (initalise) {
 						windowwidth = 550; windowheight = (gfx.linesize * 9) + (gfx.linesize * 2) + 35;
 						windowx = 20;	windowy = gfx.pianorollposition + (gfx.linesize * 2);
@@ -254,8 +297,45 @@ package {
 					windowline = 0;
 					addline("DRAG over multiple sections to play them all!", "DRAG");
 					
-					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help11", 0, true);
-					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "help9", 0, true);
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help12", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "help10", 0, true);
+				break;
+				case "help12":
+					if (initalise) {
+						windowwidth = 520; windowheight = (gfx.linesize * 2) + (gfx.linesize * 2) + 35;
+						windowx = 20;	windowy = gfx.pianorollposition + (gfx.linesize * 2);
+						
+						windowtext = "HELP - Timeline";
+					}
+					
+					addhighlight(0, gfx.pianorollposition + 8, gfx.patternmanagerx, 12, 18, "");
+					highlightflash = 0;
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowline = 0;
+					addline("You can DOUBLE CLICK anywhere on the timeline", "DOUBLE CLICK");
+					addline("to play the entire song from that point.");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help13", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "help11", 0, true);
+				break;
+				case "help13":
+					if (initalise) {
+						windowwidth = 400; windowheight =  (gfx.linesize * 1) + (gfx.linesize * 2) + 35;
+						windowx = ((gfx.screenwidth - 40) / 4)*2;	windowy = gfx.linesize+10;
+						
+						windowtext = "HELP - Instruments";
+					}
+					
+					addhighlight(((gfx.screenwidth - 40) / 4)*2, 0, (gfx.screenwidth - 40) / 4, gfx.linesize, 18, "");
+					
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowline = 0;
+					addline("Let's look at INSTRUMENTS next.", "INSTRUMENTS");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help14", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "help12", 0, true);
 				break;
 				case "advancedhelp1":
 					if (initalise) {
@@ -1211,6 +1291,36 @@ package {
 				control.changetab(control.currenttab); control.clicklist = true;
 			}else if (currentbutton == "help10") {
 				changewindow("help10");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help11") {
+				changewindow("help11");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help12") {
+				changewindow("help12");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help13") {
+				changewindow("help13");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help14") {
+				changewindow("help14");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help15") {
+				changewindow("help15");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help16") {
+				changewindow("help16");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help17") {
+				changewindow("help17");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help18") {
+				changewindow("help18");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help19") {
+				changewindow("help19");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "help20") {
+				changewindow("help20");
 				control.changetab(control.currenttab); control.clicklist = true;
 			}else if (currentbutton == "advancedhelp1") {
 				control.currenttab = control.MENUTAB_FILE;
