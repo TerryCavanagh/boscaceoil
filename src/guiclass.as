@@ -116,12 +116,8 @@ package {
 						windowtext = "HELP - Placing Notes";
 					}
 					
-					//Scroll bar
-					if (control.doublesize) {
-						addhighlight((42 + (32 * control.boxsize)), gfx.pianorollposition + gfx.linesize, gfx.screenwidth - (42 + (32 * control.boxsize)), gfx.screenheight - gfx.pianorollposition - gfx.linesize - gfx.linesize, 18, "");
-					}else {
-						addhighlight((42 + (16 * control.boxsize)), gfx.pianorollposition + gfx.linesize, gfx.screenwidth - (42 + (16 * control.boxsize)), gfx.screenheight - gfx.pianorollposition - gfx.linesize - gfx.linesize, 18, "");
-					}
+					addhighlight(40, gfx.pianorollposition + gfx.linesize, gfx.screenwidth - 40, gfx.screenheight - gfx.pianorollposition - gfx.linesize - gfx.linesize, 18, "");
+					highlightflash = 0;
 					
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
@@ -159,10 +155,10 @@ package {
 		}
 		
 		public static function addline(line:String, high:String = ""):void {
-			if(line != ""){
+			if(line != "") {
 				addtextlabel(windowx + 10 + windowxoffset, windowy + 30 + windowyoffset + (gfx.linesize * windowline), line, 0, true);
 				if (high != "") {
-					tx = line.search(high);
+					tx = line.indexOf(high);
 					tx = gfx.len(help.Left(line, tx));
 					addtextlabel(windowx + 10 + tx + windowxoffset, windowy + 30 + windowyoffset + (gfx.linesize * windowline), high, 18, true);
 				}
