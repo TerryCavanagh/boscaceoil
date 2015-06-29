@@ -41,21 +41,21 @@
 		key.press = false;
 	}
 	
-	if (!guiclass.overwindow) {
-		if (control.list.active || control.secondlist.active) {
-			if(control.secondlist.active){
-				if(control.mx > control.secondlist.x && control.mx < control.secondlist.x + control.secondlist.w && control.my > control.secondlist.y && control.my < control.secondlist.y + control.secondlist.h) {
-					control.secondlist.selection = control.my - control.secondlist.y;
-					control.secondlist.selection = (control.secondlist.selection - (control.secondlist.selection % gfx.linesize)) / gfx.linesize;
-				}
+	if (control.list.active || control.secondlist.active) {
+		if(control.secondlist.active){
+			if(control.mx > control.secondlist.x && control.mx < control.secondlist.x + control.secondlist.w && control.my > control.secondlist.y && control.my < control.secondlist.y + control.secondlist.h) {
+				control.secondlist.selection = control.my - control.secondlist.y;
+				control.secondlist.selection = (control.secondlist.selection - (control.secondlist.selection % gfx.linesize)) / gfx.linesize;
 			}
-			if (control.list.active){
-				if(control.mx > control.list.x && control.mx < control.list.x + control.list.w && control.my > control.list.y && control.my < control.list.y + control.list.h) {
-					control.list.selection = control.my - control.list.y;
-					control.list.selection = (control.list.selection - (control.list.selection % gfx.linesize)) / gfx.linesize;
-				}
+		}
+		if (control.list.active){
+			if(control.mx > control.list.x && control.mx < control.list.x + control.list.w && control.my > control.list.y && control.my < control.list.y + control.list.h) {
+				control.list.selection = control.my - control.list.y;
+				control.list.selection = (control.list.selection - (control.list.selection % gfx.linesize)) / gfx.linesize;
 			}
-		}else {
+		}
+	}else {
+		if (!guiclass.overwindow) {
 			if (control.mx > 40 && control.mx < gfx.screenwidth - 24) {
 				if (control.my > gfx.pianorollposition + gfx.linesize && control.my < gfx.pianorollposition + (gfx.linesize * (gfx.patterneditorheight + 1))) {
 					control.cursorx = (control.mx - 40);

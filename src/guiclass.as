@@ -165,6 +165,7 @@ package {
 					}
 					
 					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					control.arrange.viewstart = 0;
 					helpcondition_check = "addnew_pattern";
 					addhighlight(gfx.patternmanagerx + 10 - 5, gfx.linespacing + gfx.pianorollposition - 28 - 5, gfx.screenwidth - (gfx.patternmanagerx) - 16 + 10, gfx.linesize+ 10, 18, "");
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
@@ -188,6 +189,7 @@ package {
 					}
 					
 					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					control.arrange.viewstart = 0;
 					addhighlight(0, gfx.linesize, gfx.screenwidth, gfx.pianorollposition, 18, "");
 					highlightflash = 0;
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
@@ -220,6 +222,7 @@ package {
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
 					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					control.arrange.viewstart = 0;
 					windowxoffset = 0;
 					windowyoffset = gfx.tutorialimageheight(3) + 15;
 					addtutorialimage(windowx + 25, windowy + 30 + (gfx.linesize / 2), 3, true);
@@ -243,6 +246,7 @@ package {
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
 					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					control.arrange.viewstart = 0;
 					windowline = 0;
 					addline("This thin line is called the TIMELINE.", "TIMELINE");
 					
@@ -261,6 +265,7 @@ package {
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
 					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					control.arrange.viewstart = 0;
 					windowline = 0;
 					addline("If you CLICK on a section of the timeline,", "CLICK");
 					addline("the song will loop over that section.");
@@ -280,6 +285,7 @@ package {
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
 					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					control.arrange.viewstart = 0;
 					windowxoffset = 0;
 					windowyoffset = gfx.tutorialimageheight(2) + 15;
 					addtutorialimage(windowx + 25, windowy + 30 + (gfx.linesize / 2), 2, true);
@@ -299,6 +305,7 @@ package {
 					}
 					
 					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					control.arrange.viewstart = 0;
 					addhighlight(0, gfx.pianorollposition + 8, gfx.patternmanagerx, 12, 18, "");
 					highlightflash = 0;
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
@@ -372,18 +379,20 @@ package {
 				break;
 				case "help16":
 					if (initalise) {
-						windowwidth = 400; windowheight =  (gfx.linesize * 2) + (gfx.linesize * 2) + 35;
+						windowwidth = 400; windowheight =  (gfx.linesize * 3) + (gfx.linesize * 2) + 35;
 						windowx = 250;	windowy = gfx.screenheight - windowheight - (gfx.linesize * 3);
 						
 						windowtext = "HELP - Instruments";
 					}
 					
 					addhighlight(10, gfx.screenheight - gfx.linesize, 280, gfx.linesize, 18, "");
+					highlightflash = 90;
 					
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					windowline = 0;
 					addline("You can change what instrument a");
-					addline("pattern uses from the menu here.");
+					addline("pattern uses from the menu down");
+					addline("here in the bottom left.");
 					
 					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "help17", 0, true);
 					addbutton(windowx + 15, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "help15", 0, true);
@@ -435,17 +444,71 @@ package {
 				break;
 				case "advancedhelp1":
 					if (initalise) {
-						windowx = 50;	windowy = 50;
-						windowwidth = 300; windowheight = 200;
-						windowtext = "HELP - Placing Notes";
+						windowwidth = 420; windowheight = (gfx.linesize * 8) + (gfx.linesize * 2) + 35;
+						windowx = gfx.screenwidth - 460;	windowy = gfx.screenheight - windowheight - (gfx.linesize * 2) - 10;
+						
+						windowtext = "HELP - Tips and Tricks";
 					}
 					
-					addhighlight(40, gfx.pianorollposition + gfx.linesize, gfx.screenwidth - 40, gfx.screenheight - gfx.pianorollposition - gfx.linesize - gfx.linesize, 18, "");
+					addhighlight(gfx.screenwidth - 380, gfx.screenheight - (gfx.linesize), 380, (gfx.linesize), 18, "");
 					
 					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
 					
-					addtextlabel(windowx + 5, windowy + 25, "testing", 2, true);
-					addbutton(windowx + 5, windowy + 50, 150, "Credits", "creditstab", 0, true);
+					windowline = 0;
+					addline("You can change the SCALE and KEY of a", "SCALE", "KEY");
+					addline("pattern with this menu in the bottom");
+					addline("right. When you're using a SCALE, only", "SCALE");
+					addline("the notes in that scale are shown!");
+					addline("");
+					addline("Limiting yourself to a given scale is a");
+					addline("great way to make things sound good");
+					addline("when you're learning to write music!");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "advancedhelp3", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "advancedhelp1", 0, true);
+				break;
+				case "advancedhelp1x":
+					if (initalise) {
+						windowwidth = 530; windowheight =  (gfx.linesize * 5) + (gfx.linesize * 2) + 35;
+						windowx = gfx.screenwidthmid - (windowwidth / 2);	windowy = gfx.pianorollposition + (gfx.linesize * 2) - 5;
+						
+						windowtext = "HELP - Tips and Tricks";
+					}
+					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowline = 0;
+					addline("Some useful keys to know:");
+					addline("");
+					addtextlabel(windowx + 10 + windowxoffset + 140, windowy + 30 + windowyoffset + (gfx.linesize * windowline), "- Pause/Unpause the current song.", 0, true);
+					addline("SPACE", "SPACE");
+					addtextlabel(windowx + 10 + windowxoffset + 140, windowy + 30 + windowyoffset + (gfx.linesize * windowline), "- Scroll the pattern editor.", 0, true);
+					addline("UP/DOWN", "UP", "DOWN");
+					addtextlabel(windowx + 10 + windowxoffset + 140, windowy + 30 + windowyoffset + (gfx.linesize * windowline), "- Scroll the arrangment editor.", 0, true);
+					addline("LEFT/RIGHT", "LEFT", "RIGHT");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "advancedhelp2", 0, true);
+				break;
+				case "advancedhelp2":
+					if (initalise) {
+						windowwidth = 385; windowheight = (gfx.linesize * 3) + (gfx.linesize * 2) + 35;
+						windowx = gfx.screenwidth - 470;	windowy = gfx.screenheight - windowheight - (gfx.linesize * 2) - 10;
+						
+						windowtext = "HELP - Tips and Tricks";
+					}
+					
+					addhighlight(gfx.screenwidth - 470, gfx.screenheight - (gfx.linesize), 80, (gfx.linesize), 18, "");
+					
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowline = 0;
+					addline("These little PLUS and MINUS buttons", "PLUS", "MINUS");
+					addline("transpose the notes in a pattern,", "transpose");
+					addline("moving them higher and lower!");
+					
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NEXT", "advancedhelp3", 0, true);
+					addbutton(windowx + 15 + windowxoffset, windowy + windowheight - gfx.linesize - 15, 150, "PREVIOUS", "advancedhelp1", 0, true);
 				break;
 				default:
 				  helpwindow = "nothing";
@@ -1429,6 +1492,30 @@ package {
 				control.currenttab = control.MENUTAB_FILE;
 				
 				changewindow("advancedhelp1");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "advancedhelp2") {
+				changewindow("advancedhelp2");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "advancedhelp3") {
+				changewindow("advancedhelp3");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "advancedhelp4") {
+				changewindow("advancedhelp4");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "advancedhelp5") {
+				changewindow("advancedhelp5");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "advancedhelp6") {
+				changewindow("advancedhelp6");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "advancedhelp7") {
+				changewindow("advancedhelp7");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "advancedhelp8") {
+				changewindow("advancedhelp8");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "advancedhelp9") {
+				changewindow("advancedhelp9");
 				control.changetab(control.currenttab); control.clicklist = true;
 			}
 		}
