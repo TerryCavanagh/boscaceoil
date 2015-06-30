@@ -595,16 +595,11 @@
 				}
 			}
 			
-			/*
-			for (i = 0; i < musicbox[currentbox].numnotes; i++) {
-				musicbox[currentbox].notes[i].x = pianoroll[musicbox[currentbox].notes[i].x];
-			}
-			*/
 			musicbox[currentbox].scale = t;
 			if (musicbox[currentbox].bottomnote < 250) {
 				musicbox[currentbox].start = invertpianoroll[musicbox[currentbox].bottomnote] - 2;
 				if (musicbox[currentbox].start < 0) musicbox[currentbox].start = 0;
-			}else{
+			}else {
 			  musicbox[currentbox].start = (scalesize * 4) - 2;
 			}
 			musicbox[currentbox].setnotespan();
@@ -621,7 +616,7 @@
 					musicbox[t].start = invertpianoroll[musicbox[t].bottomnote] - 2;
 					if (musicbox[t].start < 0) musicbox[t].start = 0;
 				}else{
-					musicbox[t].start = scalesize * 3;
+					musicbox[t].start = (scalesize * 4) - 2;
 				}
 			}else {
 				musicbox[t].start = 0;
