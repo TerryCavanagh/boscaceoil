@@ -1,5 +1,4 @@
 package {
-	import flash.desktop.InteractiveIcon;
 	import flash.geom.*;
  
 	public class guibutton {

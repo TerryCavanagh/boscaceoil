@@ -28,6 +28,13 @@
 			}
 		}
 		
+		
+		CONFIG::web {
+		public static function changescalemode(t:int):void {
+		}
+		}
+		
+		CONFIG::desktop {
 		public static function changescalemode(t:int):void {
 			//Set new minimum screensize
 			if (t == 0) {
@@ -43,6 +50,7 @@
 			scalemode = t;
 			control.forceresize = true;
 			control.clicklist = true; // Stops from placing a note on resize
+		}
 		}
 		
 		public static function tutorialimagewidth(t:int):int {

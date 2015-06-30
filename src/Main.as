@@ -76,7 +76,9 @@ package{
 			//Working towards resolution independence!
 			gfx.init(stage);
 			
-			stage.addEventListener(Event.RESIZE, handleResize);
+			CONFIG::desktop {
+				stage.addEventListener(Event.RESIZE, handleResize);
+			}
 			
 			var tempbmp:Bitmap;
 			tempbmp = new im_icons();	gfx.buffer = tempbmp.bitmapData;	gfx.makeiconarray();
@@ -132,6 +134,7 @@ package{
 			}
 		}
 		
+		CONFIG::desktop {
 		private function handleResize(e:Event):void {
 			// adjust the gui to fit the new device resolution
 			var tempwidth:int, tempheight:int;
@@ -170,6 +173,7 @@ package{
 				gfx.screen.scaleX = 1;
 				gfx.screen.scaleY = 1;
 			}
+		}
 		}
 		
 		private function _startMainLoop():void {
@@ -223,9 +227,11 @@ package{
     public function _logic():void {
 			logic(key);
 			help.updateglow();
-			if (control.forceresize) {
-				control.forceresize = false;
-				handleResize(null);
+			CONFIG::desktop {
+				if (control.forceresize) {
+					control.forceresize = false;
+					handleResize(null);
+				}
 			}
 		}
 		
