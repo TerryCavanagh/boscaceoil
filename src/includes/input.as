@@ -134,11 +134,13 @@
 			//Add note 
 			if (control.musicbox[control.currentbox].start + control.cursory - 1 == -1) {
 				if (key.click) {
+					//Enable/Disable recording filter for this musicbox
 					control.musicbox[control.currentbox].recordfilter = 1 - control.musicbox[control.currentbox].recordfilter;
 				}
 			}else {
 				if(control.musicbox[control.currentbox].start + control.cursory - 1 > -1){
 					control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + control.cursory - 1];
+					trace(control.currentnote);
 					if (control.musicbox[control.currentbox].noteat(control.cursorx, control.currentnote)) {
 						control.musicbox[control.currentbox].removenote(control.cursorx, control.currentnote);
 						control.musicbox[control.currentbox].addnote(control.cursorx, control.currentnote, control.notelength);

@@ -721,6 +721,7 @@
 				for (j = 0; j < pianorollsize; j++) {
 					if (pianoroll[j] == i) {
 						invertpianoroll[i] = j;
+						trace("invertpianoroll[" + String(i)+ "] = " + String(j));
 					}
 				}
 			}

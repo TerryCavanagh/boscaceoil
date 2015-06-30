@@ -272,7 +272,7 @@
 			for (j = 0; j < control.musicbox[control.currentbox].numnotes; j++) {
 				i = control.musicbox[control.currentbox].notes[j].width;
 				if (i < control.boxcount) {
-					control.drawnoteposition = control.invertpianoroll[control.musicbox[control.currentbox].notes[j].x + 1];
+					control.drawnoteposition = control.invertpianoroll[control.musicbox[control.currentbox].notes[j].x] + 1;
 					control.drawnotelength = control.musicbox[control.currentbox].notes[j].y * control.boxsize;
 					if (control.drawnoteposition > -1) {			
 						control.drawnoteposition -= control.musicbox[control.currentbox].start;

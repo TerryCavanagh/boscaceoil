@@ -861,7 +861,6 @@ package {
 					z = numbuttons;
 				}
 			}
-			//trace("addguipart(", x, y, w, h, contents, act, sty, ")", numbuttons);
 			button[z].init(x, y, w, h, contents, act, sty);
 			button[z].textoffset = toffset;
 			if (sty == "horizontalslider" || sty == "scrollup" || sty == "scrolldown"
@@ -930,8 +929,6 @@ package {
 					if (button[i].action == "window" && windowdrag) {
 						if (key.hasreleased) {
 							windowdrag = false;
-							trace("From LEFT: " + String(windowx) + ", " + String(windowy));
-							trace("From RIGHT: gfx.screenwidth - windowwidth - " + String(gfx.screenwidth - windowwidth - windowx) + ", gfx.screenheight - " + String(gfx.screenheight - windowy));
 						}else {
 							button[i].position.x = control.mx - windowdx;
 							button[i].position.y = control.my - windowdy;
