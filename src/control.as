@@ -373,6 +373,13 @@
 		public static function loadscreensettings():void {
 			programsettings = SharedObject.getLocal("boscaceoil_settings");		
 			
+			if (programsettings.data.firstrun == null) {
+				guiclass.firstrun = true;
+				programsettings.data.firstrun = 1;
+			}else {
+				guiclass.firstrun = false;
+			}
+			
 			if (programsettings.data.fullscreen == 0) {
 				fullscreen = false;
 			}else {
@@ -401,6 +408,8 @@
 		
 		public static function savescreensettings():void {
 			programsettings = SharedObject.getLocal("boscaceoil_settings");		
+			
+			programsettings.data.firstrun = 1;
 			
 			if (!fullscreen){
 				programsettings.data.fullscreen = 0;

@@ -1681,5 +1681,7 @@ package {
 		
 		public static var helpcondition_check:String;
 		public static var helpcondition_set:String;
+		
+		public static var firstrun:Boolean = false;
 	}
 }

@@ -61,7 +61,6 @@ package {
 		
 		public function transpose(amount:int):void {
 			for (var i:int = 0; i < numnotes; i++) {
-				//notes[i].x = notes[i].x + amount;
 				if (notes[i].x != -1) {
 					if (control.invertpianoroll[notes[i].x] + amount != -1) {
 						notes[i].x = control.pianoroll[control.invertpianoroll[notes[i].x] + amount];

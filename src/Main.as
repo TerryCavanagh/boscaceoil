@@ -109,6 +109,11 @@ package{
 			
 			gfx.changescalemode(gfx.scalemode);
 			
+			if (guiclass.firstrun) {
+				guiclass.changewindow("firstrun");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}
+			
 			CONFIG::desktop {
 				_startMainLoop();
 			}
