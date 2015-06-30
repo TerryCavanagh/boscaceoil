@@ -432,8 +432,8 @@
 					control.drawnotelength = Math.ceil(control.musicbox[t].notes[mbj].y * zoomoffset);
 					if (mbi + control.musicbox[t].notes[mbj].y > control.boxcount) {
 						//temppatternwidth for each bar
-						control.drawnotelength = temppatternwidth - (21 + int(mbi * zoomoffset));
-						control.drawnotelength += (temppatternwidth * (control.musicbox[t].notes[mbj].y - (control.boxcount - mbi)) / control.boxcount);
+						control.drawnotelength = (temppatternwidth/2) - (21 + int(mbi * zoomoffset));
+						control.drawnotelength += ((temppatternwidth/2) * (control.musicbox[t].notes[mbj].y - (control.boxcount - mbi)) / control.boxcount);
 					}
 					if (control.drawnoteposition > -1) {			
 						control.drawnoteposition -= control.musicbox[t].bottomnote;

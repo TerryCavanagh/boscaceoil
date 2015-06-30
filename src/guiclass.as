@@ -633,7 +633,7 @@ package {
 				break;
 				case "advancedhelp9":
 					if (initalise) {
-						windowwidth = 430; windowheight =  (gfx.linesize * 7) + (gfx.linesize * 2) + 35;
+						windowwidth = 430; windowheight =  (gfx.linesize * 2) + (gfx.linesize * 2) + 35;
 						windowx = gfx.screenwidthmid - (windowwidth / 2);	windowy = gfx.pianorollposition + (gfx.linesize * 2) - 5;
 						
 						windowtext = "HELP - Tips and Tricks";
@@ -645,11 +645,6 @@ package {
 					windowline = 0;
 					addline("I think that's everything! Thanks for");
 					addline("using Bosca Ceoil!");
-					addline("");
-					addline("This is a tool I made for myself, to try");
-					addline("to get better at composing music. I hope");
-					addline("it ends up being as useful for you as it");
-					addline("has been for me!                        - Terry", "- Terry");
 					
 					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "FINISH", "endhelp", 0, true);
 				break;
