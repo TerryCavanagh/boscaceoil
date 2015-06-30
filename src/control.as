@@ -584,21 +584,28 @@
 		}
 		
 		public static function changescale(t:int):void {
-			for (i = 0; i < musicbox[currentbox].numnotes; i++) {
-				musicbox[currentbox].notes[i].x = invertpianoroll[musicbox[currentbox].notes[i].x];
-			}
-			
 			setscale(t);
 			updatepianoroll();
+			
+			//Delete notes not in scale
+			for (i = 0; i < musicbox[currentbox].numnotes; i++) {
+				if (invertpianoroll[musicbox[currentbox].notes[i].x] == -1) {
+					musicbox[currentbox].deletenote(i);
+					i--;
+				}
+			}
+			
+			/*
 			for (i = 0; i < musicbox[currentbox].numnotes; i++) {
 				musicbox[currentbox].notes[i].x = pianoroll[musicbox[currentbox].notes[i].x];
 			}
+			*/
 			musicbox[currentbox].scale = t;
 			if (musicbox[currentbox].bottomnote < 250) {
 				musicbox[currentbox].start = invertpianoroll[musicbox[currentbox].bottomnote] - 2;
 				if (musicbox[currentbox].start < 0) musicbox[currentbox].start = 0;
 			}else{
-			  musicbox[currentbox].start = scalesize * 3;
+			  musicbox[currentbox].start = (scalesize * 4) - 2;
 			}
 			musicbox[currentbox].setnotespan();
 		}
@@ -718,10 +725,10 @@
 			}
 			
 			for (i = 0; i < 104; i++) {
+				invertpianoroll[i] = -1;
 				for (j = 0; j < pianorollsize; j++) {
 					if (pianoroll[j] == i) {
 						invertpianoroll[i] = j;
-						trace("invertpianoroll[" + String(i)+ "] = " + String(j));
 					}
 				}
 			}
