@@ -1402,8 +1402,8 @@ package {
 					button[i].pressed = 2;
 					if (control.currentbox > -1) {
 						control.musicbox[control.currentbox].start++;
-						if (control.musicbox[control.currentbox].start > 120 - gfx.notesonscreen) {
-							control.musicbox[control.currentbox].start = 120 - gfx.notesonscreen;
+						if (control.musicbox[control.currentbox].start > control.pianorollsize - gfx.notesonscreen) {
+							control.musicbox[control.currentbox].start = control.pianorollsize - gfx.notesonscreen;
 						}
 					}
 				}
