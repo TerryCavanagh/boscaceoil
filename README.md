@@ -18,8 +18,9 @@ Bosca Ceoil is currently under active development for version 2.0. Here's the ro
  - *[DONE]* XM Exporter
  - *[DONE]* Resolution independance
  - *[DONE]* New gui controls: transpose, instrument next/prev, scrollbars
- - Built in Tutorial, Interactive make-your-first-song guide
- - Built in Tutorial, General Reference guide
+ - *[DONE]* Built in Tutorial, Interactive make-your-first-song guide
+ - *[DONE]* Built in Tutorial, General Reference guide
+ - Web fork updated to 2.0 to match
  - Linux fork updated to 2.0 to match
  
 ## Contributing to Bosca Ceoil
