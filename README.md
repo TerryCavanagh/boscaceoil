@@ -20,8 +20,8 @@ Bosca Ceoil is currently under active development for version 2.0. Here's the ro
  - *[DONE]* New gui controls: transpose, instrument next/prev, scrollbars
  - *[DONE]* Built in Tutorial, Interactive make-your-first-song guide
  - *[DONE]* Built in Tutorial, General Reference guide
+ - *[DONE]* Linux fork updated to 2.0 to match
  - Web fork updated to 2.0 to match
- - Linux fork updated to 2.0 to match
  
 ## Contributing to Bosca Ceoil
 
