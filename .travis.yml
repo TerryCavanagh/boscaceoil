@@ -13,7 +13,7 @@ install:
   # The Homebrew formula for adobe-air-sdk tends to break periodically, so install it manually
   # - brew install homebrew/binary/adobe-air-sdk
   - mkdir AIRSDK_Compiler
-  - curl http://airdownload.adobe.com/air/mac/download/17.0/AIRSDK_Compiler.tbz2 | tar xj -C AIRSDK_Compiler
+  - curl http://airdownload.adobe.com/air/mac/download/18.0/AIRSDK_Compiler.tbz2 | tar xj -C AIRSDK_Compiler
   - export PATH=$PATH:$PWD/AIRSDK_Compiler/bin/
 script:
   - test/build-desktop.sh
