@@ -139,7 +139,6 @@ package{
 			}
 		}
 		
-		CONFIG::desktop {
 		private function handleResize(e:Event):void {
 			// adjust the gui to fit the new device resolution
 			var tempwidth:int, tempheight:int;
@@ -178,7 +177,6 @@ package{
 				gfx.screen.scaleX = 1;
 				gfx.screen.scaleY = 1;
 			}
-		}
 		}
 		
 		private function _startMainLoop():void {
@@ -232,11 +230,9 @@ package{
     public function _logic():void {
 			logic(key);
 			help.updateglow();
-			CONFIG::desktop {
-				if (control.forceresize) {
-					control.forceresize = false;
-					handleResize(null);
-				}
+			if (control.forceresize) {
+				control.forceresize = false;
+				handleResize(null);
 			}
 		}
 		

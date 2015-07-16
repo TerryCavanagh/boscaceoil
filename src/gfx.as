@@ -12,7 +12,7 @@
 	public class gfx extends Sprite {
 		public static function init(_stage:Stage):void {
 			min_windowwidth = 768;
-			min_windowheight = 400;
+			min_windowheight = 540;
 			updatebackground = 5;
 			initgfx();
 			initfont();
@@ -29,28 +29,26 @@
 		}
 		
 		
-		CONFIG::web {
-		public static function changescalemode(t:int):void {
-		}
-		}
-		
-		CONFIG::desktop {
+
 		public static function changescalemode(t:int):void {
 			//Set new minimum screensize
 			if (t == 0) {
 				min_windowwidth = 768;
 				min_windowheight = 540;
-				stage.nativeWindow.minSize = new Point(768 + windowboundsx, 540 + windowboundsy);
+				CONFIG::desktop {
+					stage.nativeWindow.minSize = new Point(768 + windowboundsx, 540 + windowboundsy);
+				}
 			}else {
 				min_windowwidth = 1152;
 				min_windowheight = 690;
-				stage.nativeWindow.minSize = new Point(1152 + windowboundsx, 690 + windowboundsy);
+				CONFIG::desktop {
+					stage.nativeWindow.minSize = new Point(1152 + windowboundsx, 690 + windowboundsy);
+				}
 			}
 			
 			scalemode = t;
 			control.forceresize = true;
 			control.clicklist = true; // Stops from placing a note on resize
-		}
 		}
 		
 		public static function tutorialimagewidth(t:int):int {
@@ -822,7 +820,17 @@
 
 		CONFIG::web {
 			public static function changewindowsize(w:int, h:int):void {
-				// no-op
+				windowwidth = w;
+				windowheight = h;
+
+				if (gfx.scalemode == 1) {
+					screenwidth = w/1.5; screenheight = h/1.5;
+				}else {
+					screenwidth = w; screenheight = h;
+				}
+
+				screenwidthmid = screenwidth / 2; screenheightmid = screenheight / 2;
+				screenviewwidth = screenwidth; screenviewheight = screenheight;
 			}
 		}
 
