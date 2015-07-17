@@ -59,7 +59,7 @@ if "%airVar%"=="" (
 	PAUSE
 	goto end
 ) else (
-	CALL %AIR_SDK_HOME%\bin\amxmlc.bat -swf-version 20 -default-frame-rate 60 -default-size 768 480 -library-path+=lib/sion065.swc -source-path+=src -default-background-color 0x000000 -warnings -strict src/Main.as -o %fileName% -define+=CONFIG::desktop,true -define+=CONFIG::web,false
+	CALL %AIR_SDK_HOME%\bin\amxmlc.bat -swf-version 28 -default-frame-rate 30 -default-size 768 560 -library-path+=lib/sion065.swc -source-path+=src -default-background-color 0x000000 -warnings -strict src/Main.as -o %fileName% -define+=CONFIG::desktop,true -define+=CONFIG::web,false
 	ECHO.
 	ECHO Compilation finished.
 	ECHO.
