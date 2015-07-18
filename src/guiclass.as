@@ -1350,12 +1350,12 @@ package {
 					addcontrol(40 + tx, (gfx.linespacing * 7) + 4, "swingcontrol");
 					addcontrol(gfx.screenwidth - 210 - tx,  (gfx.linespacing * 3) + 4, "globaleffects");
 					
-					if (gfx.scalemode == 0) {
-						addbutton(gfx.screenwidth - 340 - tx, gfx.linespacing * 7, 150, "SCALE UP", "changescale");
-					}else {
-						addbutton(gfx.screenwidth - 340 - tx, gfx.linespacing * 7, 150, "SCALE DOWN", "changescale");
-					}
 					CONFIG::desktop {
+						if (gfx.scalemode == 0) {
+							addbutton(gfx.screenwidth - 340 - tx, gfx.linespacing * 7, 150, "SCALE UP", "changescale");
+						} else {
+							addbutton(gfx.screenwidth - 340 - tx, gfx.linespacing * 7, 150, "SCALE DOWN", "changescale");
+						}
 						addbutton(gfx.screenwidth - 170 - tx, gfx.linespacing * 7, 150, "IMPORT .mid", "loadmidi");
 					}
 				break;
