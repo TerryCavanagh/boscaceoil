@@ -1,8 +1,15 @@
-Version 2.0
+Version 2.0 (24th July 2015)
 ---------
  
  * Major update!
  
+  - Built in tutorial
+  - Resizable window
+  - Now exports to Midi, XM and MML
+  - Support for Midi importing
+  - Major performance improvements
+  - Nicer GUI, new scrollbars/buttons in various places
+  - Web version
 
 Version 1.1 (1st September 2013)
 ---------
