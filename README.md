@@ -6,26 +6,9 @@ A simple music making program.
 
 Terry Cavanagh / http://www.distractionware.com
 
-## Roadmap for version 2.0
-
-Bosca Ceoil is currently under active development for version 2.0. Here's the roadmap for what I want that version to contain, and where we currently are:
-
- - *[DONE]* New expandable GUI code
- - *[DONE]* New GUI skin
- - *[DONE]* Online version
- - *[DONE]* Midi Importer 
- - *[DONE]* Midi Exporter
- - *[DONE]* XM Exporter
- - *[DONE]* Resolution independance
- - *[DONE]* New gui controls: transpose, instrument next/prev, scrollbars
- - *[DONE]* Built in Tutorial, Interactive make-your-first-song guide
- - *[DONE]* Built in Tutorial, General Reference guide
- - *[DONE]* Linux fork updated to 2.0 to match
- - Web fork updated to 2.0 to match
- 
 ## Contributing to Bosca Ceoil
 
-RIGHT NOW is a really good time to contribute to Bosca Ceoil. Pull requests are very welcome - 2.0 is around the corner!
+Bosca Ceoil is now stable at version 2.0. However, contibutions are always welcome!
 
 See [howtobuild.MD](https://github.com/TerryCavanagh/boscaceoil/blob/master/how%20to%20build.MD) for a detailed guide to compiling Bosca Ceoil.
 
