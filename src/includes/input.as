@@ -138,7 +138,8 @@
 					control.musicbox[control.currentbox].recordfilter = 1 - control.musicbox[control.currentbox].recordfilter;
 				}
 			}else {
-				if(control.musicbox[control.currentbox].start + control.cursory - 1 > -1){
+				if(control.musicbox[control.currentbox].start + control.cursory - 1 > -1 &&
+					 control.musicbox[control.currentbox].start + control.cursory - 1 < control.pianorollsize) {
 					control.currentnote = control.pianoroll[control.musicbox[control.currentbox].start + control.cursory - 1];
 					if (control.musicbox[control.currentbox].noteat(control.cursorx, control.currentnote)) {
 						control.musicbox[control.currentbox].removenote(control.cursorx, control.currentnote);
