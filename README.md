@@ -14,7 +14,7 @@ See [howtobuild.MD](https://github.com/TerryCavanagh/boscaceoil/blob/master/how%
 
 ## Open Source Licence
 
-Available under the FreeBSD licence. Feel free to fork Bosca Ceoil and do your own thing with it! FreeBSD licence text follows:
+Available under the FreeBSD licence (the same licence which the SiON synth library uses). Feel free to fork Bosca Ceoil and do your own thing with it! FreeBSD licence text follows:
 
 >Copyright 1992-2013 Terry Cavanagh. All rights reserved.
 >
