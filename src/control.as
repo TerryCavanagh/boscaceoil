@@ -43,7 +43,20 @@
 		public static var CHORD_MINOR_MAJOR_7TH:int = 20;
 		public static var CHORD_SUS4:int = 21;
 		public static var CHORD_SUS2:int = 22;
-		
+		public static var SCALE_NATURAL_MINOR:int = 23;
+		public static var SCALE_DORIAN:int = 24;
+		public static var SCALE_PHRYGIAN:int = 25;
+		public static var SCALE_LYDIAN:int = 26;
+		public static var SCALE_LOCRIAN:int = 27;
+		public static var SCALE_DOMINANT:int = 28; // Mixolydian
+		public static var SCALE_ALTERED_DOM:int = 29;
+		public static var SCALE_SYMMETRIC_HW:int = 30;
+		public static var SCALE_SYMMETRIC_WH:int = 31;
+		public static var SCALE_WHOLE_TONE:int = 32;
+		public static var SCALE_MELODIC_MINOR:int = 33;
+		public static var SCALE_MELODIC_MAJOR:int = 34;
+		public static var SCALE_COUNT:int = 35;
+
 		public static var LIST_KEY:int = 0;
 		public static var LIST_SCALE:int = 1;
 		public static var LIST_INSTRUMENT:int = 2;
@@ -116,7 +129,7 @@
 				notename[(j * 12) + 11] = "B";
 			}
 			
-			for (i = 0; i < 23; i++) {
+			for (i = 0; i < SCALE_COUNT; i++) {
 				scalename.push("");
 			}
 			scalename[SCALE_NORMAL] = "Scale: Normal";
@@ -142,6 +155,18 @@
 			scalename[CHORD_MINOR_MAJOR_7TH] = "Chord: Minor Major 7th";
 			scalename[CHORD_SUS4] = "Chord: Sus4";
 			scalename[CHORD_SUS2] = "Chord: sus2";
+			scalename[SCALE_NATURAL_MINOR] = "Scale: Natural Minor";
+			scalename[SCALE_DORIAN] = "Scale: Dorian";
+			scalename[SCALE_PHRYGIAN] = "Scale: Phrygian";
+			scalename[SCALE_LYDIAN] = "Scale: Lydian";
+			scalename[SCALE_LOCRIAN] = "Scale: Locrian";
+			scalename[SCALE_DOMINANT] = "Scale: Dominant";
+			scalename[SCALE_ALTERED_DOM] = "Scale: Altered Dominant";
+			scalename[SCALE_SYMMETRIC_HW] = "Scale: Symmetric (Half, Whole)";
+			scalename[SCALE_SYMMETRIC_WH] = "Scale: Symmetric (Whole, Half)";
+			scalename[SCALE_WHOLE_TONE] = "Scale: Whole Tone";
+			scalename[SCALE_MELODIC_MINOR] = "Scale: Melodic Minor";
+			scalename[SCALE_MELODIC_MAJOR] = "Scale: Melodic Major";
 			
 			looptime = 0;
 			swingoff = 0;
@@ -708,6 +733,18 @@
 				case CHORD_MINOR_MAJOR_7TH: _setscale(3, 4, 4, 1); break;
 				case CHORD_SUS4: _setscale(5, 2, 5); break;
 				case CHORD_SUS2: _setscale(2, 5, 5); break;
+				case SCALE_NATURAL_MINOR: _setscale(2, 1, 2, 2, 1, 2, 2); break;
+				case SCALE_DORIAN: _setscale(2, 1, 2, 2, 2, 1, 2); break;
+				case SCALE_PHRYGIAN: _setscale(1, 2, 2, 2, 1, 2, 2); break;
+				case SCALE_LYDIAN: _setscale(2, 2, 2, 1, 2, 2, 1); break;
+				case SCALE_LOCRIAN: _setscale(1, 2, 2, 1, 2, 2, 2); break;
+				case SCALE_DOMINANT: _setscale(2, 2, 1, 2, 2, 1, 2); break;
+				case SCALE_ALTERED_DOM: _setscale(1, 2, 1, 2, 2, 2, 2); break;
+				case SCALE_SYMMETRIC_HW: _setscale(1, 2, 1, 2, 1, 2, 1, 2); break;
+				case SCALE_SYMMETRIC_WH: _setscale(2, 1, 2, 1, 2, 1, 2, 1); break;
+				case SCALE_WHOLE_TONE: _setscale(2, 2, 2, 2, 2, 2); break;
+				case SCALE_MELODIC_MINOR: _setscale(2, 1, 2, 2, 2, 2, 1); break;
+				case SCALE_MELODIC_MAJOR: _setscale(2, 2, 1, 2, 1, 2, 2); break;
 				default: case SCALE_NORMAL:_setscale(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);	break;
 			}
 		}
@@ -809,10 +846,10 @@
 					list.numitems = 12;
 				break;
 				case LIST_SCALE:
-					for (i = 0; i < 23; i++) {
+					for (i = 0; i < SCALE_COUNT; i++) {
 						list.item[i] = scalename[i];
 					}
-					list.numitems = 23;
+					list.numitems = SCALE_COUNT;
 				break;
 			  case LIST_CATEGORY:
 					list.item[0] = "MIDI";
