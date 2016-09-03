@@ -1618,7 +1618,7 @@
 			{
 				if (!filepath)
 				{
-					filepath = File.desktopDirectory;
+					filepath = File.applicationDirectory;
 				}
 				file = filepath.resolvePath("*.ceol");
 				file.addEventListener(Event.SELECT, onsaveceol);
@@ -1651,7 +1651,7 @@
 			{
 				if (!filepath)
 				{
-					filepath = File.desktopDirectory;
+					filepath = File.applicationDirectory;
 				}
 				file = filepath.resolvePath("");
 				file.addEventListener(Event.SELECT, onloadceol);
@@ -1698,7 +1698,11 @@
 			{
 				stopmusic();
 				
-				file = File.desktopDirectory.resolvePath("*.xm");
+				if (!filepath)
+				{
+					filepath = File.applicationDirectory;
+				}
+				file = filepath.resolvePath("*.xm");
 				file.addEventListener(Event.SELECT, onexportxm);
 				file.browseForSave("Export .XM module file");
 				
@@ -1730,7 +1734,11 @@
 			{
 				stopmusic();
 				
-				file = File.desktopDirectory.resolvePath("*.mml");
+				if (!filepath)
+				{
+					filepath = File.applicationDirectory;
+				}
+				file = filepath.resolvePath("*.mml");
 				file.addEventListener(Event.SELECT, onexportmml);
 				file.browseForSave("Export MML music text file");
 				
@@ -1910,7 +1918,11 @@
 			
 			CONFIG::desktop
 			{
-				file = File.desktopDirectory.resolvePath("*.wav");
+				if (!filepath)
+				{
+					filepath = File.applicationDirectory;
+				}
+				file = filepath.resolvePath("*.wav");
 				file.addEventListener(Event.SELECT, onsavewav);
 				file.browseForSave("Export .wav File");
 			}

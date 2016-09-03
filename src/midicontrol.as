@@ -62,7 +62,11 @@ package {
 		public static function openfile():void {
 			control.stopmusic();	
 			
-			file = File.desktopDirectory.resolvePath("");
+			if (!control.filepath)
+			{
+				control.filepath = File.applicationDirectory;
+			}
+			file = control.filepath.resolvePath("");
 		  file.addEventListener(Event.SELECT, onloadmidi);
 			file.browseForOpen("Load .mid File", [midiFilter]);
 			
@@ -70,9 +74,13 @@ package {
 		}
 		
 		public static function savemidi():void {
-			control.stopmusic();	
+			control.stopmusic();
 			
-			file = File.desktopDirectory.resolvePath("*.mid");
+			if (!control.filepath)
+			{
+				control.filepath = File.applicationDirectory;
+			}
+			file = control.filepath.resolvePath("*.mid");
       file.addEventListener(Event.SELECT, onsavemidi);
 			file.browseForSave("Save .mid File");
 			
