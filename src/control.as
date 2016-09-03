@@ -5,6 +5,7 @@
 	import flash.events.*;
 	import flash.utils.*;
 	import flash.net.*;
+	import ocean.midi.MidiFile;
 	import org.si.sion.SiONDriver;
 	import org.si.sion.SiONData;
 	import org.si.sion.utils.SiONPresetVoice;
@@ -87,6 +88,9 @@
 			clicksecondlist = false;
 			midilistselection = -1;
 			savescreencountdown = 0;
+			
+			// default filepath
+			defaultDirectory = File.desktopDirectory;
 			
 			test = false;
 			teststring = "TEST = True";
@@ -477,16 +481,6 @@
 				gfx.windowheight = programsettings.data.windowheight;
 			}
 			
-			// Add filepath memory
-			if (programsettings.data.filepath == null)
-			{
-				control.filepath = File.applicationDirectory.resolvePath("");
-			}
-			else
-			{
-				control.filepath = File.applicationDirectory.resolvePath(programsettings.data.filepath);
-			}
-			
 			gfx.changewindowsize(gfx.windowwidth, gfx.windowheight);
 			
 			programsettings.flush();
@@ -500,11 +494,11 @@
 			// Add filepath memory
 			if (programsettings.data.filepath == null)
 			{
-				filepath = File.applicationDirectory.resolvePath("");
+				filepath = defaultDirectory.resolvePath("");
 			}
 			else
 			{
-				filepath = File.applicationDirectory.resolvePath(programsettings.data.filepath);
+				filepath = defaultDirectory.resolvePath(programsettings.data.filepath);
 			}
 			
 			programsettings.flush();
@@ -1644,7 +1638,7 @@
 			{
 				if (!filepath)
 				{
-					filepath = File.applicationDirectory;
+					filepath = defaultDirectory;
 				}
 				file = filepath.resolvePath("*.ceol");
 				file.addEventListener(Event.SELECT, onsaveceol);
@@ -1678,7 +1672,7 @@
 			{
 				if (!filepath)
 				{
-					filepath = File.applicationDirectory;
+					filepath = defaultDirectory;
 				}
 				file = filepath.resolvePath("");
 				file.addEventListener(Event.SELECT, onloadceol);
@@ -1728,7 +1722,7 @@
 				
 				if (!filepath)
 				{
-					filepath = File.applicationDirectory;
+					filepath = defaultDirectory;
 				}
 				file = filepath.resolvePath("*.xm");
 				file.addEventListener(Event.SELECT, onexportxm);
@@ -1765,7 +1759,7 @@
 				
 				if (!filepath)
 				{
-					filepath = File.applicationDirectory;
+					filepath = defaultDirectory;
 				}
 				file = filepath.resolvePath("*.mml");
 				file.addEventListener(Event.SELECT, onexportmml);
@@ -1951,7 +1945,7 @@
 			{
 				if (!filepath)
 				{
-					filepath = File.applicationDirectory;
+					filepath = defaultDirectory;
 				}
 				file = filepath.resolvePath("*.wav");
 				file.addEventListener(Event.SELECT, onsavewav);
@@ -2090,6 +2084,7 @@
 		
 		// Add filepath memory
 		public static var filepath:File = null;
+		public static var defaultDirectory:File = null;
 		
 		//Global effects
 		public static var effecttype:int;

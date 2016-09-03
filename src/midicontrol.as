@@ -64,7 +64,7 @@ package {
 			
 			if (!control.filepath)
 			{
-				control.filepath = File.applicationDirectory;
+				control.filepath = control.defaultDirectory;
 			}
 			file = control.filepath.resolvePath("");
 		  file.addEventListener(Event.SELECT, onloadmidi);
@@ -78,7 +78,7 @@ package {
 			
 			if (!control.filepath)
 			{
-				control.filepath = File.applicationDirectory;
+				control.filepath = control.defaultDirectory;
 			}
 			file = control.filepath.resolvePath("*.mid");
       file.addEventListener(Event.SELECT, onsavemidi);
