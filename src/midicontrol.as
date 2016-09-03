@@ -106,6 +106,7 @@ package {
 			
 			control.fixmouseclicks = true;
 			control.showmessage("SONG EXPORTED AS MIDI");
+			control.savefilesettings();
 		}
 		
 		private static function onloadmidi(e:Event):void {  
@@ -174,6 +175,7 @@ package {
       
 			control.showmessage("MIDI IMPORTED");
 			control.fixmouseclicks = true;
+			control.savefilesettings();
 		}
 		
 		public static function clone(source:Object):* { 

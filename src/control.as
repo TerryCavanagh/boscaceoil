@@ -493,6 +493,24 @@
 			programsettings.close();
 		}
 		
+		public static function loadfilesettings():void
+		{
+			programsettings = SharedObject.getLocal("boscaceoil_settings");
+			
+			// Add filepath memory
+			if (programsettings.data.filepath == null)
+			{
+				filepath = File.applicationDirectory.resolvePath("");
+			}
+			else
+			{
+				filepath = File.applicationDirectory.resolvePath(programsettings.data.filepath);
+			}
+			
+			programsettings.flush();
+			programsettings.close();
+		}
+		
 		public static function savescreensettings():void
 		{
 			programsettings = SharedObject.getLocal("boscaceoil_settings");
@@ -511,6 +529,14 @@
 			programsettings.data.scalemode = gfx.scalemode;
 			programsettings.data.windowwidth = gfx.windowwidth;
 			programsettings.data.windowheight = gfx.windowheight;
+			
+			programsettings.flush();
+			programsettings.close();
+		}
+		
+		public static function savefilesettings():void
+		{
+			programsettings = SharedObject.getLocal("boscaceoil_settings");
 			
 			// Add filepath memory
 			if (filepath != null)
@@ -1645,6 +1671,7 @@
 				
 				fixmouseclicks = true;
 				showmessage("SONG SAVED");
+				savefilesettings();
 			}
 			
 			public static function loadceol():void
@@ -1692,6 +1719,7 @@
 				
 				fixmouseclicks = true;
 				showmessage("SONG LOADED");
+				savefilesettings();
 			}
 			
 			public static function exportxm():void
@@ -1728,6 +1756,7 @@
 				
 				fixmouseclicks = true;
 				showmessage("SONG EXPORTED AS XM");
+				savefilesettings();
 			}
 			
 			public static function exportmml():void
@@ -1764,6 +1793,7 @@
 				
 				fixmouseclicks = true;
 				showmessage("SONG EXPORTED AS MML");
+				savefilesettings();
 			}
 			
 			private static function onsavewav(e:Event):void
@@ -1782,6 +1812,7 @@
 				
 				fixmouseclicks = true;
 				showmessage("SONG EXPORTED AS WAV");
+				savefilesettings();
 			}
 		
 		}

@@ -140,6 +140,7 @@ package
 			addChild(gfx.screen);
 			
 			control.loadscreensettings();
+			control.loadfilesettings();
 			updategraphicsmode();
 			
 			gfx.changescalemode(gfx.scalemode);
