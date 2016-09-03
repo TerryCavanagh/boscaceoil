@@ -12,6 +12,7 @@
     <movie minorVersion="0" />
     <movie platform="AIR" />
     <movie background="#000000" />
+    <movie preferredSDK="C:\Users\Ryusui\AppData\Local\FlashDevelop\Apps\ascsdk" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
