@@ -62,7 +62,11 @@ package {
 		public static function openfile():void {
 			control.stopmusic();	
 			
-			file = File.desktopDirectory.resolvePath("");
+			if (!control.filepath)
+			{
+				control.filepath = control.defaultDirectory;
+			}
+			file = control.filepath.resolvePath("");
 		  file.addEventListener(Event.SELECT, onloadmidi);
 			file.browseForOpen("Load .mid File", [midiFilter]);
 			
@@ -70,9 +74,13 @@ package {
 		}
 		
 		public static function savemidi():void {
-			control.stopmusic();	
+			control.stopmusic();
 			
-			file = File.desktopDirectory.resolvePath("*.mid");
+			if (!control.filepath)
+			{
+				control.filepath = control.defaultDirectory;
+			}
+			file = control.filepath.resolvePath("*.mid");
       file.addEventListener(Event.SELECT, onsavemidi);
 			file.browseForSave("Save .mid File");
 			
@@ -98,6 +106,7 @@ package {
 			
 			control.fixmouseclicks = true;
 			control.showmessage("SONG EXPORTED AS MIDI");
+			control.savefilesettings();
 		}
 		
 		private static function onloadmidi(e:Event):void {  
@@ -166,6 +175,7 @@ package {
       
 			control.showmessage("MIDI IMPORTED");
 			control.fixmouseclicks = true;
+			control.savefilesettings();
 		}
 		
 		public static function clone(source:Object):* { 
