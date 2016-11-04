@@ -16,9 +16,9 @@
 		if (control.currenttab == control.MENUTAB_HELP) {
 			gfx.fillrect(0, 0, j, gfx.linesize, 5);
 			gfx.print(14, 0, "HELP", control.currenttab == control.MENUTAB_HELP?0:2, false, true);
-		}else if (control.currenttab == control.MENUTAB_CREDITS) {
+		}else if (control.currenttab == control.MENUTAB_CREDITS || control.currenttab == control.MENUTAB_GITHUB) {
 			gfx.fillrect(0, 0, j, gfx.linesize, 5);
-			gfx.print(14, 0, "CREDITS", control.currenttab == control.MENUTAB_CREDITS?0:2, false, true);
+			gfx.print(14, 0, "CREDITS", (control.currenttab == control.MENUTAB_CREDITS || control.currenttab == control.MENUTAB_GITHUB)?0:2, false, true);
 		}else{
 			gfx.fillrect(control.currenttab * j, 0, j, gfx.linesize, 5);
 			gfx.print(14, 0, "FILE", control.currenttab == control.MENUTAB_FILE?0:2, false, true);
@@ -72,6 +72,11 @@
 				gfx.fillrect(gfx.screenwidth - guiclass.tx - 408+24, gfx.linesize, 408, gfx.linesize * 10, 5);
 			break;
 			case control.MENUTAB_CREDITS:
+				guiclass.tx = (gfx.screenwidth - 768) / 4;
+				gfx.fillrect(guiclass.tx, gfx.linesize, 408, gfx.linesize * 10, 5);
+				gfx.fillrect(gfx.screenwidth - guiclass.tx - 408+24, gfx.linesize, 408, gfx.linesize * 10, 5);
+			break;
+			case control.MENUTAB_GITHUB:
 				guiclass.tx = (gfx.screenwidth - 768) / 4;
 				gfx.fillrect(guiclass.tx, gfx.linesize, 408, gfx.linesize * 10, 5);
 				gfx.fillrect(gfx.screenwidth - guiclass.tx - 408+24, gfx.linesize, 408, gfx.linesize * 10, 5);

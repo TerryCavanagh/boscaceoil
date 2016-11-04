@@ -1324,6 +1324,14 @@ package {
 					addrighttextlabel(gfx.screenwidth - 20 - tx, (gfx.linespacing * 7) - 10, "Online version by Chris Kim", 0);
 				  addrighttextlabel(gfx.screenwidth - 20 - tx, (gfx.linespacing * 8) - 10, "dy-dx.com/");
 					
+					addbutton(gfx.screenwidth - 340 - tx, (gfx.linespacing * 9) + 8, 150, "MORE", "githubtab");
+					addbutton(gfx.screenwidth - 164 - tx, (gfx.linespacing * 9) + 8, 150, "BACK", "filetab");
+				break;
+				case control.MENUTAB_GITHUB:
+					tx = (gfx.screenwidth - 768) / 4;
+				  addtextlabel(tx + 20, (gfx.linespacing * 1)+10, "Github pull requsts:", 0);
+					addtextlabel(tx + 20, (gfx.linespacing * 2)+10, "Filepath memory by Ryusui");
+					
 					addbutton(gfx.screenwidth - 164 - tx, (gfx.linespacing * 9) + 8, 150, "BACK", "filetab");
 				break;
 				case control.MENUTAB_HELP:
@@ -1472,6 +1480,8 @@ package {
 				control.changetab(control.MENUTAB_ADVANCED);
 			}else if (currentbutton == "creditstab") {
 				control.changetab(control.MENUTAB_CREDITS);
+			}else if (currentbutton == "githubtab") {
+				control.changetab(control.MENUTAB_GITHUB);
 			}else if (currentbutton == "helptab") {
 				/*
 				changewindow("firstrun");

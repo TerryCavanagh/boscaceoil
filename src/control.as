@@ -81,6 +81,7 @@
 		public static var MENUTAB_ADVANCED:int = 3;
 		public static var MENUTAB_CREDITS:int = 4;
 		public static var MENUTAB_HELP:int = 5;
+		public static var MENUTAB_GITHUB:int = 6;
 		
 		public static function init():void
 		{
