@@ -1330,7 +1330,8 @@ package {
 				case control.MENUTAB_GITHUB:
 					tx = (gfx.screenwidth - 768) / 4;
 				  addtextlabel(tx + 20, (gfx.linespacing * 1)+10, "Github pull requsts:", 0);
-					addtextlabel(tx + 20, (gfx.linespacing * 2)+10, "Filepath memory by Ryusui");
+					addtextlabel(tx + 20, (gfx.linespacing * 2) + 10, "Filepath memory by Ryusui");
+					addtextlabel(tx + 20, (gfx.linespacing * 3) + 10, "Pattern editor bugs fixed by thomcc");
 					
 					addbutton(gfx.screenwidth - 164 - tx, (gfx.linespacing * 9) + 8, 150, "BACK", "filetab");
 				break;
