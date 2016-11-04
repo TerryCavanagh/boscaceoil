@@ -1,5 +1,8 @@
 Version 2.1 (work in progress, binary versions not currently live)
+---------
 
+ - Fix pattern editor letting you write out of bounds notes 
+   [contributed by thomcc, https://github.com/TerryCavanagh/boscaceoil/pull/50]
  - Filepath memory - Bosca Ceoil now remembers last directory used
    [contributed by Ryusui, https://github.com/TerryCavanagh/boscaceoil/pull/53]
 
