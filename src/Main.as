@@ -66,7 +66,7 @@ package
 		
 		public function Main():void
 		{
-			control.versionnumber = "v2.0"; // Version number displayed beside logo
+			control.versionnumber = "v2.1 unstable"; // Version number displayed beside logo
 			control.version = 3;            // Version number used by file
 			control.ctrl = "Ctrl"; //Set this to Cmd on Mac so that the tutorial is correct
 			

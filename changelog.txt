@@ -1,4 +1,9 @@
-Version 2.0 (24th July 2015)
+Version 2.1 (work in progress, binary versions not currently live)
+
+ - Filepath memory - Bosca Ceoil now remembers last directory used
+   [contributed by Ryusui, https://github.com/TerryCavanagh/boscaceoil/pull/53]
+
+Version 2.0 (Current live version on boscaceoil.net and itch.io, 24th July 2015)
 ---------
  
  * Major update!

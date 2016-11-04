@@ -1279,7 +1279,7 @@ package {
 				case control.MENUTAB_FILE:
 					tx = (gfx.screenwidth - 768) / 4;
 					addlogo(24 + tx, (gfx.linespacing * 2));
-					addtextlabel(330 + tx, (gfx.linespacing * 5), control.versionnumber);
+					addtextlabel(385 + tx - gfx.len(control.versionnumber, 1), (gfx.linespacing * 5), control.versionnumber);
 					
 					addtextlabel(20 + tx, (gfx.linespacing * 6) + 2, "Created by Terry Cavanagh");
 					addtextlabel(20 + tx, (gfx.linespacing * 7) + 2, "http://www.distractionware.com");

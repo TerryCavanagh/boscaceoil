@@ -8,11 +8,11 @@
     <movie fps="30" />
     <movie width="768" />
     <movie height="560" />
-    <movie version="17" />
+    <movie version="21" />
     <movie minorVersion="0" />
     <movie platform="AIR" />
     <movie background="#000000" />
-    <movie preferredSDK="C:\Users\Ryusui\AppData\Local\FlashDevelop\Apps\ascsdk" />
+    <movie preferredSDK="AIR 21.0.0;21.0.0;" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
