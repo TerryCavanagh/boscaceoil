@@ -1338,7 +1338,7 @@
 				filestring += String(musicbox[i].recordfilter) + ",";
 				if (musicbox[i].recordfilter == 1)
 				{
-					for (j = 0; j < 32; j++)
+					for (j = 0; j < 16; j++)
 					{
 						filestring += String(musicbox[i].volumegraph[j]) + ",";
 						filestring += String(musicbox[i].cutoffgraph[j]) + ",";
@@ -1447,7 +1447,7 @@
 					musicbox[i].recordfilter = readfilestream();
 					if (musicbox[i].recordfilter == 1)
 					{
-						for (j = 0; j < 32; j++)
+						for (j = 0; j < 16; j++)
 						{
 							musicbox[i].volumegraph[j] = readfilestream();
 							musicbox[i].cutoffgraph[j] = readfilestream();
