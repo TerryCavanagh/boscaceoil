@@ -168,19 +168,27 @@
 				control.barsize = control.boxsize * control.barcount;
 			}
 		}
-		
+
+		public static function lastchar(s:String):String {
+			return (s.length > 0) ? s.charAt(s.length - 1) : "";
+		}
+
 		public static function drawpatterneditor():void {
 			//Pattern editor
 			updateboxsize();
 			
-			//Background alternating colour rows
+			//Draw background colour for each row
+			var isdrumkit:Boolean = control.instrument[control.musicbox[control.currentbox].instr].type >= 1;
 			for (i = 0; i < notesonscreen; i++){
 				var instsize:int = control.pianorollsize;
 				if (control.instrument[control.musicbox[control.currentbox].instr].type >= 1) {
 					instsize = control.drumkit[control.instrument[control.musicbox[control.currentbox].instr].type - 1].size;
 				}
 				if (control.musicbox[control.currentbox].start + i - 1 < instsize) {
-					if (i % 2 == 0) {
+					var n:int = control.musicbox[control.currentbox].start + i - 1;
+					var notename:String = (n > -1) ? control.notename[control.pianoroll[n]] : "";
+					var sharp:Boolean = isdrumkit ? (n % 2 == 0) : (lastchar(notename) == '#');
+					if (!sharp) {
 						fillrect(0, screenheight - linesize - (i * linesize), screenwidth, linesize, 100 + (control.musicbox[control.currentbox].palette * 10));
 						fillrect(0, screenheight - linesize - (i * linesize), screenwidth, 2, 103+(control.musicbox[control.currentbox].palette*10));
 					}else{
