@@ -10,6 +10,16 @@ Bosca Ceoil is now stable at version 2.0. However, contibutions are always welco
 
 See [howtobuild.MD](https://github.com/TerryCavanagh/boscaceoil/blob/master/how%20to%20build.MD) for a detailed guide to compiling Bosca Ceoil.
 
+## Command line usage
+
+* If no arguments are supplied, the GUI will open with an empty song.
+* The first positional argument may be a `*.ceol` file to load in the GUI.
+* `--export FILENAME` may be specified to export the loaded song.
+  The filename must end with `.mid`, `.midi`, or `.wav`.
+  The GUI will appear during the export, but will close once complete.
+
+Note that positional arguments must come before named arguments.
+
 ## Open Source Licence
 
 Available under the FreeBSD licence (the same licence which the SiON synth library uses). Feel free to fork Bosca Ceoil and do your own thing with it! FreeBSD licence text follows:

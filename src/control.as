@@ -16,6 +16,10 @@
 	import flash.filesystem.*;
 	import flash.net.FileFilter;
 	import flash.system.Capabilities;
+	CONFIG::desktop
+	{
+		import flash.desktop.NativeApplication;
+	}
 	CONFIG::web
 	{
 		import flash.external.ExternalInterface;
@@ -1944,13 +1948,24 @@
 			
 			CONFIG::desktop
 			{
-				if (!filepath)
+				if (cliExportFile)
 				{
-					filepath = defaultDirectory;
+					stream = new FileStream();
+					stream.open(new File(cliExportFile), FileMode.WRITE);
+					stream.writeBytes(_wav, 0, _wav.length);
+					stream.close();
+					NativeApplication.nativeApplication.dispatchEvent(new Event("exportFinished"));
 				}
-				file = filepath.resolvePath("*.wav");
-				file.addEventListener(Event.SELECT, onsavewav);
-				file.browseForSave("Export .wav File");
+				else
+				{
+					if (!filepath)
+					{
+						filepath = defaultDirectory;
+					}
+					file = filepath.resolvePath("*.wav");
+					file.addEventListener(Event.SELECT, onsavewav);
+					file.browseForSave("Export .wav File");
+				}
 			}
 			
 			CONFIG::web
@@ -2096,5 +2111,7 @@
 		public static var savescreencountdown:int;
 		public static var minresizecountdown:int;
 		public static var forceresize:Boolean = false;
+
+		public static var cliExportFile:String = null;
 	}
 }

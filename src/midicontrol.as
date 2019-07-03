@@ -9,7 +9,11 @@ package {
 	import flash.filesystem.*;
 	import org.si.sion.midi.*;
 	import org.si.sion.events.*;
-	
+	CONFIG::desktop
+	{
+		import flash.desktop.NativeApplication;
+	}
+
 	public class midicontrol {
 		public static var MIDIDRUM_35_Acoustic_Bass_Drum:int = 35;
 		public static var MIDIDRUM_36_Bass_Drum_1:int = 36;
@@ -109,6 +113,21 @@ package {
 			control.savefilesettings();
 		}
 		
+		public static function savemidicli(outputFile:String):void {
+			file = new File(outputFile);
+			convertceoltomidi();
+
+			tempbytes = new ByteArray();
+			tempbytes = clone(midiexporter.midifile.output());
+
+			stream = new FileStream();
+			stream.open(file, FileMode.WRITE);
+			stream.writeBytes(tempbytes, 0, tempbytes.length);
+			stream.close();
+
+			NativeApplication.nativeApplication.dispatchEvent(new Event("exportFinished"));
+		}
+
 		private static function onloadmidi(e:Event):void {  
 			mididata = new ByteArray();
 			file = e.currentTarget as File;
