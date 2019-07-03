@@ -1302,14 +1302,19 @@
 		{
 			filestring = "";
 			filestring += String(version) + ",";
+
+			filestring += "\n\n// general\n";
 			filestring += String(swing) + ",";
 			filestring += String(effecttype) + ",";
 			filestring += String(effectvalue) + ",";
 			filestring += String(bpm) + ",";
 			filestring += String(boxcount) + ",";
 			filestring += String(barcount) + ",";
+
 			//Instruments first!
+			filestring += "\n\n// instruments\n";
 			filestring += String(numinstrument) + ",";
+			filestring += "\n";
 			for (i = 0; i < numinstrument; i++)
 			{
 				filestring += String(instrument[i].index) + ",";
@@ -1318,9 +1323,13 @@
 				filestring += String(instrument[i].cutoff) + ",";
 				filestring += String(instrument[i].resonance) + ",";
 				filestring += String(instrument[i].volume) + ",";
+				filestring += "\n";
 			}
+
 			//Next, musicboxes
+			filestring += "\n// patterns\n";
 			filestring += String(numboxes) + ",";
+			filestring += "\n";
 			for (i = 0; i < numboxes; i++)
 			{
 				filestring += String(musicbox[i].key) + ",";
@@ -1345,17 +1354,22 @@
 						filestring += String(musicbox[i].resonancegraph[j]) + ",";
 					}
 				}
+				filestring += "\n";
 			}
+
 			//Next, arrangements
+			filestring += "\n// arrangements\n";
 			filestring += String(arrange.lastbar) + ",";
 			filestring += String(arrange.loopstart) + ",";
 			filestring += String(arrange.loopend) + ",";
+			filestring += "\n";
 			for (i = 0; i < arrange.lastbar; i++)
 			{
 				for (j = 0; j < 8; j++)
 				{
 					filestring += String(arrange.bar[i].channel[j]) + ",";
 				}
+				filestring += "\n";
 			}
 		}
 		
@@ -1398,6 +1412,11 @@
 			fi = 0;
 			version = readfilestream();
 			if (version == 3)
+			{
+				// Backwards compatible, so no need for legacy conversions.
+				version = 4;
+			}
+			if (version == 4)
 			{
 				swing = readfilestream();
 				effecttype = readfilestream();
@@ -1471,7 +1490,7 @@
 			{
 				//opps, the file we're loading is out of date. Let's try to convert it
 				legacy_convertfilestring(version);
-				version = 3;
+				version = 4;
 			}
 		}
 		
@@ -1840,8 +1859,19 @@
 		
 		private static function loadfilestring(s:String):void
 		{
+			var simplified:String = "";
+			var lines:Array = s.split("\n");
+			for (var i:int = 0; i < lines.length; i++)
+			{
+				var line:String = lines[i];
+				if (line.substr(0, 2) != "//" && line != "")
+				{
+					simplified += line;
+				}
+			}
+
 			filestream = new Array();
-			filestream = s.split(",");
+			filestream = simplified.split(",");
 			
 			numinstrument = 1;
 			numboxes = 0;

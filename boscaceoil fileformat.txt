@@ -1,7 +1,8 @@
 Bosca Ceoil .ceol file format specification:
 ----------------------------------------------
 
-.ceol files are just a comma seperated list of integers, which it expects to read in this order:
+.ceol files are just a comma seperated list of integers, which it expects to read in this order.
+Note that blank lines and lines beginning with "//" are ignored.
 
 // FIRST WE READ IN BASIC INFO:
 
