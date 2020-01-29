@@ -17,7 +17,7 @@ Ignore it and click ok
 
 Now download and  double click on the Quarantine.command  file In the attachments below it will ask you to enter your password again and it may look something like this :
 
-![alt text] (https://github.com/Pikachuxxxx/boscaceoil/blob/master/terminal%20pwd%20promt.png)
+![alt text](https://github.com/Pikachuxxxx/boscaceoil/blob/master/terminal%20pwd%20promt.png)
 
 However you won’t be able to see the password, not a problem just type it and hit enter.
 
