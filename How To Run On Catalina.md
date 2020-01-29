@@ -15,7 +15,7 @@ After the installation is done and it says successful and you exit it you’ll g
 
 Ignore it and click ok 
 
-Now download and double click on the [Quarantine.command](https://github.com/Pikachuxxxx/boscaceoil/blob/master/Quarantine.command) file it will ask you to enter your password again and it may look something like this :
+Now download and double click on the [Quarantine.command](https://github.com/Pikachuxxxx/boscaceoil/raw/master/Quarantine.command) file it will ask you to enter your password again and it may look something like this :
 
 ![alt text](https://github.com/Pikachuxxxx/boscaceoil/blob/master/terminal%20pwd%20promt.png)
 
