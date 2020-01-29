@@ -1,5 +1,5 @@
 I downloaded and installed the [AIRSDK](https://www.adobe.com/devnet/air/air-sdk-download.html)
-and installed the Adobe AIR 29(cause few people told me AIR32 wasn’t working and AIR 29 was working on Catalina )which is an older version of current version 32.
+and installed the Adobe AIR 29(cause few people told me AIR32 wasn’t working and AIR 29 was working on Catalina ).
 
 But it wasn’t running on Catalina due to some issues, so I found this [post](https://community.adobe.com/t5/air/quot-installation-file-is-damaged-quot-when-installing-an-air-supported-app/td-p/9540338?page=1) which said the date of my Mac needs to be set to somewhere older than October 2016 and now the air apps was opening and I could make BoscaCeoil run, but I wanted to make it more easy and not change date and stuff so I decided to build a dmg. 
  
