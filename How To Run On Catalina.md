@@ -34,5 +34,6 @@ Download the [BoscaCeoilV3.app](https://github.com/Pikachuxxxx/boscaceoil/raw/ma
 
 Please read [Building V3 for Catalina.md](https://github.com/Pikachuxxxx/boscaceoil/blob/master/Building%20V3%20for%20Catalina.md) to learn more about how the V3 app was rebuild to work on catalina.
 
-
+**Here is the working proof on Catalina**
+![alt text](https://github.com/Pikachuxxxx/boscaceoil/blob/master/Working%20Proof.png)
 
