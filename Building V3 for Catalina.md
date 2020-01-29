@@ -5,19 +5,21 @@ But it wasn’t running on Catalina due to some issues, so I found this [post](h
  
  I used this command as provided by the AIRSDK (to know more about tinkering with AIRSDK [read here](https://help.adobe.com/en_US/air/build/index.html)
  
- I had trouble configuring the PATH variables to get the SDK up and running and used the following command to make the .dmg 
-
-(using 
+ (using 
 `adt -package -target native myApp.dmg myApp.air` 
 )
+ 
+ I had trouble configuring the PATH variables to get the SDK up and running but at last got it working.
+
 
 But the final dmg had some similar date issues so I had to change the date back to an older one and get the .app file 
-Now after I got the .app file it still said it couldn’t open so I knew the problem was due the signing of the certificates so I resigned them and changed the date of creating and modification and had to quarantine the AIR from apple to check its validity and used the following commands 
+Now after I got the .app file it still said it couldn’t open so I knew the problem was due the signing of the certificates so I resigned them and changed the date of creation and modification and had to quarantine the AIR app from apple to check its validity and used the following commands.
 
-
-`cd /Library/Frameworks`
-`sudo xattr -r -d com.apple.quarantine ./Adobe\ AIR.framework`
-`ls -l@ ./Adobe\ AIR.framework/`
+```shell
+cd /Library/Frameworks
+sudo xattr -r -d com.apple.quarantine ./Adobe\ AIR.framework
+ls -l@ ./Adobe\ AIR.framework/
+```
 
 
 Now the app was running without any date related issues but required the installation of latest version of AIR and the following 3 commands to be executed after a semi-successful installation of AIR so I made a .command executable.
