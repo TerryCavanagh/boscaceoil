@@ -15,7 +15,7 @@ After the installation is done and it says successful and you exit it you’ll g
 
 Ignore it and click ok 
 
-Now download and  double click on the Quarantine.command  file In the attachments below it will ask you to enter your password again and it may look something like this :
+Now download and double click on the [Quarantine.command](https://github.com/Pikachuxxxx/boscaceoil/blob/master/Quarantine.command) file it will ask you to enter your password again and it may look something like this :
 
 ![alt text](https://github.com/Pikachuxxxx/boscaceoil/blob/master/terminal%20pwd%20promt.png)
 
@@ -27,7 +27,7 @@ After it’s done download it should look like this :
 
 Great you’re just one step away from getting BoscaCeoil up and running 
 
-Download the BoscaCeoilV3.app and double click it and it should open up like any other app.
+Download the [BoscaCeoilV3.app](https://github.com/Pikachuxxxx/boscaceoil/raw/master/BoscaCeoilV3.app.zip) and double click it and it should open up like any other app.
 
 
 **Learn about Rebuilding V3**
