@@ -351,6 +351,11 @@ package
 		
 		CONFIG::desktop
 		{
+			public function onCliDone(event:Event):void
+			{
+				NativeApplication.nativeApplication.exit(0);
+			}
+
 			public function onInvokeEvent(event:InvokeEvent):void
 			{
 				if (event.arguments.length > 0)
@@ -369,6 +374,37 @@ package
 					{
 						//Program is up and running, just load now
 						control.invokeceol(event.arguments[0]);
+					}
+
+					if (event.arguments.length > 1)
+					{
+						if (event.arguments[1] == "--export")
+						{
+							NativeApplication.nativeApplication.addEventListener("exportFinished", onCliDone);
+
+							if (event.arguments.length < 3)
+							{
+								NativeApplication.nativeApplication.exit(1);
+							}
+							control.cliExportFile = event.arguments[2];
+
+							if (control.cliExportFile.substr(-4) == ".mid" || control.cliExportFile.substr(-5) == ".midi")
+							{
+								midicontrol.savemidicli(control.cliExportFile);
+							}
+							else if (control.cliExportFile.substr(-4) == ".wav")
+							{
+								control.exportwav();
+							}
+							else
+							{
+								NativeApplication.nativeApplication.exit(1);
+							}
+						}
+						else
+						{
+							NativeApplication.nativeApplication.exit(1);
+						}
 					}
 				}
 			}
