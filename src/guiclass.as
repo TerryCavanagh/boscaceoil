@@ -1,4 +1,5 @@
 package {
+	import flash.desktop.NativeApplication;
 	import flash.desktop.InteractiveIcon;
 	import flash.display.*;
 	import flash.geom.*;
@@ -651,6 +652,26 @@ package {
 				default:
 				  helpwindow = "nothing";
 				break;
+				
+				case "exit":
+					if (initalise) {
+						windowwidth = 530; windowheight =  (gfx.linesize * 5) + (gfx.linesize * 2) + 35;
+						windowx = gfx.screenwidthmid - (windowwidth / 2);	windowy = gfx.pianorollposition + (gfx.linesize * 2) - 5;
+						
+						windowtext = "WARNING";
+					}
+					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowline = 0;
+					addline("Are you sure you want to exit?");
+					addline("");
+					
+					addbutton(windowx + windowwidth - 450 - 60, windowy + windowheight - gfx.linesize - 15, 150, "YES", "close", 0, true);
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NO", "endhelp", 0, true);
+				break;
+				
 			}
 		}
 		
@@ -1662,6 +1683,10 @@ package {
 				control.changetab(control.currenttab); control.clicklist = true;
 			}else if (currentbutton == "advancedhelp9") {
 				changewindow("advancedhelp9");
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "close") {
+				changewindow("nothing");
+				NativeApplication.nativeApplication.exit(0);
 				control.changetab(control.currenttab); control.clicklist = true;
 			}
 		}
