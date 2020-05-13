@@ -714,4 +714,10 @@
 		guiclass.helpcondition_set = "nothing";
 	}
 	
+		
+
+	if (key.isDown(Keyboard.ESCAPE)){
+		guiclass.changewindow("exit");
+	}
+	
 }
