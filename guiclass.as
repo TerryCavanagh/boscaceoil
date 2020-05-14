@@ -672,6 +672,25 @@ package {
 					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NO", "endhelp", 0, true);
 				break;
 				
+				case "new_song":
+					if (initalise) {
+						windowwidth = 530; windowheight =  (gfx.linesize * 5) + (gfx.linesize * 2) + 35;
+						windowx = gfx.screenwidthmid - (windowwidth / 2);	windowy = gfx.pianorollposition + (gfx.linesize * 2) - 5;
+						
+						windowtext = "WARNING";
+					}
+					
+					control.changetab_ifdifferent(control.MENUTAB_ARRANGEMENTS);
+					addwindow(windowx, windowy, windowwidth, windowheight, helpwindow);
+					
+					windowline = 0;
+					addline("Doing this will erase the current song!");
+					addline("Are you sure you want to continue?");
+					
+					addbutton(windowx + windowwidth - 450 - 60, windowy + windowheight - gfx.linesize - 15, 150, "YES", "create_new_song", 0, true);
+					addbutton(windowx + windowwidth - 150 - 15, windowy + windowheight - gfx.linesize - 15, 150, "NO", "endhelp", 0, true);
+				break;
+				
 			}
 		}
 		
@@ -1456,7 +1475,7 @@ package {
 			button[i].press();
 			
 			if (currentbutton == "newsong") {
-				control.newsong();
+				changewindow("new_song");
 			  button[i].press();
 			}else if (currentbutton == "logo") {
 				if (!control.musicplaying) {
@@ -1687,6 +1706,10 @@ package {
 			}else if (currentbutton == "close") {
 				changewindow("nothing");
 				NativeApplication.nativeApplication.exit(0);
+				control.changetab(control.currenttab); control.clicklist = true;
+			}else if (currentbutton == "create_new_song") {
+				changewindow("nothing");
+				control.newsong();
 				control.changetab(control.currenttab); control.clicklist = true;
 			}
 		}
