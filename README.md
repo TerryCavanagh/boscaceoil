@@ -6,7 +6,7 @@ Terry Cavanagh / http://www.distractionware.com
 
 ## Contributing to Bosca Ceoil
 
-Bosca Ceoil is now stable at version 2.0. However, contibutions are always welcome!
+Bosca Ceoil is now stable at version 2.0. However, contributions are always welcome!
 
 See [howtobuild.MD](https://github.com/TerryCavanagh/boscaceoil/blob/master/how%20to%20build.MD) for a detailed guide to compiling Bosca Ceoil.
 
