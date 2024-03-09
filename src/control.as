@@ -917,7 +917,7 @@
 				_setscale(2, 2, 1, 2, 2, 2, 1);
 				break;
 			case SCALE_MINOR: 
-				_setscale(2, 1, 2, 2, 2, 2, 1);
+				_setscale(2, 1, 2, 2, 1, 2, 2);
 				break;
 			case SCALE_BLUES: 
 				_setscale(3, 2, 1, 1, 3, 2);
